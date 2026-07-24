@@ -6,6 +6,9 @@ export default defineConfig({
   output: "static",
   trailingSlash: "ignore",
   compressHTML: false,
+  devToolbar: {
+    enabled: false,
+  },
   build: {
     format: "directory",
   },

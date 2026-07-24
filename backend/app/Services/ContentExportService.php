@@ -57,7 +57,14 @@ class ContentExportService
             'sitemap' => SitemapEntry::query()
                 ->where('is_included', true)
                 ->orderBy('position')
-                ->get(),
+                ->get()
+                ->map(fn (SitemapEntry $entry) => [
+                    ...$entry->toArray(),
+                    // A sitemap lastmod is a calendar date, not an instant. Formatting
+                    // it before JSON serialization prevents a Riyadh midnight from
+                    // being shifted to the previous UTC day.
+                    'lastmod' => $entry->lastmod?->toDateString(),
+                ]),
             'contact' => ContactSetting::first(),
             'settings' => SiteSetting::query()
                 ->where('is_public', true)

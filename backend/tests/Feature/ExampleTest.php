@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use App\Enums\ContentStatus;
 use App\Models\Article;
+use App\Models\SitemapEntry;
 use App\Models\User;
+use App\Services\ContentExportService;
 use App\Services\ContentPublishingService;
 use App\Services\ImageProcessor;
 use App\Services\SlugRedirectService;
@@ -90,5 +92,22 @@ class ExampleTest extends TestCase
 
         $this->expectException(ValidationException::class);
         app(ImageProcessor::class)->upload($upload);
+    }
+
+    public function test_content_export_keeps_sitemap_lastmod_as_a_calendar_date(): void
+    {
+        SitemapEntry::create([
+            'loc' => 'https://lams-event.com/example',
+            'path' => '/example',
+            'lastmod' => '2026-05-14',
+            'changefreq' => 'monthly',
+            'priority' => 0.5,
+            'position' => 1,
+            'is_included' => true,
+        ]);
+
+        $export = app(ContentExportService::class)->build();
+
+        $this->assertSame('2026-05-14', $export['sitemap']->first()['lastmod']);
     }
 }
