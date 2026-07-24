@@ -1,0 +1,13 @@
+---
+import type { ContentBlock } from "../types/content";
+
+interface Props {
+  blocks: ContentBlock[];
+}
+
+const { blocks } = Astro.props;
+---
+
+<main id="main">
+  {blocks.map((block) => <Fragment set:html={block.html} />)}
+</main>

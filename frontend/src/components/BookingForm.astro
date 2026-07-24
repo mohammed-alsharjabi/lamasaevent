@@ -1,0 +1,79 @@
+<section class="site-booking" aria-labelledby="site-booking-h2">
+  <div class="container site-booking__container">
+    <h2 id="site-booking-h2" class="visually-hidden">طلب حجز</h2>
+    <div class="site-booking__panel">
+      <form
+        id="site-booking-form"
+        class="site-booking__form"
+        novalidate
+        data-wa-base="https://wa.me/966502560106"
+        data-other-value="__other__"
+      >
+        <div class="site-booking__field">
+          <label class="site-booking__label" for="booking-name">الاسم / الجهة</label>
+          <input
+            class="site-booking__input"
+            type="text"
+            id="booking-name"
+            name="name"
+            autocomplete="name"
+            placeholder="الاسم الكريم"
+            required
+          />
+          <p class="site-booking__error" id="booking-name-err" role="alert" hidden></p>
+        </div>
+        <div class="site-booking__field">
+          <label class="site-booking__label" for="booking-occasion">نوع المناسبة / الخدمة</label>
+          <div class="site-booking__select-wrap">
+            <select class="site-booking__select" id="booking-occasion" name="occasion" required>
+              <option value="" disabled selected hidden>اختر نوع الخدمة أو المناسبة</option>
+              <option value="الكوش وتقديم الأفراح">الكوش وتقديم الأفراح</option>
+              <option value="الدزات والملكة">الدزات والملكة</option>
+              <option value="الجلوس الملكي وكراسي الضيافة">الجلوس الملكي وكراسي الضيافة</option>
+              <option value="المخيمات التراثية وبيت الشعر">المخيمات التراثية وبيت الشعر</option>
+              <option value="الاستقبال والمداخل">الاستقبال والمداخل</option>
+              <option value="الافتتاحات والإعلان والبوابات">الافتتاحات والإعلان والبوابات</option>
+              <option value="ديكور الحفلات والأقواس">ديكور الحفلات والأقواس</option>
+              <option value="الذكرى السنوية وغرفة العروس">الذكرى السنوية وغرفة العروس</option>
+              <option value="طاولات الطعام والولائم">طاولات الطعام والولائم</option>
+              <option value="مناسبات مدعومة بصور الأعمال">مناسبات مدعومة بصور الأعمال</option>
+              <option value="عيد ميلاد">عيد ميلاد</option>
+              <option value="استقبال مواليد">استقبال مواليد</option>
+              <option value="تحديد الجنين">تحديد الجنين</option>
+              <option value="__other__">مناسبة أخرى</option>
+            </select>
+          </div>
+          <p class="site-booking__error" id="booking-occasion-err" role="alert" hidden></p>
+        </div>
+        <div id="booking-occasion-custom-wrap" class="site-booking__field site-booking__field--conditional" hidden>
+          <label class="site-booking__label" for="booking-occasion-custom">اكتب المناسبة</label>
+          <input
+            class="site-booking__input"
+            type="text"
+            id="booking-occasion-custom"
+            name="occasion_custom"
+            autocomplete="off"
+            placeholder="اكتب نوع المناسبة أو الطلب"
+          />
+          <p class="site-booking__error" id="booking-occasion-custom-err" role="alert" hidden></p>
+        </div>
+        <div class="site-booking__field">
+          <label class="site-booking__label" for="booking-phone">رقم التواصل</label>
+          <input
+            class="site-booking__input"
+            type="tel"
+            id="booking-phone"
+            name="phone"
+            inputmode="tel"
+            placeholder="05xxxxxxxx"
+            dir="ltr"
+            autocomplete="tel"
+            required
+          />
+          <p class="site-booking__error" id="booking-phone-err" role="alert" hidden></p>
+        </div>
+        <button type="submit" class="site-booking__submit">إرسال الطلب للمدير العام</button>
+      </form>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+---
+import LegacyContent from "../components/LegacyContent.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  behaviorScriptFor,
+  getContentByPath,
+  routes,
+} from "../lib/content";
+import type { ContentEntity } from "../types/content";
+
+export function getStaticPaths() {
+  return routes
+    .filter((route) => route.path !== "/")
+    .map((route) => ({
+      params: { path: route.path.replace(/^\/|\/$/g, "") },
+      props: { page: getContentByPath(route.path), routePath: route.path },
+    }));
+}
+
+interface Props {
+  page: ContentEntity;
+  routePath: string;
+}
+
+const { page, routePath } = Astro.props;
+---
+
+<BaseLayout seo={page.seo_meta} behaviorScript={behaviorScriptFor(routePath)}>
+  <LegacyContent blocks={page.content_blocks} />
+</BaseLayout>
