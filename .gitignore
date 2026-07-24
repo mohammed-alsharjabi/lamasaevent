@@ -1,0 +1,16 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+node_modules/
+vendor/
+storage/*.key
+storage/framework/
+storage/logs/
+public/storage
+frontend/dist/
+frontend/.astro/
+tests/visual/actual/
+tests/visual/diff/
+*.sqlite
+*.log
