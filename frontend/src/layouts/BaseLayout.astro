@@ -1,0 +1,72 @@
+---
+import BookingForm from "../components/BookingForm.astro";
+import FloatDock from "../components/FloatDock.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import "../styles/recovered-inline.css";
+import type { SeoMeta } from "../types/content";
+
+interface Props {
+  seo: SeoMeta;
+  behaviorScript: string;
+}
+
+const { seo, behaviorScript } = Astro.props;
+const og = seo.open_graph || {};
+const twitter = seo.twitter || {};
+---
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="content-language" content="ar" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content={seo.robots || "index, follow"} />
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    <link rel="canonical" href={seo.canonical} />
+    {(seo.hreflang || []).map((alternate) => (
+      <link rel="alternate" hreflang={alternate.lang} href={alternate.href} />
+    ))}
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+
+    {og.type && <meta property="og:type" content={og.type} />}
+    {og.locale && <meta property="og:locale" content={og.locale} />}
+    {og.site_name && <meta property="og:site_name" content={og.site_name} />}
+    {og.title && <meta property="og:title" content={og.title} />}
+    {og.description && <meta property="og:description" content={og.description} />}
+    {og.url && <meta property="og:url" content={og.url} />}
+    {og.image && <meta property="og:image" content={og.image} />}
+    {og.image_alt && <meta property="og:image:alt" content={og.image_alt} />}
+
+    {twitter.card && <meta name="twitter:card" content={twitter.card} />}
+    {twitter.title && <meta name="twitter:title" content={twitter.title} />}
+    {twitter.description && <meta name="twitter:description" content={twitter.description} />}
+    {twitter.image && <meta name="twitter:image" content={twitter.image} />}
+    {twitter.image_alt && <meta name="twitter:image:alt" content={twitter.image_alt} />}
+
+    <link rel="icon" type="image/png" href="/icons/logo-bg.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/icons/logo-bg.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/icons/logo-bg.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    {seo.json_ld.map((schema) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+    ))}
+    <link rel="stylesheet" href="/_astro/about.BD8mXtiO.css" />
+    <script is:inline type="module" src={behaviorScript}></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">تخطي إلى المحتوى</a>
+    <Header />
+    <slot />
+    <BookingForm />
+    <Footer />
+    <FloatDock />
+  </body>
+</html>

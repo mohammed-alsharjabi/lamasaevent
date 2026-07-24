@@ -12,5 +12,12 @@ frontend/dist/
 frontend/.astro/
 tests/visual/actual/
 tests/visual/diff/
+tests/visual/results/
+frontend/tests/visual/actual/
+frontend/tests/visual/diff/
+frontend/tests/visual/results/
+frontend/playwright-report/
+frontend/test-results/
+reports/
 *.sqlite
 *.log
