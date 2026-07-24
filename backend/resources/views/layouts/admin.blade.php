@@ -20,6 +20,7 @@
             @foreach (config('content.resources') as $key => $item)
                 <a href="{{ route('admin.resources.index', $key) }}">{{ $item['label'] }}</a>
             @endforeach
+            <a href="{{ route('admin.media.index') }}">مكتبة الصور</a>
             <a href="{{ route('admin.settings.edit') }}">التواصل وSEO</a>
             <a href="{{ route('admin.sitemap.index') }}">Sitemap</a>
             <a href="{{ route('admin.redirects.index') }}">Redirects 301</a>

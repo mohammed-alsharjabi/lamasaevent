@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Media extends Model
@@ -21,5 +22,12 @@ class Media extends Model
     protected function casts(): array
     {
         return ['size' => 'integer', 'width' => 'integer', 'height' => 'integer'];
+    }
+
+    public function galleries(): BelongsToMany
+    {
+        return $this->belongsToMany(Gallery::class)
+            ->withPivot('sort_order')
+            ->orderByPivot('sort_order');
     }
 }

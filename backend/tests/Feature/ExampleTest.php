@@ -6,8 +6,11 @@ use App\Enums\ContentStatus;
 use App\Models\Article;
 use App\Models\User;
 use App\Services\ContentPublishingService;
+use App\Services\ImageProcessor;
 use App\Services\SlugRedirectService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
@@ -61,5 +64,31 @@ class ExampleTest extends TestCase
             'is_active' => true,
         ]);
         $this->assertSame('new-slug', $article->fresh()->slug);
+    }
+
+    public function test_validated_upload_generates_a_webp_derivative(): void
+    {
+        Storage::fake('public');
+        $upload = UploadedFile::fake()->image('event.jpg', 120, 80);
+
+        $media = app(ImageProcessor::class)->upload($upload);
+
+        Storage::disk('public')->assertExists($media->path);
+        Storage::disk('public')->assertExists($media->webp_path);
+        $this->assertSame('image/jpeg', $media->mime_type);
+        $this->assertSame(120, $media->width);
+        $this->assertSame(80, $media->height);
+    }
+
+    public function test_mime_spoofed_upload_is_rejected(): void
+    {
+        Storage::fake('public');
+        $upload = UploadedFile::fake()->createWithContent(
+            'malicious.jpg',
+            '<?php echo "not an image";',
+        );
+
+        $this->expectException(ValidationException::class);
+        app(ImageProcessor::class)->upload($upload);
     }
 }

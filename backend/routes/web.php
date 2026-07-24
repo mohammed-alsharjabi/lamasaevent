@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ContentResourceController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SitemapController;
@@ -44,4 +45,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/redirects', [RedirectController::class, 'store'])->name('redirects.store');
     Route::delete('/redirects/{redirect}', [RedirectController::class, 'destroy'])
         ->name('redirects.destroy');
+
+    Route::get('/media', [MediaController::class, 'index'])->name('media.index');
+    Route::get('/media/create', [MediaController::class, 'create'])->name('media.create');
+    Route::post('/media', [MediaController::class, 'store'])->name('media.store');
+    Route::get('/media/{media}/edit', [MediaController::class, 'edit'])->name('media.edit');
+    Route::put('/media/{media}', [MediaController::class, 'update'])->name('media.update');
+    Route::delete('/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
 });
