@@ -17,11 +17,13 @@ class RedirectForm
                 TextInput::make('from_path')
                     ->label('المسار القديم')
                     ->startsWith('/')
+                    ->maxLength(255)
                     ->unique(ignoreRecord: true)
                     ->required(),
                 TextInput::make('to_path')
                     ->label('المسار الجديد')
                     ->startsWith('/')
+                    ->maxLength(255)
                     ->different('from_path')
                     ->required(),
                 Select::make('status_code')

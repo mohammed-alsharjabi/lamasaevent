@@ -25,6 +25,7 @@ class PageForm
                 TextInput::make('path')
                     ->label('المسار')
                     ->startsWith('/')
+                    ->maxLength(255)
                     ->unique(ignoreRecord: true)
                     ->disabled(fn ($record): bool => (bool) $record?->routeRecord?->slug_locked)
                     ->dehydrated()

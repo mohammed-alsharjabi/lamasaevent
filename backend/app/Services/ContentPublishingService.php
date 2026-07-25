@@ -64,9 +64,10 @@ class ContentPublishingService
                 'ip_address' => request()?->ip(),
                 'user_agent' => Str::limit((string) request()?->userAgent(), 500, ''),
             ]);
-        });
+        }, 3);
 
-        Cache::forget('content-export:v2');
+        Cache::forget(ContentExportService::CACHE_KEY);
+        Cache::forget('sitemap-xml:v1');
         app(PublishPipeline::class)->queue($content, $actorId);
     }
 

@@ -21,6 +21,7 @@ class MenuForm
                     ->label('عناصر القائمة')
                     ->relationship()
                     ->orderColumn('sort_order')
+                    ->defaultItems(0)
                     ->schema([
                         TextInput::make('label')->label('النص')->required(),
                         TextInput::make('url')->label('الرابط')->required()->maxLength(2048),

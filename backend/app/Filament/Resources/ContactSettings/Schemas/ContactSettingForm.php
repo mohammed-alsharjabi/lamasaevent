@@ -13,13 +13,18 @@ class ContactSettingForm
     {
         return $schema->components([
             Section::make('بيانات التواصل')->columns(2)->schema([
-                TextInput::make('phone')->label('الهاتف')->tel(),
-                TextInput::make('phone_display')->label('الهاتف الظاهر'),
-                TextInput::make('whatsapp')->label('واتساب'),
-                TextInput::make('email')->label('البريد الإلكتروني')->email(),
-                TextInput::make('city')->label('المدينة'),
-                TextInput::make('region')->label('المنطقة'),
-                TextInput::make('country_code')->label('رمز الدولة')->length(2),
+                TextInput::make('phone')->label('الهاتف')->tel()->maxLength(30),
+                TextInput::make('phone_display')->label('الهاتف الظاهر')->maxLength(30),
+                TextInput::make('whatsapp')->label('واتساب')->maxLength(30),
+                TextInput::make('email')->label('البريد الإلكتروني')->email()->maxLength(255),
+                TextInput::make('city')->label('المدينة')->maxLength(100),
+                TextInput::make('region')->label('المنطقة')->maxLength(100),
+                TextInput::make('country_code')
+                    ->label('رمز الدولة')
+                    ->length(2)
+                    ->dehydrateStateUsing(
+                        fn (?string $state): ?string => $state ? strtoupper($state) : null,
+                    ),
                 KeyValue::make('social_links')
                     ->label('روابط الشبكات الاجتماعية')
                     ->keyLabel('الشبكة')

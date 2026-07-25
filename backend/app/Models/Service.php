@@ -65,6 +65,14 @@ class Service extends Model implements ManagedContent
                 ]);
             }
         });
+
+        static::deleting(function (Service $service): void {
+            if ($service->children()->exists()) {
+                throw ValidationException::withMessages([
+                    'delete' => 'انقل أو احذف الخدمات الفرعية قبل حذف الخدمة الرئيسية.',
+                ]);
+            }
+        });
     }
 
     public function category(): BelongsTo

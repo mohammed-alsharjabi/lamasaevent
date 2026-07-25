@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\InvalidatesContentExport;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class Redirect extends Model
 {
+    use InvalidatesContentExport;
+
     protected $fillable = [
         'from_path', 'to_path', 'status_code', 'reason', 'is_active', 'created_by',
         'hit_count', 'last_used_at',
@@ -25,6 +30,12 @@ class Redirect extends Model
     protected static function booted(): void
     {
         static::saving(function (self $redirect): void {
+            Validator::make($redirect->getAttributes(), [
+                'from_path' => ['required', 'string', 'max:255', 'starts_with:/'],
+                'to_path' => ['required', 'string', 'max:255', 'starts_with:/'],
+                'status_code' => ['required', Rule::in([301, 302])],
+            ])->validate();
+
             if ($redirect->from_path === $redirect->to_path) {
                 throw ValidationException::withMessages([
                     'to_path' => 'لا يمكن تحويل المسار إلى نفسه.',

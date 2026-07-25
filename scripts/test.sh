@@ -7,6 +7,7 @@ source "${project_dir}/scripts/runtime.sh"
 lams_use_node
 
 cd "${project_dir}/backend"
+php artisan optimize:clear
 vendor/bin/pint --test
 vendor/bin/phpstan analyse --memory-limit=1G --no-progress
 php artisan test

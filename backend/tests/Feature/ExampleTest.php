@@ -98,6 +98,22 @@ class ExampleTest extends TestCase
         app(ImageProcessor::class)->upload($upload);
     }
 
+    public function test_uploading_the_same_image_reuses_the_existing_media_record(): void
+    {
+        Storage::fake('public');
+        $firstUpload = UploadedFile::fake()->image('first.jpg', 120, 80);
+        $secondUpload = UploadedFile::fake()->createWithContent(
+            'second.jpg',
+            (string) file_get_contents($firstUpload->getRealPath()),
+        );
+
+        $first = app(ImageProcessor::class)->upload($firstUpload);
+        $second = app(ImageProcessor::class)->upload($secondUpload);
+
+        $this->assertTrue($first->is($second));
+        $this->assertDatabaseCount('media', 1);
+    }
+
     public function test_content_export_keeps_sitemap_lastmod_as_a_calendar_date(): void
     {
         SitemapEntry::create([
@@ -156,9 +172,9 @@ class ExampleTest extends TestCase
             $export['menus']->sole()->allItems->sole()->label,
         );
 
-        Cache::put('content-export:v2', ['stale' => true], now()->addMinute());
+        Cache::put(ContentExportService::CACHE_KEY, '{"stale":true}', now()->addMinute());
         $setting->update(['value' => ['name' => 'اسم محدث']]);
 
-        $this->assertFalse(Cache::has('content-export:v2'));
+        $this->assertFalse(Cache::has(ContentExportService::CACHE_KEY));
     }
 }

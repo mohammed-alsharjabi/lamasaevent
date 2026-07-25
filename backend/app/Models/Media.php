@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class Media extends Model
 {
@@ -21,7 +23,7 @@ class Media extends Model
     protected $fillable = [
         'disk', 'path', 'webp_path', 'source_path', 'original_name', 'mime_type',
         'size', 'width', 'height', 'sha256', 'alt', 'caption', 'status',
-        'uploaded_by', 'avif_path', 'variants', 'title',
+        'uploaded_by', 'avif_path', 'variants', 'title', 'upload_fingerprint',
     ];
 
     protected function casts(): array
@@ -32,6 +34,29 @@ class Media extends Model
             'height' => 'integer',
             'variants' => 'array',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (self $media): void {
+            if (filled($media->source_path)) {
+                throw ValidationException::withMessages([
+                    'image' => 'لا يمكن حذف صورة مستعادة ومحمي مسارها القديم.',
+                ]);
+            }
+
+            if ($media->isInUse()) {
+                throw ValidationException::withMessages([
+                    'image' => 'لا يمكن حذف صورة مستخدمة. أزل ارتباطها بالمحتوى أولًا.',
+                ]);
+            }
+
+            if ($media->isForceDeleting()) {
+                throw ValidationException::withMessages([
+                    'image' => 'الحذف النهائي للملفات معطل؛ استخدم الأرشفة القابلة للاستعادة.',
+                ]);
+            }
+        });
     }
 
     protected function publicUrl(): Attribute
@@ -50,5 +75,31 @@ class Media extends Model
         return $this->belongsToMany(Gallery::class)
             ->withPivot('sort_order')
             ->orderByPivot('sort_order');
+    }
+
+    public function isInUse(): bool
+    {
+        if (
+            DB::table('gallery_items')->where('media_id', $this->getKey())->exists()
+            || DB::table('gallery_media')->where('media_id', $this->getKey())->exists()
+            || DB::table('mediaables')->where('media_id', $this->getKey())->exists()
+        ) {
+            return true;
+        }
+
+        foreach ([
+            'articles',
+            'article_categories',
+            'services',
+            'service_categories',
+            'areas',
+            'pages',
+        ] as $table) {
+            if (DB::table($table)->where('hero_media_id', $this->getKey())->exists()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

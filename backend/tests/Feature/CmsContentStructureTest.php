@@ -187,6 +187,31 @@ class CmsContentStructureTest extends TestCase
         );
     }
 
+    public function test_json_ld_checksum_is_refreshed_when_schema_changes(): void
+    {
+        $service = Service::create([
+            'title' => 'خدمة بمخطط',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+        app(ContentPublishingService::class)->sync($service);
+        $seo = $service->seoMeta;
+        $oldHash = $seo->json_ld_sha256;
+
+        $seo->update([
+            'json_ld' => ['@type' => 'Service', 'name' => 'خدمة بمخطط'],
+        ]);
+
+        $this->assertNotSame($oldHash, $seo->fresh()->json_ld_sha256);
+        $this->assertSame(
+            hash(
+                'sha256',
+                '{"@type":"Service","name":"خدمة بمخطط"}',
+            ),
+            $seo->fresh()->json_ld_sha256,
+        );
+    }
+
     public function test_export_normalizes_a_legacy_string_keywords_value(): void
     {
         $service = Service::create([

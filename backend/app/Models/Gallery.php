@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Validation\ValidationException;
 
 class Gallery extends Model
 {
@@ -29,6 +30,34 @@ class Gallery extends Model
             'is_legacy' => 'boolean',
             'sort_order' => 'integer',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::updating(function (self $gallery): void {
+            if (
+                $gallery->getRawOriginal('is_legacy')
+                && (
+                    $gallery->isDirty('slug')
+                    || (
+                        $gallery->isDirty('status')
+                        && $gallery->getAttribute('status') !== ContentStatus::Published
+                    )
+                )
+            ) {
+                throw ValidationException::withMessages([
+                    'gallery' => 'لا يمكن تغيير رابط أو إلغاء نشر معرض الاستعادة المحمي.',
+                ]);
+            }
+        });
+
+        static::deleting(function (self $gallery): void {
+            if ($gallery->getAttribute('is_legacy')) {
+                throw ValidationException::withMessages([
+                    'gallery' => 'لا يمكن حذف معرض الاستعادة المحمي.',
+                ]);
+            }
+        });
     }
 
     public function items(): HasMany

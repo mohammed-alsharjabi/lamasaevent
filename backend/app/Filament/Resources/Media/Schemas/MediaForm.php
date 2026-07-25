@@ -27,12 +27,12 @@ class MediaForm
                     ->image()
                     ->storeFiles(false)
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                    ->maxSize(8192)
+                    ->maxSize((int) ceil(config('media.max_bytes') / 1024))
                     ->required(fn (string $operation): bool => $operation === 'create')
                     ->visible(fn (string $operation): bool => $operation === 'create')
                     ->columnSpanFull(),
-                TextInput::make('title')->label('العنوان'),
-                TextInput::make('alt')->label('النص البديل')->required(),
+                TextInput::make('title')->label('العنوان')->maxLength(255),
+                TextInput::make('alt')->label('النص البديل')->required()->maxLength(255),
                 Textarea::make('caption')->label('الوصف')->columnSpanFull(),
                 TextInput::make('original_name')->label('اسم الملف')->disabled(),
                 TextInput::make('mime_type')->label('نوع الملف')->disabled(),

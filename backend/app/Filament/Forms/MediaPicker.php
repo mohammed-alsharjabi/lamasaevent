@@ -81,7 +81,7 @@ class MediaPicker
                 ->image()
                 ->storeFiles(false)
                 ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                ->maxSize(8192)
+                ->maxSize((int) ceil(config('media.max_bytes') / 1024))
                 ->required()
                 ->columnSpanFull(),
             TextInput::make('title')

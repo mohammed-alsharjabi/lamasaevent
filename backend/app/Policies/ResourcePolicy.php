@@ -11,7 +11,7 @@ abstract class ResourcePolicy
 
     public function before(User $user): ?bool
     {
-        return $user->hasRole('super-admin') ? true : null;
+        return null;
     }
 
     public function viewAny(User $user): bool
@@ -41,7 +41,7 @@ abstract class ResourcePolicy
 
     public function deleteAny(User $user): bool
     {
-        return $this->allowed($user, 'delete');
+        return false;
     }
 
     public function restore(User $user, Model $model): bool
@@ -56,12 +56,12 @@ abstract class ResourcePolicy
 
     public function forceDelete(User $user, Model $model): bool
     {
-        return $this->allowed($user, 'force-delete');
+        return false;
     }
 
     public function forceDeleteAny(User $user): bool
     {
-        return $this->allowed($user, 'force-delete');
+        return false;
     }
 
     protected function allowed(User $user, string $action): bool

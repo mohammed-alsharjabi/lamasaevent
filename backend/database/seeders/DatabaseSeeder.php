@@ -61,23 +61,36 @@ class DatabaseSeeder extends Seeder
             $role->permissions()->sync($this->permissionIdsFor($definition['permissions']));
         }
 
-        if (! app()->environment('local')) {
-            $this->command?->info('Local administrator was not seeded outside APP_ENV=local.');
+        [$email, $password, $name] = match (true) {
+            app()->environment('local') => [
+                env('LOCAL_ADMIN_EMAIL', 'admin@lams-event.local'),
+                env('LOCAL_ADMIN_PASSWORD'),
+                env('LOCAL_ADMIN_NAME', 'مدير لمسة المحلي'),
+            ],
+            app()->environment('staging') => [
+                env('ADMIN_EMAIL'),
+                env('ADMIN_PASSWORD'),
+                env('ADMIN_NAME', 'مدير بيئة Staging'),
+            ],
+            default => [null, null, null],
+        };
+
+        if (blank($email) || blank($password)) {
+            $this->command?->info(
+                'Administrator seed skipped for this environment.',
+            );
 
             return;
         }
 
-        $email = env('LOCAL_ADMIN_EMAIL', 'admin@lams-event.local');
-        $password = env('LOCAL_ADMIN_PASSWORD');
-
-        if (blank($password)) {
-            $this->command?->warn('Set LOCAL_ADMIN_PASSWORD to create the local administrator.');
+        if (mb_strlen((string) $password) < 12) {
+            $this->command?->warn('Administrator password must contain at least 12 characters.');
 
             return;
         }
 
         $user = User::updateOrCreate(['email' => $email], [
-            'name' => env('LOCAL_ADMIN_NAME', 'مدير لمسة المحلي'),
+            'name' => $name,
             'password' => $password,
             'is_admin' => true,
             'is_active' => true,

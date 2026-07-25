@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ContentExportService
 {
+    public const CACHE_KEY = 'content-export:json:v3';
+
     /**
      * @return array<string, mixed>
      */
@@ -30,13 +32,18 @@ class ContentExportService
     {
         $published = fn (Builder $query) => $query
             ->where('status', ContentStatus::Published->value)
-            ->with(['seoMeta', 'faqs', 'heroMedia']);
+            ->with([
+                'seoMeta',
+                'faqs' => fn ($query) => $query->where('is_active', true),
+                'heroMedia',
+            ]);
 
         $pages = $published(Page::query())
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get();
         $serviceCategories = $published(ServiceCategory::query())
+            ->where('is_active', true)
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get();
@@ -53,6 +60,7 @@ class ContentExportService
             ->orderBy('id')
             ->get();
         $areas = $published(Area::query())
+            ->where('is_active', true)
             ->with('media')
             ->orderBy('sort_order')
             ->orderBy('id')
@@ -116,7 +124,11 @@ class ContentExportService
             'articles' => $articles,
             'galleries' => Gallery::query()
                 ->where('status', 'published')
-                ->with(['media', 'items.media'])
+                ->with([
+                    'media',
+                    'items' => fn ($query) => $query->where('is_active', true),
+                    'items.media',
+                ])
                 ->orderBy('sort_order')
                 ->orderBy('id')
                 ->get(),

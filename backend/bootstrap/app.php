@@ -15,5 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn () => route('filament.admin.auth.login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->dontReportDuplicates();
+        $exceptions->shouldRenderJsonWhen(
+            fn ($request): bool => $request->is('api/*') || $request->expectsJson(),
+        );
     })->create();

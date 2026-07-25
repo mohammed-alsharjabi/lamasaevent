@@ -17,6 +17,7 @@ use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\SitemapEntry;
 use App\Models\SiteSetting;
+use App\Services\ContentExportService;
 use App\Services\ImageProcessor;
 use App\Services\LegacyHtmlParser;
 use App\Services\LegacyManifestService;
@@ -109,7 +110,7 @@ class ImportLegacySite extends Command
 
         $this->seedGlobalSettings();
         $this->syncMenus($parsedRoutes['/']['menus'] ?? []);
-        Cache::forget('content-export:v2');
+        Cache::forget(ContentExportService::CACHE_KEY);
         $report = $verification->verify($routes);
         if (! $report['passed']) {
             throw new RuntimeException('Post-import verification failed. Run legacy:verify for details.');

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Validation\ValidationException;
 
 class ServiceCategory extends Model implements ManagedContent
 {
@@ -31,6 +32,17 @@ class ServiceCategory extends Model implements ManagedContent
             'sort_order' => 'integer',
             'is_active' => 'boolean',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (self $category): void {
+            if ($category->services()->exists()) {
+                throw ValidationException::withMessages([
+                    'delete' => 'انقل الخدمات المرتبطة قبل حذف التصنيف.',
+                ]);
+            }
+        });
     }
 
     public function services(): HasMany

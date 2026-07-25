@@ -26,8 +26,17 @@ class UserForm
                     ->password()
                     ->revealable()
                     ->required(fn (string $operation): bool => $operation === 'create')
+                    ->minLength(12)
+                    ->maxLength(255)
+                    ->confirmed()
                     ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                     ->dehydrated(fn (?string $state): bool => filled($state)),
+                TextInput::make('password_confirmation')
+                    ->label('تأكيد كلمة المرور')
+                    ->password()
+                    ->revealable()
+                    ->required(fn (string $operation): bool => $operation === 'create')
+                    ->dehydrated(false),
                 Toggle::make('is_active')->label('الحساب نشط')->default(true),
                 CheckboxList::make('roles')
                     ->label('الأدوار')

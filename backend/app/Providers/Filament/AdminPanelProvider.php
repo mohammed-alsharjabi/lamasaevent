@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->databaseTransactions()
             ->brandName('لمسة التميز لإدارة المحتوى')
             ->darkMode(false)
             ->sidebarCollapsibleOnDesktop()

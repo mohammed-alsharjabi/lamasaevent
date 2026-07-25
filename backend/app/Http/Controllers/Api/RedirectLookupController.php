@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\RedirectLookupRequest;
 use App\Models\Redirect;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class RedirectLookupController extends Controller
 {
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(RedirectLookupRequest $request): JsonResponse
     {
-        $request->validate(['path' => ['required', 'string', 'starts_with:/']]);
-
         $redirect = Redirect::query()
             ->where('from_path', $request->string('path'))
             ->where('is_active', true)

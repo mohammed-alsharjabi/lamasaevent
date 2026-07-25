@@ -63,6 +63,7 @@ class ManagedContentFields
             ->label('الأسئلة الشائعة')
             ->relationship()
             ->orderColumn('sort_order')
+            ->defaultItems(0)
             ->schema([
                 TextInput::make('question')->label('السؤال')->required(),
                 Textarea::make('answer')->label('الإجابة')->required()->columnSpanFull(),
@@ -88,7 +89,7 @@ class ManagedContentFields
                     ->url()
                     ->placeholder('يُولد رابط الصفحة الصحيح تلقائيًا')
                     ->helperText('اتركه فارغًا للاستخدام الآمن الموصى به: Canonical ذاتي على رابط الصفحة المنشور.')
-                    ->maxLength(2048),
+                    ->maxLength(255),
                 Textarea::make('description')
                     ->label('Meta Description (اختياري)')
                     ->rows(3)

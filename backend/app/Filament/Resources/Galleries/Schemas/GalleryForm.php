@@ -27,6 +27,7 @@ class GalleryForm
                     ->label('صور المعرض')
                     ->relationship()
                     ->orderColumn('sort_order')
+                    ->defaultItems(0)
                     ->schema([
                         ...MediaPicker::make('media_id', 'الصورة', 'media', required: true),
                         TextInput::make('title')->label('العنوان'),
