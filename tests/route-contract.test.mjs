@@ -28,6 +28,12 @@ const decodeEntities = (value = "") =>
 const stripTags = (value = "") =>
   decodeEntities(value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim());
 
+const stripCmsAdditions = (html = "") =>
+  html.replace(
+    /<section\b[^>]*\bdata-cms-additions\b[^>]*>[\s\S]*?<\/section>/gi,
+    "",
+  );
+
 const getAttribute = (tag, attribute) => {
   const match = tag.match(
     new RegExp(`${attribute}\\s*=\\s*(["'])(.*?)\\1`, "i"),
@@ -139,7 +145,7 @@ test("Astro emits every immutable route with the complete SEO contract", () => {
         image_alt: getMeta(head, "name", "twitter:image:alt"),
       },
       json_ld_sha256: sha256(JSON.stringify(jsonLd)),
-      internal_links: getInternalLinks(html),
+      internal_links: getInternalLinks(stripCmsAdditions(html)),
     };
 
     const expected = {

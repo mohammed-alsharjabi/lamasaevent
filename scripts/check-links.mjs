@@ -7,21 +7,32 @@ const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const manifest = JSON.parse(
   readFileSync(join(projectRoot, "route-manifest.json"), "utf8"),
 );
+const contentExport = JSON.parse(
+  readFileSync(
+    join(projectRoot, "frontend", "src", "data", "content-export.json"),
+    "utf8",
+  ),
+);
 const distRoot = join(projectRoot, "frontend", "dist");
 const normalize = (value) => {
   const url = new URL(value, "https://lams-event.com");
   const path = decodeURI(url.pathname).replace(/\/+$/, "") || "/";
   return path;
 };
-const routes = new Set(manifest.routes.map((route) => normalize(route.path)));
+const routes = new Set([
+  ...manifest.routes.map((route) => normalize(route.path)),
+  ...contentExport.routes
+    .filter((route) => route.is_published)
+    .map((route) => normalize(route.path)),
+]);
 const failures = [];
 
-for (const route of manifest.routes) {
+for (const routePath of routes) {
   const outputFile =
-    route.path === "/"
+    routePath === "/"
       ? join(distRoot, "index.html")
-      : join(distRoot, route.path.replace(/^\/|\/$/g, ""), "index.html");
-  assert.ok(existsSync(outputFile), `Missing output for ${route.path}`);
+      : join(distRoot, routePath.replace(/^\/|\/$/g, ""), "index.html");
+  assert.ok(existsSync(outputFile), `Missing output for ${routePath}`);
   const html = readFileSync(outputFile, "utf8");
 
   for (const match of html.matchAll(/<a\b[^>]*\bhref=(["'])(.*?)\1/gi)) {
@@ -38,9 +49,9 @@ for (const route of manifest.routes) {
 
     const target = normalize(href);
     if (extname(target) || routes.has(target)) continue;
-    failures.push(`${route.path} -> ${href}`);
+    failures.push(`${routePath} -> ${href}`);
   }
 }
 
 assert.deepEqual(failures, [], `Broken internal links:\n${failures.join("\n")}`);
-console.log(`Verified internal links across ${manifest.routes.length} routes.`);
+console.log(`Verified internal links across ${routes.size} published routes.`);

@@ -11,6 +11,24 @@ const seoSchema = z.looseObject({
     description: z.string().min(1),
     canonical: z.url(),
     robots: z.string().nullable(),
+    keywords: z.preprocess(
+      (value) => {
+        if (typeof value !== "string") return value ?? [];
+
+        try {
+          const decoded = JSON.parse(value);
+          if (Array.isArray(decoded)) return decoded;
+        } catch {
+          // Older exports may contain a plain comma-separated value.
+        }
+
+        return value
+          .split(/[,،\r\n]+/u)
+          .map((keyword) => keyword.trim())
+          .filter(Boolean);
+      },
+      z.array(z.string()),
+    ),
     open_graph: nullableStringRecordSchema,
     twitter: nullableStringRecordSchema,
     hreflang: z

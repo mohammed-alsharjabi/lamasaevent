@@ -1,4 +1,5 @@
 ---
+import CmsPublishedAdditions from "./CmsPublishedAdditions.astro";
 import type { ContentBlock, ContentEntity } from "../types/content";
 
 interface Props {
@@ -6,9 +7,10 @@ interface Props {
   title?: string;
   summary?: string | null;
   heroMedia?: ContentEntity["hero_media_summary"];
+  routePath: string;
 }
 
-const { blocks, title, summary, heroMedia } = Astro.props;
+const { blocks, title, summary, heroMedia, routePath } = Astro.props;
 ---
 
 <main id="main">
@@ -29,4 +31,5 @@ const { blocks, title, summary, heroMedia } = Astro.props;
       {summary && <p>{summary}</p>}
     </article>
   )}
+  <CmsPublishedAdditions routePath={routePath} />
 </main>

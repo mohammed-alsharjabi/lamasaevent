@@ -8,6 +8,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -29,6 +30,7 @@ class ManagedContentFields
                 return $options;
             })
             ->default('draft')
+            ->helperText('المسودة لا تظهر في الموقع. اختر «منشور» لإرسال التحديث إلى الواجهة العامة.')
             ->required();
     }
 
@@ -74,26 +76,36 @@ class ManagedContentFields
     public static function seo(): Section
     {
         return Section::make('تحسين محركات البحث وبيانات المشاركة')
-            ->description('العنوان والوصف والرابط القانوني وOpen Graph وSchema JSON-LD.')
+            ->description('كل الحقول اختيارية. عند ترك العنوان أو الوصف أو Canonical فارغًا، ينشئ النظام قيمة مناسبة تلقائيًا من الصفحة.')
             ->relationship('seoMeta')
             ->schema([
                 TextInput::make('title')
-                    ->label('عنوان SEO')
-                    ->required()
+                    ->label('عنوان SEO (اختياري)')
+                    ->placeholder('يُستخدم عنوان المحتوى تلقائيًا')
                     ->maxLength(70),
                 TextInput::make('canonical')
-                    ->label('Canonical URL')
+                    ->label('Canonical URL (اختياري)')
                     ->url()
-                    ->required()
+                    ->placeholder('يُولد رابط الصفحة الصحيح تلقائيًا')
+                    ->helperText('اتركه فارغًا للاستخدام الآمن الموصى به: Canonical ذاتي على رابط الصفحة المنشور.')
                     ->maxLength(2048),
                 Textarea::make('description')
-                    ->label('Meta Description')
+                    ->label('Meta Description (اختياري)')
                     ->rows(3)
-                    ->required()
+                    ->placeholder('يُستخدم الملخص أو الوصف المختصر تلقائيًا')
                     ->maxLength(180)
                     ->columnSpanFull(),
+                TagsInput::make('keywords')
+                    ->label('Meta Keywords (اختياري)')
+                    ->placeholder('أضف كلمة ثم Enter، أو الصق كلمات مفصولة بفواصل')
+                    ->helperText('يمكن لصق الكلمات دفعة واحدة بفاصلة عربية (،) أو إنجليزية (,). استخدم كلمات مرتبطة فعلًا بالمحتوى وتجنب الحشو.')
+                    ->splitKeys([',', '،', "\n"])
+                    ->rules(['array', 'max:20'])
+                    ->nestedRecursiveRules(['string', 'max:60'])
+                    ->reorderable()
+                    ->columnSpanFull(),
                 TextInput::make('robots')
-                    ->label('Robots')
+                    ->label('Robots (اختياري)')
                     ->placeholder('index,follow'),
                 self::jsonEditor('open_graph', 'Open Graph'),
                 self::jsonEditor('twitter', 'Twitter Cards'),

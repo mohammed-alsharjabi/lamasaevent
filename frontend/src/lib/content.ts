@@ -23,6 +23,12 @@ const entitiesByPath = new Map<string, ContentEntity>(
   ]),
 );
 
+export const pages = content.pages as unknown as ContentEntity[];
+export const serviceCategories =
+  content.service_categories as unknown as ContentEntity[];
+export const services = content.services as unknown as ContentEntity[];
+export const areas = content.areas as unknown as ContentEntity[];
+export const articles = content.articles as unknown as ContentEntity[];
 export const routes = content.routes as unknown as RouteRecord[];
 export const sitemap = content.sitemap;
 export const contentSource = source;

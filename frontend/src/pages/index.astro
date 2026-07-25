@@ -7,5 +7,5 @@ const page = getContentByPath("/");
 ---
 
 <BaseLayout seo={page.seo_meta} behaviorScript={behaviorScriptFor("/")}>
-  <LegacyContent blocks={page.content_blocks} />
+  <LegacyContent blocks={page.content_blocks} routePath="/" />
 </BaseLayout>

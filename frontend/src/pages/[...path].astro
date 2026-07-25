@@ -31,5 +31,6 @@ const { page, routePath } = Astro.props as Props;
     title={page.title}
     summary={(page.summary || page.excerpt) as string | null}
     heroMedia={page.hero_media_summary}
+    routePath={routePath}
   />
 </BaseLayout>

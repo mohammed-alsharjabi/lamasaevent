@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-07-25T06:16:18+03:00",
+    "generated_at": "2026-07-25T06:54:35+03:00",
     "pages": [
         {
             "id": 1,
@@ -727,7 +727,8 @@
                 ],
                 "json_ld_sha256": "fde927fbcf6f122484584db6c4818a2b57828afc50e79dce647da62e675da148",
                 "created_at": "2026-07-24T23:08:47.000000Z",
-                "updated_at": "2026-07-24T23:08:47.000000Z"
+                "updated_at": "2026-07-24T23:08:47.000000Z",
+                "keywords": []
             },
             "faqs": []
         },
@@ -1218,7 +1219,8 @@
                 ],
                 "json_ld_sha256": "27059fd0708b6dcadb6a932daae51423660472ea457acbefac935d82509dddfe",
                 "created_at": "2026-07-24T23:08:49.000000Z",
-                "updated_at": "2026-07-24T23:08:49.000000Z"
+                "updated_at": "2026-07-24T23:08:49.000000Z",
+                "keywords": []
             },
             "faqs": []
         },
@@ -1609,7 +1611,8 @@
                 ],
                 "json_ld_sha256": "a4dee1b2684dc1b412a2beb151d4a342bc45ecaca384c309e150ec3bb0d006be",
                 "created_at": "2026-07-24T23:09:10.000000Z",
-                "updated_at": "2026-07-24T23:09:10.000000Z"
+                "updated_at": "2026-07-24T23:09:10.000000Z",
+                "keywords": []
             },
             "faqs": []
         },
@@ -3320,7 +3323,8 @@
                 ],
                 "json_ld_sha256": "67c25dea0f4fe257a6ba5cbd20a08f37b7dc234fddfe1825e25b4f0be773a861",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": []
         },
@@ -3579,7 +3583,8 @@
                 ],
                 "json_ld_sha256": "320ca66c85f15cc8c09dd060ca55494428769b869d6ed9cbba7627377639563d",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": []
         },
@@ -3939,7 +3944,8 @@
                 ],
                 "json_ld_sha256": "86bffa351fea0fffc5353b920bd1fecc8d6aeab1adb5801d04df91f1ca9a59b2",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": []
         },
@@ -4196,7 +4202,8 @@
                 ],
                 "json_ld_sha256": "501a375466fef98ce464704963a836368e0fc4a31c9af9f299814857c2128bc0",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": []
         }
@@ -4411,7 +4418,8 @@
                 ],
                 "json_ld_sha256": "1ed7687101983f9ce8d32c9c2dfd2f5ca076b40149cabb7a760bddd1b42c8f1a",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "services": [
@@ -5274,7 +5282,8 @@
                 ],
                 "json_ld_sha256": "9a511bdb1e5cbf46fbc81e68272304da8e5791fe90d27eb726f4eae7586003d5",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "services": [
@@ -6375,7 +6384,8 @@
                 ],
                 "json_ld_sha256": "fde90dc08688531537b4bfc299adfd98d9c06827e1e1ea66758247fa6641e4a0",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "services": [
@@ -7710,7 +7720,8 @@
                 ],
                 "json_ld_sha256": "9c0843b754b84076d4a4926cc189c49e00a8cd127a7e42c0851fc2aea760c5e2",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "services": [
@@ -8800,7 +8811,8 @@
                 ],
                 "json_ld_sha256": "1971229934354dee26cf4fdcef53a5f46f9859089a4dbd5d82b77ea4045c915a",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "services": [
@@ -9671,6 +9683,29 @@
                     "cta_url": null,
                     "whatsapp_enabled": true,
                     "parent_id": null
+                },
+                {
+                    "id": 44,
+                    "service_category_id": 5,
+                    "hero_media_id": 1,
+                    "title": "تصنيف الخدمة",
+                    "slug": "tsnyf-alkhdm",
+                    "excerpt": "تصنيف الخدمة",
+                    "content_blocks": [],
+                    "status": "published",
+                    "published_at": "2026-07-25T03:25:00.000000Z",
+                    "legacy_path": null,
+                    "sort_order": 12,
+                    "created_at": "2026-07-25T03:26:24.000000Z",
+                    "updated_at": "2026-07-25T03:47:16.000000Z",
+                    "deleted_at": null,
+                    "created_by": 1,
+                    "updated_by": 1,
+                    "is_featured": true,
+                    "cta_label": "rrrr",
+                    "cta_url": null,
+                    "whatsapp_enabled": true,
+                    "parent_id": 30
                 }
             ]
         },
@@ -9949,7 +9984,8 @@
                 ],
                 "json_ld_sha256": "df30e99e4d81f94806c130e68c8bc43c1ff6c777127bbf2a80bdd506a38f0892",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "services": [
@@ -12365,7 +12401,8 @@
                 ],
                 "json_ld_sha256": "7d358ec203bc38be2e9f09973e2fb2d2a55599bd24af432a54395b0054d5b247",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "services": [
@@ -13213,7 +13250,8 @@
                 ],
                 "json_ld_sha256": "024ab1f553e9be74c724a7933238cdf352852785f20761a98b9b721895e01970",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "services": [
@@ -14076,7 +14114,8 @@
                 ],
                 "json_ld_sha256": "6aff267b82589293c216362f7390b25e3e7340262e01b8fdbc66f395d3be2c85",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "services": [
@@ -15166,7 +15205,8 @@
                 ],
                 "json_ld_sha256": "e0c213c370f2b49977532f4fa8758e88f41fb11fe63604af1d6fbd9112b61a60",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "services": [
@@ -16039,6 +16079,154 @@
     ],
     "services": [
         {
+            "id": 44,
+            "service_category_id": 5,
+            "hero_media_id": 1,
+            "title": "تصنيف الخدمة",
+            "slug": "tsnyf-alkhdm",
+            "excerpt": "تصنيف الخدمة",
+            "content_blocks": [],
+            "status": "published",
+            "published_at": "2026-07-25T03:25:00.000000Z",
+            "legacy_path": null,
+            "sort_order": 12,
+            "created_at": "2026-07-25T03:26:24.000000Z",
+            "updated_at": "2026-07-25T03:47:16.000000Z",
+            "deleted_at": null,
+            "created_by": 1,
+            "updated_by": 1,
+            "is_featured": true,
+            "cta_label": "rrrr",
+            "cta_url": null,
+            "whatsapp_enabled": true,
+            "parent_id": 30,
+            "public_path": "/services/tsnyf-alkhdm",
+            "hero_media_summary": {
+                "original_name": "banar.png",
+                "public_url": "http://127.0.0.1:8000/storage/legacy/icons/banar.webp",
+                "alt": null
+            },
+            "seo_meta": {
+                "id": 158,
+                "seoable_type": "App\\Models\\Service",
+                "seoable_id": 44,
+                "title": "تصنيف الخدمة",
+                "description": "تصنيف الخدمة",
+                "canonical": "https://lams-event.com/services/tsnyf-alkhdm",
+                "robots": "index, follow",
+                "open_graph": {
+                    "type": "website",
+                    "locale": "ar_SA",
+                    "site_name": "لمسه التميز",
+                    "title": "تصنيف الخدمة",
+                    "description": "تصنيف الخدمة",
+                    "url": "https://lams-event.com/services/tsnyf-alkhdm"
+                },
+                "twitter": {
+                    "card": "summary",
+                    "title": "تصنيف الخدمة",
+                    "description": "تصنيف الخدمة"
+                },
+                "hreflang": [
+                    {
+                        "lang": "ar-SA",
+                        "href": "https://lams-event.com/services/tsnyf-alkhdm"
+                    },
+                    {
+                        "lang": "x-default",
+                        "href": "https://lams-event.com/services/tsnyf-alkhdm"
+                    }
+                ],
+                "json_ld": [],
+                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                "created_at": "2026-07-25T03:26:24.000000Z",
+                "updated_at": "2026-07-25T03:41:52.000000Z",
+                "keywords": []
+            },
+            "faqs": [],
+            "category": {
+                "id": 5,
+                "title": "الاستقبال والمداخل",
+                "slug": "reception-entrances",
+                "summary": "مداخل قاعات ومسارات ضيوف تربط الباب بالمنصة بانسجام بصري.",
+                "content_blocks": [
+                    {
+                        "type": "component",
+                        "tag": "div",
+                        "id": null,
+                        "classes": [
+                            "sct-page"
+                        ],
+                        "headings": [
+                            {
+                                "level": "h1",
+                                "id": "sct-h1",
+                                "text": "الاستقبال والمداخل"
+                            },
+                            {
+                                "level": "h2",
+                                "id": null,
+                                "text": "فهرس المسارات"
+                            }
+                        ],
+                        "paragraphs": [
+                            "مداخل قاعات ومسارات ضيوف تربط الباب بالمنصة بانسجام بصري.",
+                            "الصفحات التفصيلية مع المعرض والأسئلة الشائعة — اختر المسار للانتقال مباشرة."
+                        ],
+                        "links": [
+                            {
+                                "href": "/",
+                                "text": "الرئيسية"
+                            },
+                            {
+                                "href": "/services",
+                                "text": "الخدمات"
+                            },
+                            {
+                                "href": "/services/guest-reception-riyadh",
+                                "text": "استقبال ضيوف في قاعات الرياض ‹ منطقة استقبال واضحة قرب المدخل أو قبل الصالة الرئيسية."
+                            },
+                            {
+                                "href": "/services/reception-entrances-riyadh",
+                                "text": "ديكور مداخل الاستقبال في الرياض ‹ ربط باب الدخول بخط بصري يقود إلى المسرح دون فوضى بصرية."
+                            },
+                            {
+                                "href": "/services/event-entrance-decor-riyadh",
+                                "text": "ديكور مدخل الفعالية في الرياض ‹ مدخل يعكس نوع الفعالية: زفاف، استقبال، أو احتفال عائلي."
+                            },
+                            {
+                                "href": "/services/wedding-entrances-riyadh",
+                                "text": "مداخل أفراح في الرياض ‹ مدخل زفاف يراعي توقيت دخول العروسين وخط الكاميرات."
+                            },
+                            {
+                                "href": "/services",
+                                "text": "جميع الفئات"
+                            }
+                        ],
+                        "html": "<div class=\"sct-page\" dir=\"rtl\" lang=\"ar\"> <section class=\"sct-hero\" aria-labelledby=\"sct-h1\"> <div class=\"sct-hero__bg\" aria-hidden=\"true\"> <img src=\"/assets/media/wedding_set/1.jpeg\" alt=\"\" width=\"1600\" height=\"900\" loading=\"eager\" fetchpriority=\"high\" decoding=\"async\"> </div> <div class=\"sct-hero__scrim\" aria-hidden=\"true\"></div> <div class=\"sct-hero__inner container\"> <div class=\"sct-hero__crumb\"> <nav class=\"breadcrumbs\" aria-label=\"مسار التنقل\"> <ol class=\"breadcrumbs__list\"> <li class=\"breadcrumbs__item\"> <a href=\"/\">الرئيسية</a> </li><li class=\"breadcrumbs__item\"> <a href=\"/services\">الخدمات</a> </li><li class=\"breadcrumbs__item\"> <span class=\"breadcrumbs__current\" aria-current=\"page\"> الاستقبال والمداخل </span> </li> </ol> </nav> </div> <h1 id=\"sct-h1\" class=\"sct-hero__h1\">الاستقبال والمداخل</h1> <p class=\"sct-hero__lead\">مداخل قاعات ومسارات ضيوف تربط الباب بالمنصة بانسجام بصري.</p> </div> </section> <div class=\"sct-body container\"> <h2 class=\"sct-body__h2\">فهرس المسارات</h2> <p class=\"sct-body__note\">\nالصفحات التفصيلية مع المعرض والأسئلة الشائعة — اختر المسار للانتقال مباشرة.\n</p> <nav class=\"sct-nav\" aria-label=\"مسارات الخدمة في الفئة\"> <ul class=\"sct-paths\"> <li> <a class=\"sct-path\" href=\"/services/guest-reception-riyadh\"> <span class=\"sct-path__main\"> <span class=\"sct-path__title\">استقبال ضيوف في قاعات الرياض</span> <span class=\"sct-path__chev\" aria-hidden=\"true\">‹</span> </span> <span class=\"sct-path__desc\">منطقة استقبال واضحة قرب المدخل أو قبل الصالة الرئيسية.</span> </a> </li><li> <a class=\"sct-path\" href=\"/services/reception-entrances-riyadh\"> <span class=\"sct-path__main\"> <span class=\"sct-path__title\">ديكور مداخل الاستقبال في الرياض</span> <span class=\"sct-path__chev\" aria-hidden=\"true\">‹</span> </span> <span class=\"sct-path__desc\">ربط باب الدخول بخط بصري يقود إلى المسرح دون فوضى بصرية.</span> </a> </li><li> <a class=\"sct-path\" href=\"/services/event-entrance-decor-riyadh\"> <span class=\"sct-path__main\"> <span class=\"sct-path__title\">ديكور مدخل الفعالية في الرياض</span> <span class=\"sct-path__chev\" aria-hidden=\"true\">‹</span> </span> <span class=\"sct-path__desc\">مدخل يعكس نوع الفعالية: زفاف، استقبال، أو احتفال عائلي.</span> </a> </li><li> <a class=\"sct-path\" href=\"/services/wedding-entrances-riyadh\"> <span class=\"sct-path__main\"> <span class=\"sct-path__title\">مداخل أفراح في الرياض</span> <span class=\"sct-path__chev\" aria-hidden=\"true\">‹</span> </span> <span class=\"sct-path__desc\">مدخل زفاف يراعي توقيت دخول العروسين وخط الكاميرات.</span> </a> </li> </ul> </nav> <div class=\"sct-back\"> <a href=\"/services\" class=\"ui-btn ui-btn--ghost\"> جميع الفئات </a> </div> </div> </div>"
+                    }
+                ],
+                "status": "published",
+                "published_at": "2026-05-13T21:00:00.000000Z",
+                "legacy_path": "/services/category/reception-entrances/",
+                "sort_order": 12,
+                "created_at": "2026-07-24T23:09:18.000000Z",
+                "updated_at": "2026-07-25T00:49:43.000000Z",
+                "deleted_at": null,
+                "hero_media_id": 6,
+                "created_by": null,
+                "updated_by": null,
+                "is_active": true
+            },
+            "media": [],
+            "parent": {
+                "id": 30,
+                "title": "أقواس حفلات في الرياض",
+                "slug": "party-arches-riyadh"
+            },
+            "children": []
+        },
+        {
             "id": 1,
             "service_category_id": 1,
             "hero_media_id": 2,
@@ -16410,7 +16598,8 @@
                 ],
                 "json_ld_sha256": "f36a91cb95979a40a09919a592319c205659b78469670159cd0343678785b4ed",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -17174,7 +17363,8 @@
                 ],
                 "json_ld_sha256": "ddf8119d7d52fe8cc316185e82df79a84e013d854934ab6627a5f6b8e880d706",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -17934,7 +18124,8 @@
                 ],
                 "json_ld_sha256": "24a9c5d2a81ac774efca5fb24dc2573e023d96770deea756eb16b80a0446829f",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -18699,7 +18890,8 @@
                 ],
                 "json_ld_sha256": "ed4280e395e041785ff239974f6b5b149506f011ec4a71b0cb9740bd3f1e0c72",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -19313,7 +19505,8 @@
                 ],
                 "json_ld_sha256": "be41d2ba04a8d8bf6d9442203713e3859a3838fe6ed2836907c4b418b4bb6c80",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -19927,7 +20120,8 @@
                 ],
                 "json_ld_sha256": "ed2be93e4f06b3141f3d5cc45fba3c06002d0756fead0b3f7305b19eadd9806e",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -20541,7 +20735,8 @@
                 ],
                 "json_ld_sha256": "0fad0e2909174f159a427c15dabbf73d978003df59b574b96741ea38a490bbfc",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -21160,7 +21355,8 @@
                 ],
                 "json_ld_sha256": "fd7f39efe0545f8f146cac75454503cdac8fd57d39af408e5aa6a7158b09828a",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -21938,7 +22134,8 @@
                 ],
                 "json_ld_sha256": "c381182370d9b8869f462d9d412cabfa77d1042d8ede8605ac377c433a73a27e",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -22716,7 +22913,8 @@
                 ],
                 "json_ld_sha256": "3314c906412658427e660dcc031ffa91a599e217f46fd0350dee7aaa953fb1a0",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -23494,7 +23692,8 @@
                 ],
                 "json_ld_sha256": "1d3c63cec8cca3913792d82b3a49044425b8fdcd5e10e3cebee433960db6e5e9",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -24276,7 +24475,8 @@
                 ],
                 "json_ld_sha256": "4cf5294227d124ef3ae818d666db76273c55b82f16f6c711bed03f1d6b8f2f90",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -25049,7 +25249,8 @@
                 ],
                 "json_ld_sha256": "2555158c98ba111dc86867380c764d74c3e5d100c1c33d7a3817a1d98eb516ce",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -25756,7 +25957,8 @@
                 ],
                 "json_ld_sha256": "720c616bbd1ba59436b0dd82a85454a858e1f266ae597f445ea82f1e4277247d",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -26463,7 +26665,8 @@
                 ],
                 "json_ld_sha256": "91d4843dbaa77308d944562e0ea0a74f1911ce3060156e3930d87d68016a74b8",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -27170,7 +27373,8 @@
                 ],
                 "json_ld_sha256": "2b40036b5256836dfdcda41be3d12d4ea3d4c8b590e8a284cbc7f42c3c63cc7b",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -27877,7 +28081,8 @@
                 ],
                 "json_ld_sha256": "3987c636ba5d045fb7f637d138b4747fa00fe1c75f18afb8d5bb1349f69f0f1c",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -28743,7 +28948,8 @@
                 ],
                 "json_ld_sha256": "542abf68b45cf58d8fd56d6e879c304be200785ca21484d8a017afde41ac1dd4",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -29605,7 +29811,8 @@
                 ],
                 "json_ld_sha256": "59a091477debf0dc86de65ac4580ccc1cf5558c0cc6df8d766a06ca0feff50dd",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -30467,7 +30674,8 @@
                 ],
                 "json_ld_sha256": "10241e1d8ad2ed93d0ed42d34d1d74c4b099efe5c037d7c003ea879a14e6ef41",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -31354,7 +31562,8 @@
                 ],
                 "json_ld_sha256": "237084e4df57ebbc4cd17ba8c3db257e67756f66aee18c20eb423088ddd2b283",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -32540,7 +32749,8 @@
                 ],
                 "json_ld_sha256": "e9a7afcc17f69d015460485a15d6215368afc8c02d6dfad5ab2c17bfa2288da0",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -33726,7 +33936,8 @@
                 ],
                 "json_ld_sha256": "a4023e390d1352389ae32a31400f96727969c04cbf490939e8971e21acc3f5bf",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -34912,7 +35123,8 @@
                 ],
                 "json_ld_sha256": "0386c0ee04eb6135e5b1b906775708092182315eaa1e6d558a0892218d07f525",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -36102,7 +36314,8 @@
                 ],
                 "json_ld_sha256": "8222dd339864ef61cd816a34524f122d982318651b3017ee88c8f0de50ad0a05",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -37296,7 +37509,8 @@
                 ],
                 "json_ld_sha256": "e470fe7e4905d8ac683e0ecb2076284b0791bb85abd24a8b36bf08eab93e0742",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -37963,7 +38177,8 @@
                 ],
                 "json_ld_sha256": "479e965f60579019c732d94b92f1109eef295810aa26371c68672fb28da9afbd",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -38630,7 +38845,8 @@
                 ],
                 "json_ld_sha256": "29976b6c252c722dd1554c59be2eccc04422741907ed01a986752f48425c8bc3",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -39293,7 +39509,8 @@
                 ],
                 "json_ld_sha256": "f01736e75f3609e60c72d7a2c8bd9f446e257e3e96f48af0e0fb7254cddcce54",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -39922,7 +40139,8 @@
                 ],
                 "json_ld_sha256": "fe32948dcc3c3b1d0eb58b1e3187a293a416743ebbc10902438188e6c2b58b6b",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -40091,7 +40309,15 @@
                 }
             ],
             "parent": null,
-            "children": []
+            "children": [
+                {
+                    "id": 44,
+                    "parent_id": 30,
+                    "title": "تصنيف الخدمة",
+                    "slug": "tsnyf-alkhdm",
+                    "sort_order": 12
+                }
+            ]
         },
         {
             "id": 31,
@@ -40465,7 +40691,8 @@
                 ],
                 "json_ld_sha256": "f3521307b76c168023f41f35e754eaa75a27c4424ffb65f9db76c8abc5983dc0",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -41008,7 +41235,8 @@
                 ],
                 "json_ld_sha256": "83e17a0f6c5ac5f893f0824dd17468559c83ee98ae4b1185241e220f0e7baa20",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -41551,7 +41779,8 @@
                 ],
                 "json_ld_sha256": "7e70b282b7efd71126b7352e0bb4d1699ae48f25b4dcbb79a20d7f1d43848c0f",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -42408,7 +42637,8 @@
                 ],
                 "json_ld_sha256": "afb1f6fae4f6fd21f897e9ad1999948b41f242be986cdbb2ede5a8b124d3c8f1",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -43261,7 +43491,8 @@
                 ],
                 "json_ld_sha256": "894f0e85eff759678c218c60f4effded39aa5b588d731759d8f0b87c28f98998",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -44119,7 +44350,8 @@
                 ],
                 "json_ld_sha256": "587617f6e042a886ac44d0364fc7e740e1ade4bd8f0ce15eb2c026cf85e0baac",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -44888,7 +45120,8 @@
                 ],
                 "json_ld_sha256": "58bea6a3b728a1d401428b1c9db0496c195acca0ffdad3d7bff7f6f7019e928b",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -45657,7 +45890,8 @@
                 ],
                 "json_ld_sha256": "49b207f1ac8f71e922a4ba444fb292838be396c47bc1f26737f829f514d3b077",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -46426,7 +46660,8 @@
                 ],
                 "json_ld_sha256": "a35cb207468ab0b98b6d102f8f6eb39033b103278a76b6a79c10bcebead1b785",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -47195,7 +47430,8 @@
                 ],
                 "json_ld_sha256": "8ff7e0902477ff4565c9001b44979b3019453ea361f587b2181b22042c01b0c0",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -47778,7 +48014,8 @@
                 ],
                 "json_ld_sha256": "e40c9a1cf46ce3df1142a56d19970a060925afde928676f8cc03652ef6423684",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -48671,7 +48908,8 @@
                 ],
                 "json_ld_sha256": "7420feb5682eccda1a773d8f24efa9f9ac21dc7d5d98b0a597c69f2147149e16",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -49254,7 +49492,8 @@
                 ],
                 "json_ld_sha256": "d3bf5f7830bf1ca9f0bc9cdef3fc1805b174b3c79039386e07616f2ccd386570",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "category": {
@@ -49491,15 +49730,36 @@
                 "seoable_id": 6,
                 "title": "الشميسي ",
                 "description": "الشميسي ",
-                "canonical": "http://127.0.0.1:4321/blog/akhta-tanzim-hafalat-fi-al-riyadh",
-                "robots": null,
-                "open_graph": [],
-                "twitter": [],
-                "hreflang": [],
+                "canonical": "https://lams-event.com/areas/alshmysy",
+                "robots": "index, follow",
+                "open_graph": {
+                    "type": "website",
+                    "locale": "ar_SA",
+                    "site_name": "لمسه التميز",
+                    "title": "الشميسي ",
+                    "description": "الشميسي ",
+                    "url": "https://lams-event.com/areas/alshmysy"
+                },
+                "twitter": {
+                    "card": "summary",
+                    "title": "الشميسي ",
+                    "description": "الشميسي "
+                },
+                "hreflang": [
+                    {
+                        "lang": "ar-SA",
+                        "href": "https://lams-event.com/areas/alshmysy"
+                    },
+                    {
+                        "lang": "x-default",
+                        "href": "https://lams-event.com/areas/alshmysy"
+                    }
+                ],
                 "json_ld": [],
-                "json_ld_sha256": null,
+                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
                 "created_at": "2026-07-25T03:02:32.000000Z",
-                "updated_at": "2026-07-25T03:02:32.000000Z"
+                "updated_at": "2026-07-25T03:41:53.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "media": []
@@ -49788,7 +50048,8 @@
                 ],
                 "json_ld_sha256": "b073be72de522b028332b339e1f43dcfa46ae63a96cab5807e1d13226132156a",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "media": [
@@ -50109,7 +50370,8 @@
                 ],
                 "json_ld_sha256": "c2bf66dddd7884d4b94a3b7736187fa9fcbae2062d9bb6ca48aa1d2b2d98bc06",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "media": [
@@ -50430,7 +50692,8 @@
                 ],
                 "json_ld_sha256": "2895d200cc3063dcef730d2cc69456ad9044027e625248e6821ea296cccffd1d",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "media": [
@@ -50747,7 +51010,8 @@
                 ],
                 "json_ld_sha256": "7559b4bfa2eeea0efd34e353f188a711bc2a0166b974b847295790235c1b3307",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "media": [
@@ -51068,7 +51332,8 @@
                 ],
                 "json_ld_sha256": "a6cb9311483019024d6297a7cc214cc9d17df39cb2ab08ecf26e059fe7e32729",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [],
             "media": [
@@ -51533,7 +51798,8 @@
                 ],
                 "json_ld_sha256": "42d59c36898cc2644f5e153236107d9f9e5c52802aaf7cd9d6382d45bb8b5226",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -52074,7 +52340,8 @@
                 ],
                 "json_ld_sha256": "3b012aa056982d814ca585463f1e98392f89b6074b5b6e3ff3bd3594509f730a",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -52599,7 +52866,8 @@
                 ],
                 "json_ld_sha256": "2c5a0115c355c0db7823c9ed3ba8a7e94aa5ce59b9d47b19a909ca9dff65fa00",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -53111,7 +53379,8 @@
                 ],
                 "json_ld_sha256": "73ac3539007915ae32e927a041fc955bab6bb0e1d838e30fe6dcb89a5df11927",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -53616,7 +53885,8 @@
                 ],
                 "json_ld_sha256": "b1a556c37534d7d913e8bc5266353bfcd086c6789917cfe781f0fe1690765f0f",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -54120,7 +54390,8 @@
                 ],
                 "json_ld_sha256": "22cc093c22689d7900fc0ba298928c7152e778be801aa307802299642005d5c2",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -54612,7 +54883,8 @@
                 ],
                 "json_ld_sha256": "70d8a6371120f5c6896687cb201b297877c9b37771d852af8739f33af708c1e8",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -55123,7 +55395,8 @@
                 ],
                 "json_ld_sha256": "19235125eb61d11ba2fce77fc45c8a9eddf05030be5ec0d3289be0e69d9621a7",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -55630,7 +55903,8 @@
                 ],
                 "json_ld_sha256": "95711e06eb5a42d5d989837d5fca320fea25cf624533c9ec06764f452047618b",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -56127,7 +56401,8 @@
                 ],
                 "json_ld_sha256": "53808edd4e9c67a632348ad53b9598d1999c3c3ef585c2794a9e52901337b948",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -56615,7 +56890,8 @@
                 ],
                 "json_ld_sha256": "f9d9de6a1d15987d9cc4f77996335fbcd5a6c0d17c877f95140bbe793751657e",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -57103,7 +57379,8 @@
                 ],
                 "json_ld_sha256": "c5848edcd4cfd65e754460fb8b895ed8c76e8603051fb671b25edff7302cd70f",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -57603,7 +57880,8 @@
                 ],
                 "json_ld_sha256": "64b1ee59ed5fe99d4b0519f708d8cdc1eba7d4775ca7cb29c3604c7dae3d6678",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -58094,7 +58372,8 @@
                 ],
                 "json_ld_sha256": "39db69005332711fdd05b790644c8d8406670905dbb26cea32aff16ce98666c3",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -58594,7 +58873,8 @@
                 ],
                 "json_ld_sha256": "9243fedff144267157a2f5851deed8561a0ee5d24f77eb8b92217893ecd55ef2",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -59098,7 +59378,8 @@
                 ],
                 "json_ld_sha256": "2fdfff73bdbcb1b0bab421e181eb281bdd341f02b7a5f49f8067e19d3d7e5647",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -59592,7 +59873,8 @@
                 ],
                 "json_ld_sha256": "4573336c60e78a11fd69b04dc8314957bdd7462db46cf1454e367c6f0e1c45c2",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -60065,7 +60347,8 @@
                 ],
                 "json_ld_sha256": "0e33d12bbb0ccfa5a8f8679341870c6225f68d1717891394905748fc8ee5ce21",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -60517,7 +60800,8 @@
                 ],
                 "json_ld_sha256": "3752a526b7d78a740da7fa7cd2c02a9a24ae9a8083b27fd26e07ac6278aa1282",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -60987,7 +61271,8 @@
                 ],
                 "json_ld_sha256": "682b2691ae3c39d06cc4ba4e97500241deed64908b26626c8e965d114573fb32",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -61459,7 +61744,8 @@
                 ],
                 "json_ld_sha256": "b99ef30c354bf9d275e99653b07f577567e41ac3dec925282729e3e290bcbe02",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -61919,7 +62205,8 @@
                 ],
                 "json_ld_sha256": "94c7c6de75ba58434439eebb4009f5a10f86913d0ebf218d3d1005e9d63c4472",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -62383,7 +62670,8 @@
                 ],
                 "json_ld_sha256": "66229c023088e4621ce8c7f0e64825b871946dffbf74da9a4c18daa016ae4d69",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -62843,7 +63131,8 @@
                 ],
                 "json_ld_sha256": "92a5fec624252b20e8b6b78123f637bac08e67f291b4c275171e7d1f42173d69",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -63289,7 +63578,8 @@
                 ],
                 "json_ld_sha256": "0533d6c76ae8698bce37329f52ce9a4f318db612e92fed089c56ce8df3c469ce",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -63745,7 +64035,8 @@
                 ],
                 "json_ld_sha256": "26d7b3af384520100892c8f502bfa99a05dbfa2306a8b3f417d62e628c820962",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -64205,7 +64496,8 @@
                 ],
                 "json_ld_sha256": "815ed8d66be4296e6686dac40baf77341e1f5a02b5f30ee3270c79fd621f3e85",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -64665,7 +64957,8 @@
                 ],
                 "json_ld_sha256": "189e843bd5f47368f8fa2833a56ea054480c3967680281137265948269f3bd87",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -65133,7 +65426,8 @@
                 ],
                 "json_ld_sha256": "12ed169efc2717750a84a8820d427fe8a66d57a15a7012e17fc0bdf5fe3aa42b",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -65617,7 +65911,8 @@
                 ],
                 "json_ld_sha256": "495e88304cf881987294e23ee06b581fc3cf05d28ee883786a437f111cfc9adc",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -66054,7 +66349,8 @@
                 ],
                 "json_ld_sha256": "3c893c9886987f770676681efdba2bd057e0924b8bbbd5e4bb32770c7af1fca1",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -66455,7 +66751,8 @@
                 ],
                 "json_ld_sha256": "69bd9d36a788192171f4dddd0aad862cb6dbc330dd2c2b0e751cb93b38684cd5",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -66865,7 +67162,8 @@
                 ],
                 "json_ld_sha256": "c06ca36fd5f6aa6359df8d1a7a6e56b439b0b919eeac44d1b87c96675c2c755a",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -67269,7 +67567,8 @@
                 ],
                 "json_ld_sha256": "a0706af63ac72b3a2c0ab3112de57f64a38d12bd3c132f446de15561b546ce5b",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -67667,7 +67966,8 @@
                 ],
                 "json_ld_sha256": "4e7c1b6abe72c525795d2dff4c776c3c31dc9a9e89d044fa944aba044a00ba60",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -68068,7 +68368,8 @@
                 ],
                 "json_ld_sha256": "cff7575b85e97afa5e284b34f0cc975104ee7b44f862bb363d37c1721e188e9a",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -68471,7 +68772,8 @@
                 ],
                 "json_ld_sha256": "3329a99a5e2cac820062ab1cb858ffab6457fa0e5819d52a2cdac825fcfb85b9",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -68870,7 +69172,8 @@
                 ],
                 "json_ld_sha256": "d0a1a90c28da1f70dec1278a5bde8e5d7fbc2fa8a70d658b9e30b6ad68bbd9f6",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -69259,7 +69562,8 @@
                 ],
                 "json_ld_sha256": "e90943ecdeaea4260ac9b46a7d1da108fe7491780d698399a3012dbd6a395e1c",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -69654,7 +69958,8 @@
                 ],
                 "json_ld_sha256": "3ae69203f7f12f83f904bd85bac88a5faf4480040f7f93eb764d46986083a6d3",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -70049,7 +70354,8 @@
                 ],
                 "json_ld_sha256": "9c65bb57b03818a1a661988b2046eabe1a3f791472912029c43709090d27980f",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -70456,7 +70762,8 @@
                 ],
                 "json_ld_sha256": "8d27fab4b15f8f91e99dd590d744bdc168970f668940a2b7e7b9a241834123b5",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -70857,7 +71164,8 @@
                 ],
                 "json_ld_sha256": "668960ed1518a31c34fa046d7e41995fa88fb4e71c1e06056246395cd10cf800",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -71260,7 +71568,8 @@
                 ],
                 "json_ld_sha256": "fa40db6b05e3632533eb18b1f9d2fdfc88762f5cb2f2cef80f87a37b2a253d94",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -71657,7 +71966,8 @@
                 ],
                 "json_ld_sha256": "ccaa5c173baf6390969e7076c2c3ae70a5db57694e616665f0f89130c53b2a7c",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -72054,7 +72364,8 @@
                 ],
                 "json_ld_sha256": "a7324b06f6d18fd42bc33660802f035feabe34e185aa084bbd8fbc57f8d1d6e7",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -72457,7 +72768,8 @@
                 ],
                 "json_ld_sha256": "08f2cede1a36392a834e1dc54b4bb466943f84135c9f2981a9d6aa4376eeb09e",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -72846,7 +73158,8 @@
                 ],
                 "json_ld_sha256": "edf5af16b86aa961c5ad4e668942ab188d08c8fa0c8680066ac5da692d5559da",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -73241,7 +73554,8 @@
                 ],
                 "json_ld_sha256": "965ac4c2f1b3b1c6a9dcc5bc1d91efc3d6b1e075f15bd65bf31f44be5490a032",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -73650,7 +73964,8 @@
                 ],
                 "json_ld_sha256": "cb909fd7602dc7b7f25b2a154c1abe1ce622e8aa8f5c0cae9a5a6cf161a15af9",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -74053,7 +74368,8 @@
                 ],
                 "json_ld_sha256": "8205831317310694079ca598594fce3b833f501835fd439e3f3aa85915ead10e",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -74448,7 +74764,8 @@
                 ],
                 "json_ld_sha256": "eb91e8b2817d81ebe3a3559cdb079ff41fe7c1fe4683302893e6ef7221843cfc",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -74847,7 +75164,8 @@
                 ],
                 "json_ld_sha256": "ae4c4d9086541198e07fc56e213b729f54a58420e210aa1b8687722e4cc6d205",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -75242,7 +75560,8 @@
                 ],
                 "json_ld_sha256": "24c93981bd75827687192fe3c3fc9dbd0516dc005949e235ab19c323654991a5",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -75637,7 +75956,8 @@
                 ],
                 "json_ld_sha256": "3004808623d5333751e62d6f6f355efec643c354ad69f80334b175af04c6cd6f",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -76032,7 +76352,8 @@
                 ],
                 "json_ld_sha256": "f4147636baeefebcc4d5562f3c6e3c436154c5315b8ac9587c299bcc85776a45",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -76435,7 +76756,8 @@
                 ],
                 "json_ld_sha256": "547fc038dad43035dad46970294c36374ca64bc8bdcff197102f477c71a3e7ab",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -76824,7 +77146,8 @@
                 ],
                 "json_ld_sha256": "9e393f7ee12a296cbf7ad2c5156f002f04cfca3ad6ca6b57b2e46c8fb5f32da8",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -77237,7 +77560,8 @@
                 ],
                 "json_ld_sha256": "0a9752acfa75d1b9ee045572d8f1199f27b6624938293d1b59fc00e5650fd1ec",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -77646,7 +77970,8 @@
                 ],
                 "json_ld_sha256": "392fb5a0a0bd1f322eb5dcf9d237f518865dceac397a06a5c701356fe06b9ce4",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -78006,7 +78331,8 @@
                 ],
                 "json_ld_sha256": "64128c8189e027fbed00b97fb18d841d6b7440bbaec185866ac69bd0c81ddc1b",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -78366,7 +78692,8 @@
                 ],
                 "json_ld_sha256": "f80c5c6c62b2ef38d9f3facd162a2d20d3c6d65532015e4e893208239e867875",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -78726,7 +79053,8 @@
                 ],
                 "json_ld_sha256": "2b9c195e774d0866c2ddaaae4aeca27623729eb17aa0ad20804bd430a3cd2e40",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -79090,7 +79418,8 @@
                 ],
                 "json_ld_sha256": "60ba281161d8c7cc53af9a79d03b938acca11e432747f75854c206b2e0e647d1",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -79454,7 +79783,8 @@
                 ],
                 "json_ld_sha256": "e0926cdc60265c3b9f9ecc029191b68db0674fdd15fa15c89cbe71786efdcae6",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -79901,7 +80231,8 @@
                 ],
                 "json_ld_sha256": "d882c9805dbf3725c814403852ae13860ebed3a6ff860ab3552ed98da9bbe0d0",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -80284,7 +80615,8 @@
                 ],
                 "json_ld_sha256": "f351b6fbb1e12d5a20a494f50ce00e3dc5a87ab22aaa2992036bbec7a0cbb70e",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -80725,7 +81057,8 @@
                 ],
                 "json_ld_sha256": "bfc84bb723cff95725fb8e2ec8349efb1fcbee7da3cb97d6ba7e9de04c4873fc",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -81182,7 +81515,8 @@
                 ],
                 "json_ld_sha256": "0b9d92ba95834a623e010d52bf7f4f9dd45c448116f67b3ffcabea7d38bdf411",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -81574,7 +81908,8 @@
                 ],
                 "json_ld_sha256": "03987bcd546f0d191456a322d119e5bace65c4c8da4f4fcae29913f4e15f5141",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -82023,7 +82358,8 @@
                 ],
                 "json_ld_sha256": "c85692628440669e5afe8e6d2f6eb630e0d55f03f257c5c83aad085368aa58fe",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -82406,7 +82742,8 @@
                 ],
                 "json_ld_sha256": "019b2d804d083214f8db6f2db591943a932cfc867b4b8be46a544977179aeddd",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -82765,7 +83102,8 @@
                 ],
                 "json_ld_sha256": "8c9fc126943068fbec19ca9b8ece04aaa2fcb32c4fcbbaf4af6b80b8322da840",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -83133,7 +83471,8 @@
                 ],
                 "json_ld_sha256": "e878925461e0d77034edc0437b48c1dfbfd438eead563196c086bee147aa1684",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -83501,7 +83840,8 @@
                 ],
                 "json_ld_sha256": "5b3bd5230758ecdbbdd50297dad3f9e01fe57ed8e0f18d0b7022425294358b55",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -83868,7 +84208,8 @@
                 ],
                 "json_ld_sha256": "3972126d5076538431fc1e1dc78d033d07b27e04972af7462d92e9d8524802c4",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -84236,7 +84577,8 @@
                 ],
                 "json_ld_sha256": "391e0f22064caffa866fab3f43689b50496b9d534af44e86b9ee85d0084a9498",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -84604,7 +84946,8 @@
                 ],
                 "json_ld_sha256": "3981c89f9cb16779f6683195a1f330e791e456fc64b18188cd7209c189e23e44",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -84972,7 +85315,8 @@
                 ],
                 "json_ld_sha256": "c1fe1516eef5afdc428ba595820546490ceb13cc6bf1aa0525af03aa4ed8423d",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -85340,7 +85684,8 @@
                 ],
                 "json_ld_sha256": "cfa0248650cf96f9089a9205374346405169b1cee5dec4defbc4b61d62fba6de",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -85708,7 +86053,8 @@
                 ],
                 "json_ld_sha256": "200d755c41269991b7b0d03e3314bb3df9cc29b9de151aa6e41d9a35d943b58a",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -86076,7 +86422,8 @@
                 ],
                 "json_ld_sha256": "091c5de9374811f7aa88fa4e809102f6dd146de6b720abf2c0d5f90be9c429f6",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -86443,7 +86790,8 @@
                 ],
                 "json_ld_sha256": "8a077997fc01854935ab6d4378c042a3549ac4e25427271213b1ad5a9e5b7335",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -86811,7 +87159,8 @@
                 ],
                 "json_ld_sha256": "3fc704bd8574280526f1ac95a22a6a32d236792d9a75f4b5fbe5ae1b74b03b15",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -87179,7 +87528,8 @@
                 ],
                 "json_ld_sha256": "88ea8047eb54abfef8cff582ea55a693b95ba672882c39b3f2229befd7fe2cc7",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -87540,7 +87890,8 @@
                 ],
                 "json_ld_sha256": "982e143ded87da2b7a7e8881232921214b8bfc224ac0fbe5a2eba7a8e18da904",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -87907,7 +88258,8 @@
                 ],
                 "json_ld_sha256": "b3aa06ed85ef1c02fa75e91cde6ca6bcdab91212a4176b20a475a541b98ef7d4",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -88275,7 +88627,8 @@
                 ],
                 "json_ld_sha256": "f604578d629cfb28dccd0f05bccec7c53d8e151634ab29af16742df85057e78f",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -88643,7 +88996,8 @@
                 ],
                 "json_ld_sha256": "6267c3a81a5748eab2ae46ebec50eb666d084b3af3d225897b091cf3acb574af",
                 "created_at": "2026-07-24T23:09:18.000000Z",
-                "updated_at": "2026-07-24T23:09:18.000000Z"
+                "updated_at": "2026-07-24T23:09:18.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -89011,7 +89365,8 @@
                 ],
                 "json_ld_sha256": "d78c59d4a0a30990102a0ed4c291af087c29f299197d060291c6191ced86a470",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -89368,7 +89723,8 @@
                 ],
                 "json_ld_sha256": "cd1901bf8a1fdb9521e0b426bf1c70d5c6df68e3f93e71c5f67f845b2696967f",
                 "created_at": "2026-07-24T23:09:19.000000Z",
-                "updated_at": "2026-07-24T23:09:19.000000Z"
+                "updated_at": "2026-07-24T23:09:19.000000Z",
+                "keywords": []
             },
             "faqs": [
                 {
@@ -96885,6 +97241,20 @@
             "published_at": "2026-07-25T03:01:00.000000Z",
             "created_at": "2026-07-25T03:02:32.000000Z",
             "updated_at": "2026-07-25T03:02:32.000000Z"
+        },
+        {
+            "id": 158,
+            "path": "/services/tsnyf-alkhdm",
+            "exact_url": "https://lams-event.com/services/tsnyf-alkhdm",
+            "routable_type": "App\\Models\\Service",
+            "routable_id": 44,
+            "is_legacy": false,
+            "slug_locked": true,
+            "is_published": true,
+            "legacy_html_sha256": null,
+            "published_at": "2026-07-25T03:25:00.000000Z",
+            "created_at": "2026-07-25T03:26:24.000000Z",
+            "updated_at": "2026-07-25T03:26:24.000000Z"
         }
     ],
     "redirects": [],
@@ -98929,6 +99299,19 @@
             "is_included": true,
             "created_at": "2026-07-25T03:11:23.000000Z",
             "updated_at": "2026-07-25T03:11:23.000000Z"
+        },
+        {
+            "id": 158,
+            "route_registry_id": 158,
+            "loc": "https://lams-event.com/services/tsnyf-alkhdm",
+            "path": "/services/tsnyf-alkhdm",
+            "lastmod": "2026-07-25",
+            "changefreq": "monthly",
+            "priority": "0.80",
+            "position": 158,
+            "is_included": true,
+            "created_at": "2026-07-25T03:26:24.000000Z",
+            "updated_at": "2026-07-25T03:26:24.000000Z"
         }
     ],
     "contact": {

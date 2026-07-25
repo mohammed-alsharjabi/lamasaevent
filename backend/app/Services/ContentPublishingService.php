@@ -49,6 +49,7 @@ class ContentPublishingService
                 return;
             }
 
+            app(SeoDefaultsService::class)->sync($content, $path);
             $this->syncSitemap($route, $published);
 
             ActivityLog::create([

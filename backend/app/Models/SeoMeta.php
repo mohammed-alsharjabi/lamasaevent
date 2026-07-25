@@ -11,12 +11,13 @@ class SeoMeta extends Model
 
     protected $fillable = [
         'title', 'description', 'canonical', 'robots', 'open_graph', 'twitter',
-        'hreflang', 'json_ld', 'json_ld_sha256',
+        'keywords', 'hreflang', 'json_ld', 'json_ld_sha256',
     ];
 
     protected function casts(): array
     {
         return [
+            'keywords' => 'array',
             'open_graph' => 'array',
             'twitter' => 'array',
             'hreflang' => 'array',

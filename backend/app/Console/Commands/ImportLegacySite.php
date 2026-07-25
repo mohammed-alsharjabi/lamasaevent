@@ -219,6 +219,7 @@ class ImportLegacySite extends Command
             'description' => $seo['meta_description'],
             'canonical' => $seo['canonical'],
             'robots' => $seo['robots'],
+            'keywords' => [],
             'open_graph' => $seo['open_graph'],
             'twitter' => $seo['twitter'],
             'hreflang' => [

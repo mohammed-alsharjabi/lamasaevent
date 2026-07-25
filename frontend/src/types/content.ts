@@ -3,6 +3,7 @@ export interface SeoMeta {
   description: string;
   canonical: string;
   robots: string | null;
+  keywords: string[];
   open_graph: Record<string, string | null>;
   twitter: Record<string, string | null>;
   hreflang: Array<{ lang: string; href: string }> | null;

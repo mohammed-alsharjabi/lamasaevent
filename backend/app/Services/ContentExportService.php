@@ -13,6 +13,7 @@ use App\Models\Menu;
 use App\Models\Page;
 use App\Models\Redirect;
 use App\Models\RouteRecord;
+use App\Models\SeoMeta;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\SitemapEntry;
@@ -60,6 +61,20 @@ class ContentExportService
             foreach ($records as $record) {
                 if (! $record instanceof ManagedContent) {
                     continue;
+                }
+
+                $seo = $record->getRelation('seoMeta');
+                if ($seo instanceof SeoMeta) {
+                    $keywords = $seo->getAttribute('keywords');
+
+                    if (is_string($keywords)) {
+                        $keywords = json_decode($keywords, true);
+                    }
+
+                    $seo->setAttribute(
+                        'keywords',
+                        app(SeoDefaultsService::class)->normalizeKeywords($keywords),
+                    );
                 }
 
                 $hero = $record->getRelation('heroMedia');

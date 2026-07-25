@@ -54,6 +54,11 @@ for (const [route, slug] of pages) {
       prepare(legacy, new URL(route, legacyBase).href),
       prepare(current, new URL(route, newBase).href),
     ]);
+    await current.evaluate(() => {
+      document.querySelectorAll("[data-cms-additions]").forEach((element) => {
+        element.remove();
+      });
+    });
 
     const [legacyPng, currentPng] = await Promise.all([
       legacy.locator("main").screenshot({ animations: "disabled" }),

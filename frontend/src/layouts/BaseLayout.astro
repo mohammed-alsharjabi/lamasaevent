@@ -28,6 +28,9 @@ const ui = requireSetting("ui_labels");
     <meta name="robots" content={seo.robots || "index, follow"} />
     <title>{seo.title}</title>
     <meta name="description" content={seo.description} />
+    {seo.keywords.length > 0 && (
+      <meta name="keywords" content={seo.keywords.join(", ")} />
+    )}
     <link rel="canonical" href={seo.canonical} />
     {(seo.hreflang || []).map((alternate) => (
       <link rel="alternate" hreflang={alternate.lang} href={alternate.href} />

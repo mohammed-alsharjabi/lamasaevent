@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\ServiceCategory;
 use App\Services\ContentPublishingService;
+use App\Services\SeoDefaultsService;
 use App\Services\SlugRedirectService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
@@ -215,10 +216,11 @@ class ContentResourceController extends Controller
 
         if ($config['seo']) {
             $rules += [
-                'seo.title' => ['required', 'string', 'max:255'],
-                'seo.description' => ['required', 'string', 'max:5000'],
-                'seo.canonical' => ['required', 'url:http,https', 'max:2048'],
+                'seo.title' => ['nullable', 'string', 'max:255'],
+                'seo.description' => ['nullable', 'string', 'max:5000'],
+                'seo.canonical' => ['nullable', 'url:http,https', 'max:2048'],
                 'seo.robots' => ['nullable', 'string', 'max:255'],
+                'seo.keywords' => ['nullable', 'string', 'max:1500'],
                 'seo.open_graph' => ['nullable', 'json'],
                 'seo.twitter' => ['nullable', 'json'],
                 'seo.json_ld' => ['nullable', 'json'],
@@ -240,6 +242,11 @@ class ContentResourceController extends Controller
                     "seo.{$field}",
                 );
             }
+        }
+
+        if (isset($validated['seo']['keywords'])) {
+            $validated['seo']['keywords'] = app(SeoDefaultsService::class)
+                ->normalizeKeywords($validated['seo']['keywords']);
         }
 
         return $validated;

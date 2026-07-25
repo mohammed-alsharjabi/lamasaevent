@@ -10,6 +10,7 @@ use App\Services\ContentExportService;
 use App\Services\ContentPublishingService;
 use App\Services\ContentSnapshotWriter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -107,6 +108,91 @@ class CmsContentStructureTest extends TestCase
             'path' => $service->routePath(),
             'is_included' => false,
         ]);
+    }
+
+    public function test_optional_seo_fields_receive_safe_publishing_defaults(): void
+    {
+        $service = Service::create([
+            'title' => 'خدمة بدون حقول SEO',
+            'excerpt' => 'وصف مختصر للخدمة الجديدة.',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        app(ContentPublishingService::class)->sync($service);
+
+        $seo = $service->fresh()->seoMeta;
+        $this->assertSame('خدمة بدون حقول SEO', $seo->title);
+        $this->assertSame('وصف مختصر للخدمة الجديدة.', $seo->description);
+        $this->assertSame(
+            'https://lams-event.com'.$service->routePath(),
+            $seo->canonical,
+        );
+        $this->assertSame('index, follow', $seo->robots);
+        $this->assertSame([], $seo->keywords);
+        $this->assertSame($seo->canonical, $seo->open_graph['url']);
+    }
+
+    public function test_meta_keywords_are_normalized_and_exported(): void
+    {
+        $service = Service::create([
+            'title' => 'خدمة بكلمات مفتاحية',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+        $service->seoMeta()->create([
+            'keywords' => ['تنظيم حفلات، مناسبات الرياض', 'تنظيم حفلات'],
+        ]);
+
+        app(ContentPublishingService::class)->sync($service);
+
+        $this->assertSame(
+            ['تنظيم حفلات', 'مناسبات الرياض'],
+            $service->fresh()->seoMeta->keywords,
+        );
+
+        $exported = app(ContentExportService::class)
+            ->build()['services']
+            ->firstWhere('id', $service->id);
+        $this->assertSame(
+            ['تنظيم حفلات', 'مناسبات الرياض'],
+            $exported->seoMeta->keywords,
+        );
+    }
+
+    public function test_export_normalizes_a_legacy_string_keywords_value(): void
+    {
+        $service = Service::create([
+            'title' => 'خدمة بتنسيق كلمات قديم',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+        $service->seoMeta()->create([
+            'title' => 'خدمة بتنسيق كلمات قديم',
+            'description' => 'وصف',
+            'canonical' => 'https://lams-event.com'.$service->routePath(),
+        ]);
+        DB::table('seo_meta')
+            ->where('seoable_type', $service->getMorphClass())
+            ->where('seoable_id', $service->id)
+            ->update([
+                'keywords' => json_encode(
+                    json_encode(
+                        ['تنظيم حفلات', 'مناسبات الرياض'],
+                        JSON_UNESCAPED_UNICODE,
+                    ),
+                    JSON_UNESCAPED_UNICODE,
+                ),
+            ]);
+
+        $exported = app(ContentExportService::class)
+            ->build()['services']
+            ->firstWhere('id', $service->id);
+
+        $this->assertSame(
+            ['تنظيم حفلات', 'مناسبات الرياض'],
+            $exported->seoMeta->keywords,
+        );
     }
 
     public function test_content_snapshots_are_written_atomically(): void

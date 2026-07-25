@@ -89,16 +89,21 @@
         <section class="panel">
             <div class="panel-body form-grid">
                 <div class="field span-2">
-                    <label for="seo-title">SEO Title</label>
-                    <input id="seo-title" name="seo[title]" value="{{ old('seo.title', $seo?->title ?? $record->title) }}" required>
+                    <label for="seo-title">SEO Title (اختياري)</label>
+                    <input id="seo-title" name="seo[title]" value="{{ old('seo.title', $seo?->title) }}" placeholder="يُستخدم عنوان المحتوى تلقائيًا">
                 </div>
                 <div class="field span-2">
-                    <label for="seo-description">Meta Description</label>
-                    <textarea id="seo-description" name="seo[description]" required>{{ old('seo.description', $seo?->description) }}</textarea>
+                    <label for="seo-description">Meta Description (اختياري)</label>
+                    <textarea id="seo-description" name="seo[description]" placeholder="يُستخدم الملخص تلقائيًا">{{ old('seo.description', $seo?->description) }}</textarea>
                 </div>
                 <div class="field span-2">
-                    <label for="seo-canonical">Canonical URL</label>
-                    <input id="seo-canonical" name="seo[canonical]" value="{{ old('seo.canonical', $seo?->canonical) }}" required dir="ltr">
+                    <label for="seo-canonical">Canonical URL (اختياري)</label>
+                    <input id="seo-canonical" name="seo[canonical]" value="{{ old('seo.canonical', $seo?->canonical) }}" placeholder="يُولد رابط الصفحة الصحيح تلقائيًا" dir="ltr">
+                </div>
+                <div class="field span-2">
+                    <label for="seo-keywords">Meta Keywords (اختياري)</label>
+                    <textarea id="seo-keywords" name="seo[keywords]" placeholder="تنظيم حفلات، مناسبات الرياض، ديكور">{{ old('seo.keywords', implode('، ', $seo?->keywords ?? [])) }}</textarea>
+                    <small class="muted">أدخل الكلمات مفصولة بفاصلة عربية أو إنجليزية. يحذف النظام التكرار تلقائيًا.</small>
                 </div>
                 <div class="field span-2">
                     <label for="seo-robots">Robots</label>
