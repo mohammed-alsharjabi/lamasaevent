@@ -41,3 +41,32 @@ export interface RouteRecord {
   is_legacy: boolean;
   is_published: boolean;
 }
+
+export interface MenuItem {
+  id: number;
+  label: string;
+  url: string;
+  is_external: boolean;
+  open_in_new_tab: boolean;
+  is_active: boolean;
+  sort_order: number;
+}
+
+export interface Menu {
+  id: number;
+  name: string;
+  location: string;
+  is_active: boolean;
+  all_items: MenuItem[];
+}
+
+export interface ContactSettings {
+  phone: string;
+  phone_display: string;
+  whatsapp: string;
+  email: string;
+  city: string;
+  region: string;
+  country_code: string;
+  social_links: Record<string, string> | null;
+}

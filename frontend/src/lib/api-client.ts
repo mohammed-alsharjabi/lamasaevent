@@ -62,6 +62,37 @@ const sitemapSchema = z.looseObject({
     is_included: z.boolean(),
   });
 
+const menuItemSchema = z.looseObject({
+    id: z.number().int(),
+    label: z.string().min(1),
+    url: z.string().min(1),
+    is_external: z.boolean(),
+    open_in_new_tab: z.boolean(),
+    is_active: z.boolean(),
+    sort_order: z.number().int(),
+  });
+
+const menuSchema = z.looseObject({
+    id: z.number().int(),
+    name: z.string().min(1),
+    location: z.string().min(1),
+    is_active: z.boolean(),
+    all_items: z.array(menuItemSchema),
+  });
+
+const contactSchema = z.looseObject({
+    phone: z.string().min(1),
+    phone_display: z.string().min(1),
+    whatsapp: z.string().min(1),
+    email: z.email(),
+    city: z.string().min(1),
+    region: z.string().min(1),
+    country_code: z.string().length(2),
+    social_links: z.record(z.string(), z.string()).nullable(),
+  });
+
+const settingSchema = z.record(z.string(), z.string());
+
 export const contentExportSchema = z.looseObject({
     schema_version: z.union([z.literal(1), z.literal(2)]),
     production_origin: z.url(),
@@ -75,9 +106,9 @@ export const contentExportSchema = z.looseObject({
     routes: z.array(routeSchema),
     redirects: z.array(z.record(z.string(), z.unknown())),
     sitemap: z.array(sitemapSchema),
-    contact: z.record(z.string(), z.unknown()).nullable(),
-    settings: z.record(z.string(), z.unknown()),
-    menus: z.array(z.record(z.string(), z.unknown())).optional(),
+    contact: contactSchema.nullable(),
+    settings: z.record(z.string(), settingSchema),
+    menus: z.array(menuSchema),
   });
 
 export type ContentExport = z.infer<typeof contentExportSchema>;

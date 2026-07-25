@@ -1,5 +1,10 @@
 import { loadContentExport } from "./api-client";
-import type { ContentEntity, RouteRecord } from "../types/content";
+import type {
+  ContactSettings,
+  ContentEntity,
+  Menu,
+  RouteRecord,
+} from "../types/content";
 
 const { payload: content, source } = await loadContentExport();
 
@@ -17,8 +22,39 @@ const entitiesByPath = new Map<string, ContentEntity>(
 
 export const routes = content.routes as unknown as RouteRecord[];
 export const sitemap = content.sitemap;
-export const contact = content.contact;
 export const contentSource = source;
+export const contact = content.contact as ContactSettings | null;
+export const menus = content.menus as Menu[];
+export const settings = content.settings as Record<
+  string,
+  Record<string, string>
+>;
+
+export function requireContact(): ContactSettings {
+  if (!contact) {
+    throw new Error("Published contact settings are missing from the CMS export.");
+  }
+
+  return contact;
+}
+
+export function requireMenu(location: string): Menu {
+  const menu = menus.find((candidate) => candidate.location === location);
+  if (!menu) {
+    throw new Error(`Published ${location} menu is missing from the CMS export.`);
+  }
+
+  return menu;
+}
+
+export function requireSetting(key: string): Record<string, string> {
+  const value = settings[key];
+  if (!value) {
+    throw new Error(`Published ${key} settings are missing from the CMS export.`);
+  }
+
+  return value;
+}
 
 export function getContentByPath(path: string): ContentEntity {
   const entity = entitiesByPath.get(path);

@@ -4,7 +4,10 @@ namespace Tests\Feature;
 
 use App\Enums\ContentStatus;
 use App\Models\Article;
+use App\Models\ContactSetting;
+use App\Models\Menu;
 use App\Models\SitemapEntry;
+use App\Models\SiteSetting;
 use App\Models\User;
 use App\Services\ContentExportService;
 use App\Services\ContentPublishingService;
@@ -12,6 +15,7 @@ use App\Services\ImageProcessor;
 use App\Services\SlugRedirectService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
@@ -109,5 +113,52 @@ class ExampleTest extends TestCase
         $export = app(ContentExportService::class)->build();
 
         $this->assertSame('2026-05-14', $export['sitemap']->first()['lastmod']);
+    }
+
+    public function test_global_cms_data_is_exported_and_invalidates_the_api_cache(): void
+    {
+        $contact = ContactSetting::create([
+            'phone' => '+966500000000',
+            'phone_display' => '050 000 0000',
+            'whatsapp' => '966500000000',
+            'email' => 'cms@example.test',
+            'city' => 'الرياض',
+            'region' => 'منطقة الرياض',
+            'country_code' => 'SA',
+        ]);
+        $setting = SiteSetting::create([
+            'key' => 'brand',
+            'value' => ['name' => 'اسم من قاعدة البيانات'],
+            'group' => 'general',
+            'is_public' => true,
+        ]);
+        $menu = Menu::create([
+            'name' => 'القائمة الرئيسية',
+            'location' => 'header',
+            'is_active' => true,
+        ]);
+        $menu->allItems()->create([
+            'label' => 'الرئيسية',
+            'url' => '/',
+            'is_active' => true,
+            'sort_order' => 0,
+        ]);
+
+        $export = app(ContentExportService::class)->build();
+
+        $this->assertSame($contact->email, $export['contact']->email);
+        $this->assertSame(
+            'اسم من قاعدة البيانات',
+            $export['settings']['brand']['name'],
+        );
+        $this->assertSame(
+            'الرئيسية',
+            $export['menus']->sole()->allItems->sole()->label,
+        );
+
+        Cache::put('content-export:v2', ['stale' => true], now()->addMinute());
+        $setting->update(['value' => ['name' => 'اسم محدث']]);
+
+        $this->assertFalse(Cache::has('content-export:v2'));
     }
 }

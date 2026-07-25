@@ -1,63 +1,79 @@
+---
+import { requireContact, requireMenu, requireSetting } from "../lib/content";
+
+const brand = requireSetting("brand");
+const footer = requireSetting("footer");
+const ui = requireSetting("ui_labels");
+const contact = requireContact();
+const quickLinks = requireMenu("footer").all_items.filter((item) =>
+  item.url.startsWith("/"),
+);
+const phoneHref = `tel:${contact.phone}`;
+const whatsappHref = `https://wa.me/${contact.whatsapp}`;
+---
+
 <footer class="site-footer">
   <div class="container site-footer__inner">
     <div class="site-footer__brand">
-      <p class="site-footer__brand-name">لمسه التميز</p>
+      <p class="site-footer__brand-name">{brand.name}</p>
       <p class="site-footer__brand-desc">
-        تنسيق مناسبات فاخر في الرياض — كوش، ملكة، جلوس ملكي، ومداخل بإشراف متكامل لراحتك ولضيوفك.
+        {footer.description}
       </p>
       <p class="site-footer__brand-desc" style="margin-top: 0.5rem; font-size: 0.9em; opacity: 0.92;">
-        لمسه التميز لتنسيق الحفلات والمناسبات · الرياض ·
-        <a href="mailto:info@lams-event.com" dir="ltr">info@lams-event.com</a>
+        {footer.company_line}
+        <a href={`mailto:${contact.email}`} dir="ltr">{contact.email}</a>
       </p>
     </div>
     <div class="site-footer__columns">
       <div class="site-footer__col">
-        <h2 class="site-footer__col-h">روابط سريعة</h2>
+        <h2 class="site-footer__col-h">{footer.quick_links_heading}</h2>
         <ul class="site-footer__list">
-          <li><a href="/">الرئيسية</a></li>
-          <li><a href="/services">الخدمات</a></li>
-          <li><a href="/areas">تغطية الرياض</a></li>
-          <li><a href="/gallery">المعرض</a></li>
-          <li><a href="/blog">المدونة</a></li>
-          <li><a href="/about">من نحن</a></li>
-          <li><a href="/contact">تواصل معنا</a></li>
+          {quickLinks.map((item) => (
+            <li>
+              <a
+                href={item.url}
+                target={item.open_in_new_tab ? "_blank" : undefined}
+                rel={item.open_in_new_tab ? "noopener noreferrer" : undefined}
+              >{item.label}</a>
+            </li>
+          ))}
         </ul>
       </div>
       <div class="site-footer__col">
-        <h2 class="site-footer__col-h">تواصل معنا</h2>
+        <h2 class="site-footer__col-h">{footer.contact_heading}</h2>
         <ul class="site-footer__list site-footer__list--contact">
-          <li><a class="site-footer__phone" href="tel:+966502560106" dir="ltr">050 256 0106</a></li>
+          <li><a class="site-footer__phone" href={phoneHref} dir="ltr">{contact.phone_display}</a></li>
           <li class="site-footer__cta-row">
             <a
               class="site-footer__pill site-footer__pill--wa"
-              href="https://wa.me/966502560106"
+              href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-            >واتساب</a>
-            <a class="site-footer__pill site-footer__pill--call" href="tel:+966502560106">اتصال</a>
+            >{ui.whatsapp}</a>
+            <a class="site-footer__pill site-footer__pill--call" href={phoneHref}>{ui.call}</a>
           </li>
         </ul>
       </div>
     </div>
   </div>
   <div class="container site-footer__legal">
-    <p>© 2026 لمسه التميز لتنسيق الحفلات والمناسبات — الرياض</p>
-    <div class="site-footer__credit" aria-label="برمجة الموقع">
-      <p class="site-footer__credit-title">برمجة م/ محمد الشرجبي</p>
+    <p>{footer.legal}</p>
+    <div class="site-footer__credit" aria-label={footer.credit_aria_label}>
+      <p class="site-footer__credit-title">{footer.credit_title}</p>
       <div class="site-footer__credit-actions">
         <a
           class="site-footer__credit-btn site-footer__credit-btn--wa"
-          href="https://wa.me/966568767724"
+          href={footer.credit_whatsapp_url}
           target="_blank"
           rel="noopener noreferrer"
-        >واتساب</a>
+        >{footer.credit_whatsapp_label}</a>
         <a
           class="site-footer__credit-btn site-footer__credit-btn--at"
-          href="https://www.google.com/search?q=%40mashrjbi"
+          href={footer.credit_profile_url}
           target="_blank"
           rel="noopener noreferrer"
           dir="ltr"
-        >@mashrjbi</a>
+        >{footer.credit_profile_label}</a>
       </div>
     </div>
   </div>

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\InvalidatesContentExport;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MenuItem extends Model
 {
+    use InvalidatesContentExport;
+
     protected $fillable = [
         'menu_id', 'parent_id', 'label', 'url', 'is_external', 'open_in_new_tab',
         'is_active', 'sort_order',

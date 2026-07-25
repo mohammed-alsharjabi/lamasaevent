@@ -372,7 +372,16 @@ class ImportLegacySite extends Command
             );
             $ids = [];
 
-            foreach ($menus[$location] ?? [] as $position => $item) {
+            $items = collect($menus[$location] ?? [])
+                ->when(
+                    $location === 'footer',
+                    fn ($links) => $links->filter(
+                        fn ($item) => str_starts_with($item['url'], '/'),
+                    ),
+                )
+                ->values();
+
+            foreach ($items as $position => $item) {
                 $record = $menu->allItems()->updateOrCreate(
                     ['url' => $item['url'], 'label' => $item['label']],
                     [
@@ -404,13 +413,97 @@ class ImportLegacySite extends Command
         ]);
 
         foreach ([
-            'site_name' => ['text' => 'لمسه التميز للحفلات'],
-            'site_description' => ['text' => 'تنسيق وتجهيز مناسبات في الرياض'],
-            'default_robots' => ['text' => 'index, follow, max-image-preview:large'],
-        ] as $key => $value) {
-            SiteSetting::updateOrCreate(['key' => $key], [
-                'value' => $value,
+            'site_name' => [
                 'group' => 'seo',
+                'value' => ['text' => 'لمسه التميز للحفلات'],
+            ],
+            'site_description' => [
+                'group' => 'seo',
+                'value' => ['text' => 'تنسيق وتجهيز مناسبات في الرياض'],
+            ],
+            'default_robots' => [
+                'group' => 'seo',
+                'value' => ['text' => 'index, follow, max-image-preview:large'],
+            ],
+            'brand' => [
+                'group' => 'general',
+                'value' => [
+                    'name' => 'لمسه التميز',
+                    'tagline' => 'تنسيق مناسبات — الرياض',
+                    'logo_src' => '/icons/logo-without-bg.png',
+                    'logo_width' => '520',
+                    'logo_height' => '480',
+                    'favicon_src' => '/icons/logo-bg.png',
+                ],
+            ],
+            'footer' => [
+                'group' => 'general',
+                'value' => [
+                    'description' => 'تنسيق مناسبات فاخر في الرياض — كوش، ملكة، جلوس ملكي، ومداخل بإشراف متكامل لراحتك ولضيوفك.',
+                    'company_line' => 'لمسه التميز لتنسيق الحفلات والمناسبات · الرياض ·',
+                    'quick_links_heading' => 'روابط سريعة',
+                    'contact_heading' => 'تواصل معنا',
+                    'legal' => '© 2026 لمسه التميز لتنسيق الحفلات والمناسبات — الرياض',
+                    'credit_aria_label' => 'برمجة الموقع',
+                    'credit_title' => 'برمجة م/ محمد الشرجبي',
+                    'credit_whatsapp_url' => 'https://wa.me/966568767724',
+                    'credit_whatsapp_label' => 'واتساب',
+                    'credit_profile_url' => 'https://www.google.com/search?q=%40mashrjbi',
+                    'credit_profile_label' => '@mashrjbi',
+                ],
+            ],
+            'booking_form' => [
+                'group' => 'general',
+                'value' => [
+                    'heading' => 'طلب حجز',
+                    'name_label' => 'الاسم / الجهة',
+                    'name_placeholder' => 'الاسم الكريم',
+                    'occasion_label' => 'نوع المناسبة / الخدمة',
+                    'occasion_placeholder' => 'اختر نوع الخدمة أو المناسبة',
+                    'other_value' => '__other__',
+                    'other_label' => 'اكتب المناسبة',
+                    'other_placeholder' => 'اكتب نوع المناسبة أو الطلب',
+                    'phone_label' => 'رقم التواصل',
+                    'phone_placeholder' => '05xxxxxxxx',
+                    'submit_label' => 'إرسال الطلب للمدير العام',
+                ],
+            ],
+            'booking_options' => [
+                'group' => 'general',
+                'value' => [
+                    'الكوش وتقديم الأفراح' => 'الكوش وتقديم الأفراح',
+                    'الدزات والملكة' => 'الدزات والملكة',
+                    'الجلوس الملكي وكراسي الضيافة' => 'الجلوس الملكي وكراسي الضيافة',
+                    'المخيمات التراثية وبيت الشعر' => 'المخيمات التراثية وبيت الشعر',
+                    'الاستقبال والمداخل' => 'الاستقبال والمداخل',
+                    'الافتتاحات والإعلان والبوابات' => 'الافتتاحات والإعلان والبوابات',
+                    'ديكور الحفلات والأقواس' => 'ديكور الحفلات والأقواس',
+                    'الذكرى السنوية وغرفة العروس' => 'الذكرى السنوية وغرفة العروس',
+                    'طاولات الطعام والولائم' => 'طاولات الطعام والولائم',
+                    'مناسبات مدعومة بصور الأعمال' => 'مناسبات مدعومة بصور الأعمال',
+                    'عيد ميلاد' => 'عيد ميلاد',
+                    'استقبال مواليد' => 'استقبال مواليد',
+                    'تحديد الجنين' => 'تحديد الجنين',
+                    '__other__' => 'مناسبة أخرى',
+                ],
+            ],
+            'ui_labels' => [
+                'group' => 'general',
+                'value' => [
+                    'skip_to_content' => 'تخطي إلى المحتوى',
+                    'primary_navigation' => 'التنقل الرئيسي',
+                    'menu_open' => 'فتح القائمة',
+                    'menu_close' => 'إغلاق القائمة',
+                    'quick_contact_channels' => 'قنوات اتصال سريعة',
+                    'whatsapp' => 'واتساب',
+                    'call' => 'اتصال',
+                    'phone_call' => 'اتصال هاتفي',
+                ],
+            ],
+        ] as $key => $setting) {
+            SiteSetting::updateOrCreate(['key' => $key], [
+                'value' => $setting['value'],
+                'group' => $setting['group'],
                 'is_public' => true,
             ]);
         }

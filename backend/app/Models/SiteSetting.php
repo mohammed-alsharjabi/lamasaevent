@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\InvalidatesContentExport;
 use Illuminate\Database\Eloquent\Model;
 
 class SiteSetting extends Model
 {
+    use InvalidatesContentExport;
+
     protected $table = 'settings';
 
     protected $fillable = [

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\InvalidatesContentExport;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Menu extends Model
 {
+    use InvalidatesContentExport;
+
     protected $fillable = ['name', 'location', 'is_active'];
 
     protected function casts(): array
