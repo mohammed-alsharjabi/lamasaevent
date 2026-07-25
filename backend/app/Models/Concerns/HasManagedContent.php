@@ -3,9 +3,9 @@
 namespace App\Models\Concerns;
 
 use App\Enums\ContentStatus;
-use App\Models\Media;
 use App\Models\ContentRevision;
 use App\Models\Faq;
+use App\Models\Media;
 use App\Models\RouteRecord;
 use App\Models\SeoMeta;
 use Illuminate\Database\Eloquent\Relations\MorphMany;

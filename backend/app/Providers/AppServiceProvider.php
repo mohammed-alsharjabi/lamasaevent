@@ -8,7 +8,10 @@ use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -28,6 +31,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        RateLimiter::for('api', fn (Request $request): Limit => Limit::perMinute(120)
+            ->by((string) ($request->user()?->getAuthIdentifier() ?: $request->ip())));
+
         Event::listen(Login::class, function (Login $event): void {
             $event->user->forceFill([
                 'last_login_at' => now(),

@@ -2,11 +2,15 @@
 
 namespace App\Console\Commands;
 
+use App\Contracts\ManagedContent;
 use App\Enums\ContentStatus;
 use App\Models\Area;
 use App\Models\Article;
+use App\Models\ArticleCategory;
 use App\Models\ContactSetting;
 use App\Models\Gallery;
+use App\Models\GalleryItem;
+use App\Models\Menu;
 use App\Models\Page;
 use App\Models\RouteRecord;
 use App\Models\Service;
@@ -15,9 +19,12 @@ use App\Models\SitemapEntry;
 use App\Models\SiteSetting;
 use App\Services\ImageProcessor;
 use App\Services\LegacyHtmlParser;
+use App\Services\LegacyManifestService;
+use App\Services\LegacyVerificationService;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use RuntimeException;
@@ -35,35 +42,15 @@ class ImportLegacySite extends Command
     public function handle(
         LegacyHtmlParser $parser,
         ImageProcessor $images,
+        LegacyManifestService $manifests,
+        LegacyVerificationService $verification,
     ): int {
-        $legacyRoot = realpath($this->option('legacy') ?: env('LEGACY_DIST', ''));
-        $manifestPath = realpath(
-            $this->option('manifest') ?: env('LEGACY_MANIFEST', base_path('../route-manifest.json')),
+        $inspection = $manifests->load(
+            $this->option('legacy'),
+            $this->option('manifest'),
         );
-
-        if (! $legacyRoot || ! is_dir($legacyRoot)) {
-            $this->error('Pass a readable legacy-dist directory with --legacy.');
-
-            return self::FAILURE;
-        }
-        if (! $manifestPath || ! is_file($manifestPath)) {
-            $this->error('route-manifest.json was not found.');
-
-            return self::FAILURE;
-        }
-
-        $manifest = json_decode(file_get_contents($manifestPath), true, flags: JSON_THROW_ON_ERROR);
-        $sitemapPath = $legacyRoot.DIRECTORY_SEPARATOR.'sitemap.xml';
-        $actualSitemapHash = hash_file('sha256', $sitemapPath);
-
-        if (! hash_equals($manifest['legacy']['sitemap_sha256'], $actualSitemapHash)) {
-            throw new RuntimeException('legacy-dist/sitemap.xml changed after the recovery audit.');
-        }
-
-        $routes = $manifest['routes'];
-        if (count($routes) !== $manifest['legacy']['route_count']) {
-            throw new RuntimeException('Route manifest count is inconsistent.');
-        }
+        $legacyRoot = $inspection['legacy_root'];
+        $routes = $inspection['routes'];
 
         $parsedRoutes = [];
         $categoryByServiceSlug = [];
@@ -107,6 +94,7 @@ class ImportLegacySite extends Command
                 $parsed = $parsedRoutes[$route['path']];
                 $entity = $this->upsertEntity($route, $parsed, $categoryByServiceSlug);
                 $this->syncSeo($entity, $route['seo']);
+                $this->syncFaqs($entity, $parsed['faqs']);
                 $routeRecord = $this->syncRoute($entity, $route);
                 $this->syncSitemap($routeRecord, $route);
 
@@ -120,6 +108,12 @@ class ImportLegacySite extends Command
         $this->newLine(2);
 
         $this->seedGlobalSettings();
+        $this->syncMenus($parsedRoutes['/']['menus'] ?? []);
+        Cache::forget('content-export:v2');
+        $report = $verification->verify($routes);
+        if (! $report['passed']) {
+            throw new RuntimeException('Post-import verification failed. Run legacy:verify for details.');
+        }
         $this->info('Legacy import completed successfully.');
 
         return self::SUCCESS;
@@ -134,7 +128,7 @@ class ImportLegacySite extends Command
         array $route,
         array $parsed,
         array $categoryByServiceSlug,
-    ): Model {
+    ): Article|Service|ServiceCategory|Area|Page {
         $slug = $this->slugFromPath($route['path']);
         $publishedAt = $parsed['published_at']
             ? Carbon::parse($parsed['published_at'])
@@ -154,6 +148,7 @@ class ImportLegacySite extends Command
                     ...$common,
                     'slug' => $slug,
                     'topic' => $parsed['topic'],
+                    'article_category_id' => $this->articleCategoryId($parsed['topic']),
                     'excerpt' => $parsed['summary'],
                 ],
             ),
@@ -199,10 +194,25 @@ class ImportLegacySite extends Command
         };
     }
 
+    private function articleCategoryId(?string $topic): ?int
+    {
+        if (blank($topic)) {
+            return null;
+        }
+
+        $slug = Str::slug($topic);
+        $slug = $slug !== '' ? $slug : 'topic-'.substr(sha1($topic), 0, 12);
+
+        return ArticleCategory::updateOrCreate(
+            ['slug' => $slug],
+            ['name' => $topic, 'is_active' => true],
+        )->getKey();
+    }
+
     /**
      * @param  array<string, mixed>  $seo
      */
-    private function syncSeo(Model $entity, array $seo): void
+    private function syncSeo(Model&ManagedContent $entity, array $seo): void
     {
         $entity->seoMeta()->updateOrCreate([], [
             'title' => $seo['title'],
@@ -221,19 +231,49 @@ class ImportLegacySite extends Command
     }
 
     /**
+     * @param  array<int, array{question: string, answer: string}>  $faqs
+     */
+    private function syncFaqs(Model&ManagedContent $entity, array $faqs): void
+    {
+        $ids = [];
+        foreach ($faqs as $position => $faq) {
+            $record = $entity->faqs()->updateOrCreate(
+                ['question' => $faq['question']],
+                [
+                    'answer' => $faq['answer'],
+                    'sort_order' => $position,
+                    'is_active' => true,
+                ],
+            );
+            $ids[] = $record->getKey();
+        }
+
+        $entity->faqs()->when(
+            $ids !== [],
+            fn ($query) => $query->whereNotIn('id', $ids),
+        )->delete();
+    }
+
+    /**
      * @param  array<string, mixed>  $route
      */
-    private function syncRoute(Model $entity, array $route): RouteRecord
+    private function syncRoute(Model&ManagedContent $entity, array $route): RouteRecord
     {
-        return $entity->routeRecord()->updateOrCreate([], [
+        $record = $entity->routeRecord()->updateOrCreate([], [
             'path' => $route['path'],
             'exact_url' => $route['url'],
             'is_legacy' => true,
             'slug_locked' => true,
             'is_published' => true,
             'legacy_html_sha256' => $route['legacy_html_sha256'],
-            'published_at' => $entity->published_at,
+            'published_at' => $entity->getAttribute('published_at'),
         ]);
+
+        if (! $record instanceof RouteRecord) {
+            throw new RuntimeException('Unexpected route record model.');
+        }
+
+        return $record;
     }
 
     /**
@@ -242,7 +282,7 @@ class ImportLegacySite extends Command
     private function syncSitemap(RouteRecord $routeRecord, array $route): void
     {
         SitemapEntry::updateOrCreate(['loc' => $route['url']], [
-            'route_registry_id' => $routeRecord->id,
+            'route_registry_id' => $routeRecord->getKey(),
             'path' => $route['path'],
             'lastmod' => $route['sitemap']['lastmod'],
             'changefreq' => $route['sitemap']['changefreq'],
@@ -257,7 +297,7 @@ class ImportLegacySite extends Command
      * @param  array<string, mixed>  $route
      */
     private function syncMedia(
-        Model $entity,
+        Model&ManagedContent $entity,
         array $parsedImages,
         string $legacyRoot,
         ImageProcessor $processor,
@@ -269,19 +309,17 @@ class ImportLegacySite extends Command
             $relative = ltrim(rawurldecode(parse_url($image['src'], PHP_URL_PATH)), '/');
             $absolute = $this->safeLegacyPath($legacyRoot, $relative);
             $media = $processor->import($absolute, $relative);
-            if (blank($media->alt) && filled($image['alt'])) {
+            if (blank($media->getAttribute('alt')) && filled($image['alt'])) {
                 $media->update(['alt' => $image['alt']]);
             }
-            $firstMediaId ??= $media->id;
-            $pivot[$media->id] = [
+            $firstMediaId ??= $media->getKey();
+            $pivot[$media->getKey()] = [
                 'role' => $image['role'],
                 'sort_order' => $index,
             ];
         }
 
-        if (method_exists($entity, 'media')) {
-            $entity->media()->sync($pivot);
-        }
+        $entity->media()->sync($pivot);
         if ($firstMediaId && $entity->isFillable('hero_media_id')) {
             $entity->forceFill(['hero_media_id' => $firstMediaId])->saveQuietly();
         }
@@ -290,16 +328,66 @@ class ImportLegacySite extends Command
             $gallery = Gallery::updateOrCreate(
                 ['slug' => 'main'],
                 [
-                    'title' => $entity->title,
-                    'description' => $entity->summary,
+                    'title' => $entity->getAttribute('title'),
+                    'description' => $entity->getAttribute('summary'),
                     'status' => ContentStatus::Published,
-                    'published_at' => $entity->published_at,
+                    'published_at' => $entity->getAttribute('published_at'),
                 ],
             );
             $galleryPivot = collect($pivot)
                 ->map(fn ($values) => ['sort_order' => $values['sort_order']])
                 ->all();
             $gallery->media()->sync($galleryPivot);
+            $galleryItemIds = [];
+
+            foreach ($pivot as $mediaId => $values) {
+                $item = GalleryItem::updateOrCreate(
+                    ['gallery_id' => $gallery->getKey(), 'media_id' => $mediaId],
+                    [
+                        'sort_order' => $values['sort_order'],
+                        'is_active' => true,
+                    ],
+                );
+                $galleryItemIds[] = $item->getKey();
+            }
+
+            GalleryItem::where('gallery_id', $gallery->getKey())
+                ->when(
+                    $galleryItemIds !== [],
+                    fn ($query) => $query->whereNotIn('id', $galleryItemIds),
+                )
+                ->delete();
+        }
+    }
+
+    /**
+     * @param  array<string, array<int, array{label: string, url: string}>>  $menus
+     */
+    private function syncMenus(array $menus): void
+    {
+        foreach (['header' => 'القائمة الرئيسية', 'footer' => 'قائمة التذييل'] as $location => $name) {
+            $menu = Menu::updateOrCreate(
+                ['location' => $location],
+                ['name' => $name, 'is_active' => true],
+            );
+            $ids = [];
+
+            foreach ($menus[$location] ?? [] as $position => $item) {
+                $record = $menu->allItems()->updateOrCreate(
+                    ['url' => $item['url'], 'label' => $item['label']],
+                    [
+                        'sort_order' => $position,
+                        'is_external' => str_starts_with($item['url'], 'http'),
+                        'open_in_new_tab' => false,
+                        'is_active' => true,
+                    ],
+                );
+                $ids[] = $record->getKey();
+            }
+
+            $menu->allItems()
+                ->when($ids !== [], fn ($query) => $query->whereNotIn('id', $ids))
+                ->delete();
         }
     }
 

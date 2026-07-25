@@ -5,8 +5,8 @@ namespace App\Filament\Resources\Articles\Schemas;
 use App\Filament\Forms\ManagedContentFields;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 

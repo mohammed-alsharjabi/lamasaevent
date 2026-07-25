@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Concerns;
 
+use App\Contracts\ManagedContent;
 use App\Services\SlugRedirectService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
@@ -14,7 +15,11 @@ trait HasSlugRedirectAction
             ->label('تغيير الرابط مع تحويل 301')
             ->icon('heroicon-o-arrow-path-rounded-square')
             ->color('warning')
-            ->visible(fn (): bool => (bool) $this->record->isPublished())
+            ->visible(function (): bool {
+                $record = $this->getRecord();
+
+                return $record instanceof ManagedContent && $record->isPublished();
+            })
             ->authorize(
                 fn (): bool => auth()->user()?->hasPermission(
                     $this->slugPermissionGroup().'.update',
@@ -29,7 +34,7 @@ trait HasSlugRedirectAction
             ->requiresConfirmation()
             ->action(function (array $data): void {
                 app(SlugRedirectService::class)->change(
-                    $this->record,
+                    $this->getRecord(),
                     $data['new_slug'],
                     auth()->user(),
                 );
@@ -40,7 +45,7 @@ trait HasSlugRedirectAction
 
     private function slugPermissionGroup(): string
     {
-        return match (class_basename($this->record)) {
+        return match (class_basename($this->getRecord())) {
             'Article' => 'articles',
             'Service' => 'services',
             'ServiceCategory' => 'service-categories',

@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Galleries\Pages;
 
-use App\Filament\Resources\Galleries\GalleryResource;
 use App\Filament\Resources\Concerns\HandlesManagedContent;
+use App\Filament\Resources\Galleries\GalleryResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateGallery extends CreateRecord

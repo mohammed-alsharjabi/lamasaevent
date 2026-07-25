@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -82,8 +83,10 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
+        $lockedUntil = $this->getAttribute('locked_until');
+
         return $this->is_active
-            && ($this->locked_until === null || $this->locked_until->isPast())
+            && (! $lockedUntil instanceof CarbonInterface || $lockedUntil->isPast())
             && $this->roles()->exists();
     }
 }

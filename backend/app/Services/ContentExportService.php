@@ -7,6 +7,7 @@ use App\Models\Area;
 use App\Models\Article;
 use App\Models\ContactSetting;
 use App\Models\Gallery;
+use App\Models\Menu;
 use App\Models\Page;
 use App\Models\Redirect;
 use App\Models\RouteRecord;
@@ -14,6 +15,7 @@ use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\SitemapEntry;
 use App\Models\SiteSetting;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 
 class ContentExportService
@@ -25,10 +27,10 @@ class ContentExportService
     {
         $published = fn (Builder $query) => $query
             ->where('status', ContentStatus::Published->value)
-            ->with('seoMeta');
+            ->with(['seoMeta', 'faqs']);
 
         return [
-            'schema_version' => 1,
+            'schema_version' => 2,
             'production_origin' => config('app.production_url'),
             'generated_at' => now()->toIso8601String(),
             'pages' => $published(Page::query())->get(),
@@ -50,7 +52,11 @@ class ContentExportService
                 ->get(),
             'galleries' => Gallery::query()
                 ->where('status', 'published')
-                ->with('media')
+                ->with(['media', 'items.media'])
+                ->get(),
+            'menus' => Menu::query()
+                ->where('is_active', true)
+                ->with(['allItems' => fn ($query) => $query->where('is_active', true)])
                 ->get(),
             'routes' => RouteRecord::query()->where('is_published', true)->get(),
             'redirects' => Redirect::query()->where('is_active', true)->get(),
@@ -58,16 +64,23 @@ class ContentExportService
                 ->where('is_included', true)
                 ->orderBy('position')
                 ->get()
-                ->map(fn (SitemapEntry $entry) => [
-                    ...$entry->toArray(),
-                    // A sitemap lastmod is a calendar date, not an instant. Formatting
-                    // it before JSON serialization prevents a Riyadh midnight from
-                    // being shifted to the previous UTC day.
-                    'lastmod' => $entry->lastmod?->toDateString(),
-                ]),
+                ->map(function (SitemapEntry $entry): array {
+                    $lastmod = $entry->getAttribute('lastmod');
+
+                    return [
+                        ...$entry->toArray(),
+                        // A sitemap lastmod is a calendar date, not an instant. Formatting
+                        // it before JSON serialization prevents a Riyadh midnight from
+                        // being shifted to the previous UTC day.
+                        'lastmod' => $lastmod instanceof CarbonInterface
+                            ? $lastmod->toDateString()
+                            : $lastmod,
+                    ];
+                }),
             'contact' => ContactSetting::first(),
             'settings' => SiteSetting::query()
                 ->where('is_public', true)
+                ->where('is_sensitive', false)
                 ->pluck('value', 'key'),
         ];
     }

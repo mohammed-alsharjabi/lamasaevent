@@ -2,13 +2,14 @@
 
 namespace App\Filament\Forms;
 
+use App\Contracts\ManagedContent;
 use Filament\Forms\Components\CodeEditor;
 use Filament\Forms\Components\CodeEditor\Enums\Language;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +23,10 @@ class ManagedContentFields
             ->helperText('يُقفل بعد النشر. تغييره لاحقًا متاح فقط عبر إجراء تحويل 301.')
             ->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')
             ->unique(ignoreRecord: true)
-            ->disabled(fn (?Model $record): bool => (bool) $record?->isPublished())
+            ->disabled(
+                fn (?Model $record): bool => $record instanceof ManagedContent
+                    && $record->isPublished(),
+            )
             ->dehydrated()
             ->required()
             ->maxLength(180);

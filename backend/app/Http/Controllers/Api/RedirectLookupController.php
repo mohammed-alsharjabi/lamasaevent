@@ -18,6 +18,9 @@ class RedirectLookupController extends Controller
             ->where('is_active', true)
             ->firstOrFail();
 
+        $redirect->increment('hit_count');
+        $redirect->forceFill(['last_used_at' => now()])->saveQuietly();
+
         return response()->json($redirect);
     }
 }

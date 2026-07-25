@@ -34,7 +34,11 @@ class SitemapController extends Controller
             'is_included' => ['nullable', 'boolean'],
         ]);
 
-        if ($entry->routeRecord?->is_legacy && ! $request->boolean('is_included')) {
+        $routeRecord = $entry->routeRecord()->first();
+        if (
+            $routeRecord?->getAttribute('is_legacy')
+            && ! $request->boolean('is_included')
+        ) {
             throw ValidationException::withMessages([
                 'is_included' => 'لا يمكن حذف رابط موروث من sitemap.',
             ]);

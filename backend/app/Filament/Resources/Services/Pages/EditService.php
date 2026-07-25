@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\Services\Pages;
 
-use App\Filament\Resources\Services\ServiceResource;
 use App\Filament\Resources\Concerns\HandlesManagedContent;
 use App\Filament\Resources\Concerns\HasSlugRedirectAction;
+use App\Filament\Resources\Services\ServiceResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;

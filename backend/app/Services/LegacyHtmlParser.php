@@ -18,7 +18,9 @@ class LegacyHtmlParser
      *   published_at: ?string,
      *   content_blocks: array<int, array<string, mixed>>,
      *   images: array<int, array<string, mixed>>,
-     *   service_links: array<int, string>
+     *   service_links: array<int, string>,
+     *   faqs: array<int, array{question: string, answer: string}>,
+     *   menus: array<string, array<int, array{label: string, url: string}>>
      * }
      */
     public function parse(string $html, string $legacyFile): array
@@ -56,7 +58,12 @@ class LegacyHtmlParser
             ?? $this->firstTextByClasses(
                 $xpath,
                 $main,
-                ['bla-hero__tag', 'blog-detail__topic', 'blog-card__topic'],
+                [
+                    'bla-hero__tag',
+                    'bla-hero__topic',
+                    'blog-detail__topic',
+                    'blog-card__topic',
+                ],
             );
 
         $blocks = [];
@@ -105,6 +112,29 @@ class LegacyHtmlParser
             }
         }
 
+        $faqs = [];
+        $faqNodes = $xpath->query(
+            './/*[contains(concat(" ", normalize-space(@class), " "), " blog-detail__faq-list ")]//li'
+            .' | .//details[summary]',
+            $main,
+        );
+        foreach ($faqNodes ?: [] as $faqNode) {
+            $question = $this->firstText(
+                $xpath,
+                './/h3 | .//summary | .//*[contains(@class, "faq-q")]',
+                $faqNode,
+            );
+            $answer = $this->firstText(
+                $xpath,
+                './/p | .//*[contains(@class, "faq-a")]',
+                $faqNode,
+            );
+
+            if ($question && $answer) {
+                $faqs[] = compact('question', 'answer');
+            }
+        }
+
         return [
             'title' => $title,
             'summary' => $summary,
@@ -113,6 +143,11 @@ class LegacyHtmlParser
             'content_blocks' => $blocks,
             'images' => array_values(array_unique($images, SORT_REGULAR)),
             'service_links' => array_values(array_unique($serviceLinks)),
+            'faqs' => array_values(array_unique($faqs, SORT_REGULAR)),
+            'menus' => [
+                'header' => $this->navigationLinks($xpath, '//header//a[@href]'),
+                'footer' => $this->navigationLinks($xpath, '//footer//a[@href]'),
+            ],
         ];
     }
 
@@ -222,5 +257,28 @@ class LegacyHtmlParser
     private function nullableInteger(string $value): ?int
     {
         return ctype_digit($value) ? (int) $value : null;
+    }
+
+    /**
+     * @return array<int, array{label: string, url: string}>
+     */
+    private function navigationLinks(DOMXPath $xpath, string $query): array
+    {
+        $links = [];
+
+        foreach ($xpath->query($query) ?: [] as $link) {
+            if (! $link instanceof DOMElement) {
+                continue;
+            }
+
+            $label = $this->cleanText($link->textContent);
+            $url = trim($link->getAttribute('href'));
+
+            if ($label !== '' && $url !== '' && ! str_starts_with($url, '#')) {
+                $links[] = compact('label', 'url');
+            }
+        }
+
+        return array_values(array_unique($links, SORT_REGULAR));
     }
 }

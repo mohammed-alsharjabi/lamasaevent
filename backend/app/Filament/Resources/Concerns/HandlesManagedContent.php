@@ -26,7 +26,9 @@ trait HandlesManagedContent
      */
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $this->authorizePublication($data, $this->record->status->value);
+        $status = $this->getRecord()->getAttribute('status');
+        $oldStatus = $status instanceof ContentStatus ? $status->value : (string) $status;
+        $this->authorizePublication($data, $oldStatus);
         $data['updated_by'] = auth()->id();
 
         return $data;
@@ -63,9 +65,7 @@ trait HandlesManagedContent
 
     private function permissionGroup(): string
     {
-        $model = isset($this->record)
-            ? class_basename($this->record)
-            : class_basename(static::getResource()::getModel());
+        $model = class_basename(static::getResource()::getModel());
 
         return match ($model) {
             'Article' => 'articles',

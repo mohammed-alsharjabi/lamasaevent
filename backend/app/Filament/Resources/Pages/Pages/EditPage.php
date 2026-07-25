@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Pages\Pages;
 
-use App\Filament\Resources\Pages\PageResource;
 use App\Filament\Resources\Concerns\HandlesManagedContent;
+use App\Filament\Resources\Pages\PageResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;

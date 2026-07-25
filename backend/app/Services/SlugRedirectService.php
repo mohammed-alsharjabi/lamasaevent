@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\ManagedContent;
 use App\Enums\ContentStatus;
 use App\Models\ActivityLog;
 use App\Models\Redirect;
@@ -18,7 +19,11 @@ class SlugRedirectService
 {
     public function change(Model $content, string $newSlug, User $actor): void
     {
-        if (! property_exists($content, 'allowPublishedSlugChange')) {
+        if (
+            ! $content instanceof ManagedContent
+            || ! property_exists($content, 'allowPublishedSlugChange')
+            || ! array_key_exists('slug', $content->getAttributes())
+        ) {
             throw ValidationException::withMessages([
                 'slug' => 'هذا النوع لا يدعم تغيير الرابط بهذه العملية.',
             ]);
@@ -29,18 +34,18 @@ class SlugRedirectService
         ])->validate();
 
         DB::transaction(function () use ($content, $newSlug, $actor): void {
-            $oldSlug = (string) $content->slug;
+            $oldSlug = (string) $content->getAttribute('slug');
             $oldPath = $content->routePath();
 
             if ($oldSlug === $newSlug) {
                 return;
             }
 
-            $content->slug = $newSlug;
+            $content->setAttribute('slug', $newSlug);
             $newPath = $content->routePath();
-            $content->slug = $oldSlug;
+            $content->setAttribute('slug', $oldSlug);
 
-            $currentRouteId = $content->routeRecord?->id;
+            $currentRouteId = $content->routeRecord()->value('id');
             $routeCollision = RouteRecord::where('path', $newPath)
                 ->when($currentRouteId, fn ($query) => $query->whereKeyNot($currentRouteId))
                 ->exists();
@@ -51,7 +56,7 @@ class SlugRedirectService
                 ]);
             }
 
-            if ($content->status === ContentStatus::Published) {
+            if ($content->getAttribute('status') === ContentStatus::Published) {
                 Redirect::updateOrCreate(
                     ['from_path' => $oldPath],
                     [
@@ -59,13 +64,13 @@ class SlugRedirectService
                         'status_code' => 301,
                         'reason' => 'تغيير slug بعد النشر',
                         'is_active' => true,
-                        'created_by' => $actor->id,
+                        'created_by' => $actor->getKey(),
                     ],
                 );
             }
 
             $content->allowPublishedSlugChange = true;
-            $content->slug = $newSlug;
+            $content->setAttribute('slug', $newSlug);
             $content->save();
             $content->allowPublishedSlugChange = false;
 
@@ -75,11 +80,12 @@ class SlugRedirectService
                 'exact_url' => $productionUrl,
             ]);
 
-            if ($content->seoMeta) {
-                $openGraph = $content->seoMeta->open_graph ?? [];
-                $twitter = $content->seoMeta->twitter ?? [];
+            $seo = $content->seoMeta()->first();
+            if ($seo) {
+                $openGraph = $seo->getAttribute('open_graph') ?? [];
+                $twitter = $seo->getAttribute('twitter') ?? [];
                 $openGraph['url'] = $productionUrl;
-                $content->seoMeta->update([
+                $seo->update([
                     'canonical' => $productionUrl,
                     'open_graph' => $openGraph,
                     'twitter' => $twitter,
@@ -93,7 +99,7 @@ class SlugRedirectService
             ]);
 
             ActivityLog::create([
-                'user_id' => $actor->id,
+                'user_id' => $actor->getKey(),
                 'action' => 'content.slug_changed_with_301',
                 'subject_type' => $content->getMorphClass(),
                 'subject_id' => $content->getKey(),
