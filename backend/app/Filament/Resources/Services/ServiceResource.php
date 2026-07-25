@@ -26,6 +26,19 @@ class ServiceResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    protected static ?string $modelLabel = 'خدمة';
+
+    protected static ?string $pluralModelLabel = 'الخدمات';
+
+    protected static ?string $navigationLabel = 'الخدمات';
+
+    protected static ?int $navigationSort = 20;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'المحتوى';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ServiceForm::configure($schema);

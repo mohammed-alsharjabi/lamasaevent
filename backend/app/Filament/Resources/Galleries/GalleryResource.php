@@ -26,6 +26,19 @@ class GalleryResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    protected static ?string $modelLabel = 'معرض';
+
+    protected static ?string $pluralModelLabel = 'معارض الصور';
+
+    protected static ?string $navigationLabel = 'معارض الصور';
+
+    protected static ?int $navigationSort = 20;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'الوسائط والهيكل';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return GalleryForm::configure($schema);

@@ -24,6 +24,19 @@ class RedirectResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'from_path';
 
+    protected static ?string $modelLabel = 'تحويل';
+
+    protected static ?string $pluralModelLabel = 'تحويلات 301';
+
+    protected static ?string $navigationLabel = 'تحويلات الروابط';
+
+    protected static ?int $navigationSort = 10;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'SEO والنشر';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return RedirectForm::configure($schema);

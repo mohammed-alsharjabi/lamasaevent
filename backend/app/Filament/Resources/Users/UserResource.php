@@ -24,6 +24,19 @@ class UserResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    protected static ?string $modelLabel = 'مستخدم';
+
+    protected static ?string $pluralModelLabel = 'المستخدمون';
+
+    protected static ?string $navigationLabel = 'المستخدمون والأدوار';
+
+    protected static ?int $navigationSort = 10;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'النظام';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return UserForm::configure($schema);

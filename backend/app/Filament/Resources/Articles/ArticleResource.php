@@ -24,6 +24,21 @@ class ArticleResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $modelLabel = 'مقال';
+
+    protected static ?string $pluralModelLabel = 'المقالات';
+
+    protected static ?string $navigationLabel = 'المقالات';
+
+    protected static ?int $navigationSort = 10;
+
+    protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'المحتوى';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ArticleForm::configure($schema);

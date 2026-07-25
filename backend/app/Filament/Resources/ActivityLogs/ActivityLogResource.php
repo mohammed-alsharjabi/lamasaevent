@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\ActivityLogs;
 
-use App\Filament\Resources\ActivityLogs\Pages\CreateActivityLog;
-use App\Filament\Resources\ActivityLogs\Pages\EditActivityLog;
 use App\Filament\Resources\ActivityLogs\Pages\ListActivityLogs;
 use App\Filament\Resources\ActivityLogs\Pages\ViewActivityLog;
 use App\Filament\Resources\ActivityLogs\Schemas\ActivityLogForm;
@@ -23,6 +21,19 @@ class ActivityLogResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'action';
+
+    protected static ?string $modelLabel = 'سجل تدقيق';
+
+    protected static ?string $pluralModelLabel = 'سجل التدقيق';
+
+    protected static ?string $navigationLabel = 'سجل التدقيق';
+
+    protected static ?int $navigationSort = 20;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'النظام';
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -50,9 +61,7 @@ class ActivityLogResource extends Resource
     {
         return [
             'index' => ListActivityLogs::route('/'),
-            'create' => CreateActivityLog::route('/create'),
             'view' => ViewActivityLog::route('/{record}'),
-            'edit' => EditActivityLog::route('/{record}/edit'),
         ];
     }
 }

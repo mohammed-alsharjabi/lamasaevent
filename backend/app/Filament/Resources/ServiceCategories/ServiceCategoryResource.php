@@ -26,6 +26,19 @@ class ServiceCategoryResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    protected static ?string $modelLabel = 'تصنيف خدمة';
+
+    protected static ?string $pluralModelLabel = 'تصنيفات الخدمات';
+
+    protected static ?string $navigationLabel = 'تصنيفات الخدمات';
+
+    protected static ?int $navigationSort = 20;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'التصنيفات والمناطق';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ServiceCategoryForm::configure($schema);

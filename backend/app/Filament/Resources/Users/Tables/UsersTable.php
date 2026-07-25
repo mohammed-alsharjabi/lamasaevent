@@ -14,49 +14,17 @@ class UsersTable
 {
     public static function configure(Table $table): Table
     {
-        return $table
-            ->columns([
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('email')
-                    ->label('Email address')
-                    ->searchable(),
-                TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
-                IconColumn::make('is_admin')
-                    ->boolean(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                IconColumn::make('is_active')
-                    ->boolean(),
-                TextColumn::make('last_login_at')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('failed_login_count')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('locked_until')
-                    ->dateTime()
-                    ->sortable(),
-            ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-            ])
+        return $table->columns([
+            TextColumn::make('name')->label('الاسم')->searchable(),
+            TextColumn::make('email')->label('البريد الإلكتروني')->searchable(),
+            TextColumn::make('roles.name')->label('الأدوار')->badge(),
+            IconColumn::make('is_active')->label('نشط')->boolean(),
+            TextColumn::make('last_login_at')->label('آخر دخول')->since()->placeholder('—'),
+            TextColumn::make('failed_login_count')->label('محاولات فاشلة')->numeric(),
+            TextColumn::make('locked_until')->label('مقفل حتى')->dateTime()->placeholder('—'),
+        ])->recordActions([ViewAction::make(), EditAction::make()])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
     }
 }

@@ -26,6 +26,19 @@ class AreaResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    protected static ?string $modelLabel = 'منطقة';
+
+    protected static ?string $pluralModelLabel = 'المناطق';
+
+    protected static ?string $navigationLabel = 'المناطق';
+
+    protected static ?int $navigationSort = 30;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'التصنيفات والمناطق';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return AreaForm::configure($schema);

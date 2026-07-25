@@ -8,6 +8,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -17,66 +18,24 @@ class MediaTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
-                TextColumn::make('disk')
-                    ->searchable(),
-                TextColumn::make('path')
-                    ->searchable(),
-                TextColumn::make('webp_path')
-                    ->searchable(),
-                TextColumn::make('source_path')
-                    ->searchable(),
-                TextColumn::make('original_name')
-                    ->searchable(),
-                TextColumn::make('mime_type')
-                    ->searchable(),
-                TextColumn::make('size')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('width')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('height')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('sha256')
-                    ->searchable(),
-                TextColumn::make('alt')
-                    ->searchable(),
-                TextColumn::make('status')
-                    ->searchable(),
-                TextColumn::make('uploaded_by')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('avif_path')
-                    ->searchable(),
-                TextColumn::make('title')
-                    ->searchable(),
+                ImageColumn::make('webp_path')->label('معاينة')->disk(fn ($record) => $record->disk)->square(),
+                TextColumn::make('original_name')->label('اسم الملف')->searchable()->limit(40),
+                TextColumn::make('alt')->label('النص البديل')->searchable()->limit(45),
+                TextColumn::make('mime_type')->label('النوع')->badge(),
+                TextColumn::make('size')->label('الحجم')->formatStateUsing(
+                    fn (int $state): string => number_format($state / 1024, 1).' KB',
+                ),
+                TextColumn::make('created_at')->label('تاريخ الرفع')->dateTime('Y-m-d H:i')->sortable(),
             ])
-            ->filters([
-                TrashedFilter::make(),
-            ])
-            ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-            ])
+            ->filters([TrashedFilter::make()->label('المحذوفات')])
+            ->recordActions([ViewAction::make(), EditAction::make()])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }

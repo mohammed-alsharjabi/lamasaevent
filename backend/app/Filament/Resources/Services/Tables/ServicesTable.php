@@ -10,6 +10,7 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
@@ -18,67 +19,35 @@ class ServicesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('sort_order')
             ->columns([
-                TextColumn::make('service_category_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('hero_media_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('title')
-                    ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
+                TextColumn::make('title')->label('الخدمة')->searchable()->limit(55),
+                TextColumn::make('category.title')->label('التصنيف')->placeholder('—'),
                 TextColumn::make('status')
+                    ->label('الحالة')
                     ->badge()
-                    ->searchable(),
-                TextColumn::make('published_at')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('legacy_path')
-                    ->searchable(),
-                TextColumn::make('sort_order')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('created_by')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('updated_by')
-                    ->numeric()
-                    ->sortable(),
-                IconColumn::make('is_featured')
-                    ->boolean(),
-                TextColumn::make('cta_label')
-                    ->searchable(),
-                TextColumn::make('cta_url')
-                    ->searchable(),
-                IconColumn::make('whatsapp_enabled')
-                    ->boolean(),
+                    ->formatStateUsing(fn ($state): string => $state->value === 'published' ? 'منشور' : 'مسودة')
+                    ->color(fn ($state): string => $state->value === 'published' ? 'success' : 'gray'),
+                IconColumn::make('is_featured')->label('مميزة')->boolean(),
+                TextColumn::make('sort_order')->label('الترتيب')->sortable(),
+                TextColumn::make('updated_at')->label('آخر تعديل')->since()->sortable(),
             ])
             ->filters([
-                TrashedFilter::make(),
+                SelectFilter::make('status')->label('الحالة')->options([
+                    'draft' => 'مسودة',
+                    'published' => 'منشور',
+                ]),
+                SelectFilter::make('service_category_id')
+                    ->label('التصنيف')
+                    ->relationship('category', 'title'),
+                TrashedFilter::make()->label('المحذوفات'),
             ])
-            ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-            ])
+            ->recordActions([ViewAction::make(), EditAction::make()])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }

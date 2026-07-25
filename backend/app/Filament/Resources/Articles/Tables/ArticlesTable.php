@@ -10,6 +10,7 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
@@ -18,63 +19,35 @@ class ArticlesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('updated_at', 'desc')
             ->columns([
-                TextColumn::make('hero_media_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('title')
-                    ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
-                TextColumn::make('topic')
-                    ->searchable(),
+                TextColumn::make('title')->label('العنوان')->searchable()->limit(55),
+                TextColumn::make('category.name')->label('التصنيف')->placeholder('—'),
                 TextColumn::make('status')
+                    ->label('الحالة')
                     ->badge()
-                    ->searchable(),
-                TextColumn::make('published_at')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('legacy_path')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('article_category_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('created_by')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('updated_by')
-                    ->numeric()
-                    ->sortable(),
-                IconColumn::make('is_featured')
-                    ->boolean(),
-                TextColumn::make('sort_order')
-                    ->numeric()
-                    ->sortable(),
+                    ->formatStateUsing(fn ($state): string => $state->value === 'published' ? 'منشور' : 'مسودة')
+                    ->color(fn ($state): string => $state->value === 'published' ? 'success' : 'gray'),
+                IconColumn::make('is_featured')->label('مميز')->boolean(),
+                TextColumn::make('published_at')->label('تاريخ النشر')->dateTime('Y-m-d H:i')->sortable(),
+                TextColumn::make('updated_at')->label('آخر تعديل')->since()->sortable(),
             ])
             ->filters([
-                TrashedFilter::make(),
+                SelectFilter::make('status')->label('الحالة')->options([
+                    'draft' => 'مسودة',
+                    'published' => 'منشور',
+                ]),
+                SelectFilter::make('article_category_id')
+                    ->label('التصنيف')
+                    ->relationship('category', 'name'),
+                TrashedFilter::make()->label('المحذوفات'),
             ])
-            ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-            ])
+            ->recordActions([ViewAction::make(), EditAction::make()])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }

@@ -26,6 +26,19 @@ class PageResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    protected static ?string $modelLabel = 'صفحة';
+
+    protected static ?string $pluralModelLabel = 'الصفحات';
+
+    protected static ?string $navigationLabel = 'الصفحات الثابتة';
+
+    protected static ?int $navigationSort = 30;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'المحتوى';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return PageForm::configure($schema);

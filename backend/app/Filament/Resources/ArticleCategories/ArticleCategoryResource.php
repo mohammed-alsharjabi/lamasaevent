@@ -26,6 +26,19 @@ class ArticleCategoryResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    protected static ?string $modelLabel = 'تصنيف مقال';
+
+    protected static ?string $pluralModelLabel = 'تصنيفات المقالات';
+
+    protected static ?string $navigationLabel = 'تصنيفات المقالات';
+
+    protected static ?int $navigationSort = 10;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'التصنيفات والمناطق';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ArticleCategoryForm::configure($schema);

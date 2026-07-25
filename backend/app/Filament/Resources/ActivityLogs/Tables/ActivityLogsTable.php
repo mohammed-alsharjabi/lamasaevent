@@ -2,9 +2,6 @@
 
 namespace App\Filament\Resources\ActivityLogs\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -14,41 +11,17 @@ class ActivityLogsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('action')
-                    ->searchable(),
-                TextColumn::make('subject_type')
-                    ->searchable(),
-                TextColumn::make('subject_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('ip_address')
-                    ->searchable(),
-                TextColumn::make('user_agent')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('user.name')->label('المستخدم')->placeholder('النظام'),
+                TextColumn::make('action')->label('النشاط')->badge()->searchable(),
+                TextColumn::make('subject_type')->label('نوع السجل')->formatStateUsing(
+                    fn (?string $state): string => $state ? class_basename($state) : '—',
+                ),
+                TextColumn::make('subject_id')->label('المعرّف')->placeholder('—'),
+                TextColumn::make('ip_address')->label('IP')->searchable(),
+                TextColumn::make('created_at')->label('الوقت')->dateTime('Y-m-d H:i:s')->sortable(),
             ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->recordActions([ViewAction::make()]);
     }
 }

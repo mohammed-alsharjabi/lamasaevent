@@ -26,6 +26,19 @@ class MediaResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'original_name';
 
+    protected static ?string $modelLabel = 'صورة';
+
+    protected static ?string $pluralModelLabel = 'مكتبة الصور';
+
+    protected static ?string $navigationLabel = 'مكتبة الصور';
+
+    protected static ?int $navigationSort = 10;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'الوسائط والهيكل';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return MediaForm::configure($schema);

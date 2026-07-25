@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\PublishJobs;
 
-use App\Filament\Resources\PublishJobs\Pages\CreatePublishJob;
-use App\Filament\Resources\PublishJobs\Pages\EditPublishJob;
 use App\Filament\Resources\PublishJobs\Pages\ListPublishJobs;
 use App\Filament\Resources\PublishJobs\Pages\ViewPublishJob;
 use App\Filament\Resources\PublishJobs\Schemas\PublishJobForm;
@@ -23,6 +21,19 @@ class PublishJobResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'build_version';
+
+    protected static ?string $modelLabel = 'عملية نشر';
+
+    protected static ?string $pluralModelLabel = 'عمليات النشر';
+
+    protected static ?string $navigationLabel = 'سجل النشر';
+
+    protected static ?int $navigationSort = 20;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'SEO والنشر';
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -50,9 +61,7 @@ class PublishJobResource extends Resource
     {
         return [
             'index' => ListPublishJobs::route('/'),
-            'create' => CreatePublishJob::route('/create'),
             'view' => ViewPublishJob::route('/{record}'),
-            'edit' => EditPublishJob::route('/{record}/edit'),
         ];
     }
 }

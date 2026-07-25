@@ -24,6 +24,19 @@ class MenuResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    protected static ?string $modelLabel = 'قائمة';
+
+    protected static ?string $pluralModelLabel = 'القوائم';
+
+    protected static ?string $navigationLabel = 'القوائم';
+
+    protected static ?int $navigationSort = 30;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'الوسائط والهيكل';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return MenuForm::configure($schema);

@@ -14,48 +14,16 @@ class RedirectsTable
 {
     public static function configure(Table $table): Table
     {
-        return $table
-            ->columns([
-                TextColumn::make('from_path')
-                    ->searchable(),
-                TextColumn::make('to_path')
-                    ->searchable(),
-                TextColumn::make('status_code')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('reason')
-                    ->searchable(),
-                IconColumn::make('is_active')
-                    ->boolean(),
-                TextColumn::make('created_by')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('hit_count')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('last_used_at')
-                    ->dateTime()
-                    ->sortable(),
-            ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-            ])
+        return $table->columns([
+            TextColumn::make('from_path')->label('من')->searchable(),
+            TextColumn::make('to_path')->label('إلى')->searchable(),
+            TextColumn::make('status_code')->label('الرمز')->badge(),
+            IconColumn::make('is_active')->label('نشط')->boolean(),
+            TextColumn::make('hit_count')->label('الاستخدامات')->numeric()->sortable(),
+            TextColumn::make('last_used_at')->label('آخر استخدام')->since()->placeholder('—'),
+        ])->recordActions([ViewAction::make(), EditAction::make()])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                BulkActionGroup::make([DeleteBulkAction::make()]),
             ]);
     }
 }
