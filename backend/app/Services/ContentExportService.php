@@ -110,6 +110,7 @@ class ContentExportService
             'galleries' => Gallery::query()
                 ->where('status', 'published')
                 ->with(['media', 'items.media'])
+                ->orderBy('sort_order')
                 ->get(),
             'menus' => Menu::query()
                 ->where('is_active', true)

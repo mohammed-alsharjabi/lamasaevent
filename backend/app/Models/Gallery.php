@@ -17,7 +17,7 @@ class Gallery extends Model
 
     protected $fillable = [
         'title', 'slug', 'description', 'status', 'published_at', 'created_by',
-        'updated_by', 'is_featured', 'sort_order',
+        'updated_by', 'is_featured', 'is_legacy', 'sort_order',
     ];
 
     protected function casts(): array
@@ -26,6 +26,7 @@ class Gallery extends Model
             'status' => ContentStatus::class,
             'published_at' => 'datetime',
             'is_featured' => 'boolean',
+            'is_legacy' => 'boolean',
             'sort_order' => 'integer',
         ];
     }

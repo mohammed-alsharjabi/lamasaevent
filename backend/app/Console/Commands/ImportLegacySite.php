@@ -331,6 +331,7 @@ class ImportLegacySite extends Command
                 [
                     'title' => $entity->getAttribute('title'),
                     'description' => $entity->getAttribute('summary'),
+                    'is_legacy' => true,
                     'status' => ContentStatus::Published,
                     'published_at' => $entity->getAttribute('published_at'),
                 ],

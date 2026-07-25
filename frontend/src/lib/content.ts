@@ -2,6 +2,7 @@ import { loadContentExport } from "./api-client";
 import type {
   ContactSettings,
   ContentEntity,
+  GalleryEntity,
   Menu,
   RouteRecord,
 } from "../types/content";
@@ -29,6 +30,7 @@ export const serviceCategories =
 export const services = content.services as unknown as ContentEntity[];
 export const areas = content.areas as unknown as ContentEntity[];
 export const articles = content.articles as unknown as ContentEntity[];
+export const galleries = content.galleries as unknown as GalleryEntity[];
 export const routes = content.routes as unknown as RouteRecord[];
 export const sitemap = content.sitemap;
 export const contentSource = source;

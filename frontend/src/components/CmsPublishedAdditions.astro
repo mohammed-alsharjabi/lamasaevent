@@ -2,6 +2,7 @@
 import {
   areas,
   articles,
+  galleries,
   pages,
   serviceCategories,
   services,
@@ -80,6 +81,10 @@ entries = entries
     Date.parse(right.entity.published_at) - Date.parse(left.entity.published_at)
   ))
   .slice(0, routePath === "/" ? 12 : 100);
+
+const galleryAdditions = routePath === "/gallery"
+  ? galleries.filter((gallery) => !gallery.is_legacy)
+  : [];
 ---
 
 {entries.length > 0 && (
@@ -133,11 +138,123 @@ entries = entries
   </section>
 )}
 
+{galleryAdditions.length > 0 && (
+  <section
+    class="cms-gallery-additions"
+    data-cms-additions
+    aria-labelledby="cms-gallery-additions-heading"
+  >
+    <div class="container">
+      <header class="cms-additions__header">
+        <p class="cms-additions__eyebrow">من لوحة التحكم</p>
+        <h2 id="cms-gallery-additions-heading">معارض منشورة حديثًا</h2>
+        <p>صور ومعارض جديدة مضافة من لوحة التحكم.</p>
+      </header>
+      {galleryAdditions.map((gallery) => {
+        const images = gallery.items
+          .filter((item) => item.is_active)
+          .map((item) => ({
+            id: item.id,
+            title: item.title,
+            alt: item.alt,
+            caption: item.caption,
+            media: item.media,
+          }));
+
+        return (
+          <article class="cms-gallery-additions__gallery">
+            <div class="cms-gallery-additions__intro">
+              <h3>{gallery.title}</h3>
+              {gallery.description && <p>{gallery.description}</p>}
+            </div>
+            {images.length > 0 ? (
+              <div class="cms-gallery-additions__grid">
+                {images.map((image) => (
+                  <figure>
+                    <img
+                      src={image.media.public_url}
+                      alt={image.alt || image.media.alt || image.title || gallery.title}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    {(image.caption || image.media.caption || image.title) && (
+                      <figcaption>
+                        {image.caption || image.media.caption || image.title}
+                      </figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+            ) : (
+              <p class="cms-gallery-additions__empty">
+                لم تُضف صور ظاهرة إلى هذا المعرض بعد.
+              </p>
+            )}
+          </article>
+        );
+      })}
+    </div>
+  </section>
+)}
+
 <style>
-  .cms-additions {
+  .cms-additions,
+  .cms-gallery-additions {
     padding-block: clamp(3rem, 7vw, 6rem);
     background: rgba(255, 255, 255, 0.018);
     border-block: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .cms-gallery-additions__gallery + .cms-gallery-additions__gallery {
+    margin-top: clamp(2rem, 5vw, 4rem);
+    padding-top: clamp(2rem, 5vw, 4rem);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .cms-gallery-additions__intro {
+    max-width: 46rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .cms-gallery-additions__intro h3 {
+    margin: 0 0 0.55rem;
+    color: #fff;
+    font-size: clamp(1.2rem, 3vw, 1.65rem);
+  }
+
+  .cms-gallery-additions__intro p,
+  .cms-gallery-additions__empty {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.64);
+    line-height: 1.8;
+  }
+
+  .cms-gallery-additions__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 1rem;
+  }
+
+  .cms-gallery-additions__grid figure {
+    overflow: hidden;
+    margin: 0;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg, 12px);
+  }
+
+  .cms-gallery-additions__grid img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .cms-gallery-additions__grid figcaption {
+    padding: 0.8rem 1rem;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.82rem;
+    line-height: 1.6;
   }
 
   .cms-additions__header {

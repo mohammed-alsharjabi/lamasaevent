@@ -41,6 +41,34 @@ export interface ContentEntity {
   [key: string]: unknown;
 }
 
+export interface GalleryMedia {
+  id: number;
+  original_name: string;
+  public_url: string;
+  alt: string | null;
+  caption: string | null;
+}
+
+export interface GalleryItem {
+  id: number;
+  title: string | null;
+  alt: string | null;
+  caption: string | null;
+  is_active: boolean;
+  media: GalleryMedia;
+}
+
+export interface GalleryEntity {
+  id: number;
+  title: string;
+  description: string | null;
+  status: "published";
+  published_at: string;
+  is_legacy: boolean;
+  media: GalleryMedia[];
+  items: GalleryItem[];
+}
+
 export interface RouteRecord {
   id: number;
   path: string;

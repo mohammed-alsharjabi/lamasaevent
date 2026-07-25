@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Jobs\GenerateFrontendSnapshot;
 use App\Models\Article;
+use App\Models\Gallery;
 use App\Models\PublishJob;
 use App\Models\Service;
 use App\Services\ContentExportService;
@@ -193,6 +194,22 @@ class CmsContentStructureTest extends TestCase
             ['تنظيم حفلات', 'مناسبات الرياض'],
             $exported->seoMeta->keywords,
         );
+    }
+
+    public function test_new_published_galleries_are_distinguishable_from_the_legacy_gallery(): void
+    {
+        Gallery::create([
+            'title' => 'معرض جديد',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        $gallery = app(ContentExportService::class)
+            ->build()['galleries']
+            ->sole();
+
+        $this->assertFalse($gallery->is_legacy);
+        $this->assertSame('معرض جديد', $gallery->title);
     }
 
     public function test_content_snapshots_are_written_atomically(): void
