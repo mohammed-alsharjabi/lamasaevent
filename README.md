@@ -20,46 +20,30 @@
 
 لا تكتب أي أداة في `LEGACY_DIST`. الاستيراد يقرأها فقط ويرفض المتابعة إذا اختلفت بصمة sitemap أو أي صفحة عن Route Manifest.
 
-## إعداد Staging محلي معزول
+## إعداد التطوير المحلي
 
 ```bash
-export LEGACY_DIST="/absolute/path/to/legacy-dist"
-export ADMIN_EMAIL="admin@example.com"
-export ADMIN_PASSWORD="replace-with-a-long-random-password"
-./scripts/staging-prepare.sh
-./scripts/staging-start.sh
+npm run setup
+npm run dev
 ```
 
-تفتح الواجهة على `http://127.0.0.1:8080`، ولوحة التحكم على
-`http://127.0.0.1:8080/admin`. تستخدم البيئة قاعدة
-`backend/database/staging.sqlite` المنفصلة، وترسل دائمًا ترويسة
-`X-Robots-Tag: noindex, nofollow, noarchive`.
-
-عند ربط Staging بشبكة عامة يجب تعيين `STAGING_BASIC_USER` و
-`STAGING_BASIC_PASSWORD`، واستخدام HTTPS و`SESSION_SECURE_COOKIE=true`.
-الـGateway يرفض أصلًا الاستماع على عنوان غير loopback من دون Basic Auth.
+تفتح الواجهة على `http://127.0.0.1:4321`، ولوحة Filament على
+`http://127.0.0.1:8000/admin`. التفاصيل في
+`docs/LOCAL_DEVELOPMENT.md`، وخطة Staging في `docs/DEPLOYMENT.md`.
 
 ## سير تحديث المحتوى
 
 1. يعدّل المحرر المحتوى في Laravel ويحفظه كمسودة أو منشور مع تاريخ النشر.
 2. تغيير slug منشور لا يتم مباشرة؛ خدمة النشر تنشئ Redirect 301 أولًا.
-3. ينفّذ `php artisan content:export` لتحديث بيانات Astro المنشورة.
-4. ينفّذ `npm run build` داخل `frontend/`.
+3. تنشأ مهمة Queue لتوليد snapshot ثابت برقم نسخة.
+4. يقرأ Astro الـAPI عبر عميل Zod، مع fallback إلى snapshot متحقق.
 5. تمر اختبارات العقود والمقارنة المرئية في Staging قبل أي تحويل للدومين.
 
 ## أوامر القبول
 
 ```bash
-cd backend
-php artisan test
-./vendor/bin/pint --test
-php artisan legacy:import --legacy="$LEGACY_DIST" --manifest="../route-manifest.json" --dry-run
-
-cd ../frontend
-npm run check
-npm run build
-LEGACY_DIST="$LEGACY_DIST" npm run test:contract
-npm run test:visual
+npm test
+npm run verify
 ```
 
 اختبار العقود يمر على 156 رابطًا ويقارن العنوان والوصف وCanonical وOpen
