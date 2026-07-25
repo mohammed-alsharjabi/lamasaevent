@@ -23,10 +23,21 @@ queue_pid=$!
 printf '%s\n' "${queue_pid}" >"${run_dir}/queue.pid"
 
 cd "${project_dir}/frontend"
-nohup env CMS_API_URL=http://127.0.0.1:8000 CMS_ALLOW_STATIC_FALLBACK=true \
-  npm run dev -- --host 127.0.0.1 --port 4321 \
-  >>"${project_dir}/backend/storage/logs/local-frontend.log" 2>&1 &
-frontend_pid=$!
+frontend_output="$(
+  env CMS_API_URL=http://127.0.0.1:8000 CMS_ALLOW_STATIC_FALLBACK=true \
+    ./node_modules/.bin/astro dev \
+    --host 127.0.0.1 \
+    --port 4321 \
+    --background \
+    --force \
+    --json 2>&1
+)"
+printf '%s\n' "${frontend_output}" >>"${project_dir}/backend/storage/logs/local-frontend.log"
+frontend_pid="$(printf '%s\n' "${frontend_output}" | sed -n 's/.*(pid \([0-9][0-9]*\)).*/\1/p' | tail -1)"
+if [[ -z "${frontend_pid}" ]]; then
+  echo "Could not determine the Astro dev server PID." >&2
+  exit 1
+fi
 printf '%s\n' "${frontend_pid}" >"${run_dir}/frontend.pid"
 
 backend_ready=false

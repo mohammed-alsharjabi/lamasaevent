@@ -4,6 +4,7 @@ set -euo pipefail
 
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 run_dir="${project_dir}/.run"
+source "${project_dir}/scripts/runtime.sh"
 
 stop_process() {
   local name="$1"
@@ -30,6 +31,13 @@ stop_process() {
   unlink "${pid_file}"
 }
 
+if [[ -x "${project_dir}/frontend/node_modules/.bin/astro" ]]; then
+  lams_use_node
+  (
+    cd "${project_dir}/frontend"
+    ./node_modules/.bin/astro dev stop >/dev/null 2>&1 || true
+  )
+fi
 stop_process frontend
 stop_process queue
 stop_process backend
