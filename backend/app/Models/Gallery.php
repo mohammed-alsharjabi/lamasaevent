@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ContentStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -12,14 +13,24 @@ class Gallery extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['title', 'slug', 'description', 'status', 'published_at'];
+    protected $fillable = [
+        'title', 'slug', 'description', 'status', 'published_at', 'created_by',
+        'updated_by', 'is_featured', 'sort_order',
+    ];
 
     protected function casts(): array
     {
         return [
             'status' => ContentStatus::class,
             'published_at' => 'datetime',
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
         ];
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(GalleryItem::class)->orderBy('sort_order');
     }
 
     public function media(): BelongsToMany

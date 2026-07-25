@@ -6,6 +6,7 @@ use App\Enums\ContentStatus;
 use App\Models\Concerns\HasManagedContent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Area extends Model
@@ -14,7 +15,8 @@ class Area extends Model
 
     protected $fillable = [
         'hero_media_id', 'title', 'slug', 'summary', 'content_blocks', 'status',
-        'published_at', 'legacy_path', 'sort_order',
+        'published_at', 'legacy_path', 'sort_order', 'created_by', 'updated_by',
+        'is_active',
     ];
 
     protected function casts(): array
@@ -23,7 +25,14 @@ class Area extends Model
             'content_blocks' => 'array',
             'status' => ContentStatus::class,
             'published_at' => 'datetime',
+            'sort_order' => 'integer',
+            'is_active' => 'boolean',
         ];
+    }
+
+    public function heroMedia(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'hero_media_id');
     }
 
     public function routePath(): string

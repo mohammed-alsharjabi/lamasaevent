@@ -16,12 +16,17 @@ class Media extends Model
     protected $fillable = [
         'disk', 'path', 'webp_path', 'source_path', 'original_name', 'mime_type',
         'size', 'width', 'height', 'sha256', 'alt', 'caption', 'status',
-        'uploaded_by',
+        'uploaded_by', 'avif_path', 'variants', 'title',
     ];
 
     protected function casts(): array
     {
-        return ['size' => 'integer', 'width' => 'integer', 'height' => 'integer'];
+        return [
+            'size' => 'integer',
+            'width' => 'integer',
+            'height' => 'integer',
+            'variants' => 'array',
+        ];
     }
 
     public function galleries(): BelongsToMany
