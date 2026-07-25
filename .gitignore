@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+!backend/.env.production.example
 node_modules/
 vendor/
 storage/*.key
@@ -19,5 +20,6 @@ frontend/tests/visual/results/
 frontend/playwright-report/
 frontend/test-results/
 reports/
+.run/
 *.sqlite
 *.log
