@@ -38,7 +38,7 @@ class VerifyLegacyImport extends Command
         );
 
         $this->table([
-            'Expected routes', 'Imported routes', 'Sitemap URLs', 'SEO mismatches',
+            'Expected routes', 'Imported routes', 'Legacy sitemap URLs', 'SEO mismatches',
         ], [[
             $report['expected_route_count'],
             $report['actual_legacy_route_count'],

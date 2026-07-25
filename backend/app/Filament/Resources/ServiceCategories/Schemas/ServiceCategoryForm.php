@@ -16,9 +16,8 @@ class ServiceCategoryForm
         return $schema->components([
             Section::make('تصنيف الخدمات')->columns(2)->schema([
                 TextInput::make('title')->label('الاسم')->required(),
-                ManagedContentFields::slug(),
                 Textarea::make('summary')->label('الملخص')->columnSpanFull(),
-                ManagedContentFields::heroMedia(),
+                ...ManagedContentFields::heroMedia(),
                 ManagedContentFields::status('service-categories'),
                 ManagedContentFields::publishedAt(),
                 Toggle::make('is_active')->label('نشط')->default(true),

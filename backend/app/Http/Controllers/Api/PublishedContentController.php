@@ -55,14 +55,21 @@ class PublishedContentController extends Controller
         };
     }
 
-    /**
-     * @return list<string>
-     */
+    /** @return array<int|string, mixed> */
     private function relationsFor(string $type): array
     {
         return match ($type) {
             'galleries' => ['items.media'],
-            'services' => ['seoMeta', 'faqs', 'media', 'category'],
+            'services' => [
+                'seoMeta',
+                'faqs',
+                'media',
+                'category',
+                'parent:id,title,slug',
+                'children' => fn ($query) => $query
+                    ->where('status', 'published')
+                    ->select(['id', 'parent_id', 'title', 'slug', 'sort_order']),
+            ],
             default => ['seoMeta', 'faqs', 'media'],
         };
     }

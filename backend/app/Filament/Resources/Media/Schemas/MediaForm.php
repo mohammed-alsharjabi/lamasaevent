@@ -2,7 +2,10 @@
 
 namespace App\Filament\Resources\Media\Schemas;
 
+use App\Filament\Forms\MediaPicker;
+use App\Models\Media;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
@@ -14,6 +17,11 @@ class MediaForm
     {
         return $schema->components([
             Section::make('الصورة')->columns(2)->schema([
+                Placeholder::make('current_preview')
+                    ->label('معاينة الصورة')
+                    ->content(fn (?Media $record) => MediaPicker::preview($record))
+                    ->visible(fn (string $operation): bool => $operation === 'edit')
+                    ->columnSpanFull(),
                 FileUpload::make('upload')
                     ->label('رفع صورة')
                     ->image()

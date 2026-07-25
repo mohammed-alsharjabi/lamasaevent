@@ -2,36 +2,19 @@
 
 namespace App\Filament\Forms;
 
-use App\Contracts\ManagedContent;
 use Filament\Forms\Components\CodeEditor;
 use Filament\Forms\Components\CodeEditor\Enums\Language;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
-use Illuminate\Database\Eloquent\Model;
 
 class ManagedContentFields
 {
-    public static function slug(): TextInput
-    {
-        return TextInput::make('slug')
-            ->label('الرابط المختصر (Slug)')
-            ->helperText('يُقفل بعد النشر. تغييره لاحقًا متاح فقط عبر إجراء تحويل 301.')
-            ->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')
-            ->unique(ignoreRecord: true)
-            ->disabled(
-                fn (?Model $record): bool => $record instanceof ManagedContent
-                    && $record->isPublished(),
-            )
-            ->dehydrated()
-            ->required()
-            ->maxLength(180);
-    }
-
     public static function status(string $permissionGroup): Select
     {
         return Select::make('status')
@@ -57,13 +40,12 @@ class ManagedContentFields
             ->timezone(config('app.timezone'));
     }
 
-    public static function heroMedia(): Select
+    /**
+     * @return array{Select, Placeholder}
+     */
+    public static function heroMedia(): array
     {
-        return Select::make('hero_media_id')
-            ->label('الصورة البارزة')
-            ->relationship('heroMedia', 'original_name')
-            ->searchable()
-            ->preload();
+        return MediaPicker::make();
     }
 
     public static function contentBlocks(): CodeEditor

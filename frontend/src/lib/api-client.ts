@@ -1,18 +1,23 @@
 import { z } from "zod";
 import fallbackContent from "../data/content-export.json";
 
+const nullableStringRecordSchema = z.preprocess(
+  (value) => (Array.isArray(value) && value.length === 0 ? {} : value),
+  z.record(z.string(), z.string().nullable()),
+);
+
 const seoSchema = z.looseObject({
     title: z.string().min(1),
     description: z.string().min(1),
     canonical: z.url(),
     robots: z.string().nullable(),
-    open_graph: z.record(z.string(), z.string().nullable()),
-    twitter: z.record(z.string(), z.string().nullable()),
+    open_graph: nullableStringRecordSchema,
+    twitter: nullableStringRecordSchema,
     hreflang: z
       .array(z.object({ lang: z.string(), href: z.url() }))
       .nullable(),
     json_ld: z.array(z.unknown()),
-    json_ld_sha256: z.string(),
+    json_ld_sha256: z.string().nullable(),
   });
 
 const contentBlockSchema = z.looseObject({
@@ -35,11 +40,20 @@ const contentBlockSchema = z.looseObject({
 const entitySchema = z.looseObject({
     id: z.number().int(),
     title: z.string().min(1),
-    legacy_path: z.string().startsWith("/"),
+    legacy_path: z.string().startsWith("/").nullable(),
     content_blocks: z.array(contentBlockSchema),
     status: z.literal("published"),
     published_at: z.string(),
     seo_meta: seoSchema,
+    public_path: z.string().startsWith("/").optional(),
+    hero_media_summary: z
+      .looseObject({
+        original_name: z.string().min(1),
+        public_url: z.string().min(1),
+        alt: z.string().nullable(),
+      })
+      .nullable()
+      .optional(),
   });
 
 const routeSchema = z.looseObject({

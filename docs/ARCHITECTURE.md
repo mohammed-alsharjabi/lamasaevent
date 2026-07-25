@@ -17,8 +17,8 @@
 1. يقرأ `legacy:import` الـManifest والـHTML المرجعي بعد التحقق من SHA-256.
 2. يحفظ Laravel المحتوى في جداول typed، ويولّد مشتقات WebP في storage.
 3. تعرض لوحة Filament البيانات وفق RBAC وتسجل التغييرات في `audit_logs`.
-4. عند الحفظ، يحدّث `ContentPublishingService` سجل المسار ويضع مهمة snapshot
-   في Queue.
+4. عند الحفظ، يحدّث `ContentPublishingService` سجل المسار وsitemap للصفحات
+   الجديدة، ثم يضع مهمة snapshot في Queue.
 5. يقرأ Astro `/api/v1/content-export` عبر عميل مركزي وZod. إذا كانت الـAPI
    غير متاحة أثناء البناء، يستخدم snapshot ثابتًا متحققًا منه.
 6. يبني Astro نفس 156 مسارًا، وتتحقق اختبارات العقد من SEO والروابط وsitemap.
@@ -27,7 +27,9 @@
 
 - Laravel هو مصدر الحقيقة للمحتوى بعد الاستعادة.
 - Astro مسؤول عن العرض فقط ولا يكتب إلى قاعدة البيانات.
-- تغيير slug منشور يمر حصريًا عبر `SlugRedirectService`.
+- الـSlug قيمة داخلية غير معروضة في لوحة التحكم، وتولد مرة واحدة عند الإنشاء.
+- تغيير slug منشور استثنائيًا يمر حصريًا عبر `SlugRedirectService`.
+- الخدمات تدعم مستوى رئيسيًا ومستوى فرعيًا واحدًا عبر `services.parent_id`.
 - لا يوجد في المشروع أمر DNS أو نشر للدومين الرئيسي.
 - Staging يجب أن تستخدم قاعدة ومفاتيح ووسائط مستقلة وترويسة `noindex`.
 
@@ -35,8 +37,9 @@
 
 استجابة Content Export مخزنة دقيقة واحدة وتدعم ETag و304. كل حفظ منشور يلغي
 الكاش وينشئ `publish_jobs` ثم تنفذ `GenerateFrontendSnapshot` في Queue.
-الـsnapshot يُحفظ على disk محلي برقم نسخة مشتق من SHA-256. هذا لا ينشر إلى
-الإنترنت؛ الانتقال من snapshot إلى artifact Staging خطوة تشغيلية منفصلة.
+الـsnapshot يُحفظ على disk محلي برقم نسخة مشتق من SHA-256، ويُكتب ذريًا إلى
+ملف Astro النشط في Local وStaging monorepo كي تظهر التغييرات فورًا. النشر إلى
+الإنترنت يبقى انتقالًا منفصلًا من snapshot إلى artifact Staging.
 
 ## الصحة والمراقبة
 

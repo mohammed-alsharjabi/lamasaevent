@@ -6,7 +6,7 @@
 <div class="topbar">
     <div>
         <h1>Redirects 301</h1>
-        <p class="muted">تُنشأ تلقائيًا عند تغيير slug منشور، ويمكن إضافة تحويل موثق يدويًا.</p>
+        <p class="muted">تُنشأ التحويلات الدائمة تلقائيًا عند الحاجة، ويمكن إضافة تحويل موثق يدويًا.</p>
     </div>
 </div>
 <section class="panel">

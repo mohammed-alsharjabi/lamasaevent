@@ -24,8 +24,6 @@ class ArticleCategoriesTable
                     ->sortable(),
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
                 TextColumn::make('sort_order')
                     ->numeric()
                     ->sortable(),

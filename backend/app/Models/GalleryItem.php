@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\InvalidatesContentExport;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GalleryItem extends Model
 {
+    use InvalidatesContentExport;
+
     protected $fillable = [
         'gallery_id', 'media_id', 'title', 'alt', 'caption', 'sort_order', 'is_active',
     ];

@@ -17,7 +17,6 @@ class AreaInfolist
                     ->numeric()
                     ->placeholder('-'),
                 TextEntry::make('title'),
-                TextEntry::make('slug'),
                 TextEntry::make('summary')
                     ->placeholder('-')
                     ->columnSpanFull(),

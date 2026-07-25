@@ -16,13 +16,8 @@ class ArticleCategoryForm
         return $schema->components([
             Section::make('تصنيف المقالات')->columns(2)->schema([
                 TextInput::make('name')->label('الاسم')->required(),
-                TextInput::make('slug')
-                    ->label('الرابط المختصر')
-                    ->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')
-                    ->unique(ignoreRecord: true)
-                    ->required(),
                 Textarea::make('description')->label('الوصف')->columnSpanFull(),
-                ManagedContentFields::heroMedia(),
+                ...ManagedContentFields::heroMedia(),
                 Toggle::make('is_active')->label('نشط')->default(true),
                 ManagedContentFields::order(),
             ])->columnSpanFull(),

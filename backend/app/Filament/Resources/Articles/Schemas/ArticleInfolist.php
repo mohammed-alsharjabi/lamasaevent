@@ -17,7 +17,6 @@ class ArticleInfolist
                     ->numeric()
                     ->placeholder('-'),
                 TextEntry::make('title'),
-                TextEntry::make('slug'),
                 TextEntry::make('topic')
                     ->placeholder('-'),
                 TextEntry::make('excerpt')

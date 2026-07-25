@@ -13,11 +13,12 @@ Meta Description، Canonical، robots، Open Graph، Twitter وSchema JSON-LD
 
 ## تغيير Slug
 
-- قبل النشر: يمكن تعديل slug إذا لم يصطدم بمسار أو Redirect.
-- بعد النشر: حقل slug مقفل في Filament.
-- الإجراء «تغيير الرابط مع تحويل 301» ينشئ Redirect دائمًا في transaction،
-  يرفض الحلقات والتعارضات، ثم يحدث Route Registry وCanonical وOpen Graph
-  وsitemap.
+- حقل Slug غير موجود في لوحة Filament.
+- عند إنشاء سجل جديد، يولد Backend قيمة فريدة داخليًا مرة واحدة ولا يغيرها
+  عند تعديل العنوان، سواء كان السجل مسودة أو منشورًا.
+- التغيير الاستثنائي عبر `SlugRedirectService` ينشئ Redirect دائمًا داخل
+  transaction، ويرفض الحلقات والتعارضات، ثم يحدث Route Registry وCanonical
+  وOpen Graph وsitemap.
 - يمنع Model Observer أي تعديل مباشر يتجاوز الخدمة.
 
 ## Sitemap
@@ -25,6 +26,8 @@ Meta Description، Canonical، robots، Open Graph، Twitter وSchema JSON-LD
 حقلا `loc` و`path` وحالة تضمين الروابط الموروثة مقفلة في لوحة التحكم. يمكن
 تعديل `lastmod`, `changefreq`, `priority` فقط. `legacy:verify` يقارن مجموعة
 الروابط بقاعدة البيانات، واختبار العقد يقارن XML المبني كاملًا بالـManifest.
+الصفحات الجديدة تضاف تلقائيًا بعد الصفوف الموروثة؛ يتحقق الاختبار من بقاء
+الصفوف الـ156 القديمة حرفيًا وبالترتيب نفسه ومن عدم تكرار أي رابط جديد.
 
 ## اختبارات القبول
 

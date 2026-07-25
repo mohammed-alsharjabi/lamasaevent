@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Contracts\ManagedContent;
 use App\Enums\ContentStatus;
 use App\Models\Area;
 use App\Models\Article;
 use App\Models\ContactSetting;
 use App\Models\Gallery;
+use App\Models\Media;
 use App\Models\Menu;
 use App\Models\Page;
 use App\Models\Redirect;
@@ -27,29 +29,69 @@ class ContentExportService
     {
         $published = fn (Builder $query) => $query
             ->where('status', ContentStatus::Published->value)
-            ->with(['seoMeta', 'faqs']);
+            ->with(['seoMeta', 'faqs', 'heroMedia']);
+
+        $pages = $published(Page::query())->get();
+        $serviceCategories = $published(ServiceCategory::query())
+            ->with(['services' => fn ($query) => $query->where('status', 'published')])
+            ->orderBy('sort_order')
+            ->get();
+        $services = $published(Service::query())
+            ->with([
+                'category',
+                'media',
+                'parent:id,title,slug',
+                'children' => fn ($query) => $query
+                    ->where('status', ContentStatus::Published->value)
+                    ->select(['id', 'parent_id', 'title', 'slug', 'sort_order']),
+            ])
+            ->orderBy('sort_order')
+            ->get();
+        $areas = $published(Area::query())
+            ->with('media')
+            ->orderBy('sort_order')
+            ->get();
+        $articles = $published(Article::query())
+            ->with('media')
+            ->latest('published_at')
+            ->get();
+
+        foreach ([$pages, $serviceCategories, $services, $areas, $articles] as $records) {
+            foreach ($records as $record) {
+                if (! $record instanceof ManagedContent) {
+                    continue;
+                }
+
+                $hero = $record->getRelation('heroMedia');
+                $record->unsetRelation('heroMedia');
+
+                if (filled($record->getAttribute('legacy_path'))) {
+                    continue;
+                }
+
+                $record->setAttribute('public_path', $record->routePath());
+                $record->setAttribute(
+                    'hero_media_summary',
+                    $hero instanceof Media
+                        ? [
+                            'original_name' => $hero->original_name,
+                            'public_url' => $hero->url(),
+                            'alt' => $hero->alt,
+                        ]
+                        : null,
+                );
+            }
+        }
 
         return [
             'schema_version' => 2,
             'production_origin' => config('app.production_url'),
             'generated_at' => now()->toIso8601String(),
-            'pages' => $published(Page::query())->get(),
-            'service_categories' => $published(ServiceCategory::query())
-                ->with(['services' => fn ($query) => $query->where('status', 'published')])
-                ->orderBy('sort_order')
-                ->get(),
-            'services' => $published(Service::query())
-                ->with(['category', 'media'])
-                ->orderBy('sort_order')
-                ->get(),
-            'areas' => $published(Area::query())
-                ->with('media')
-                ->orderBy('sort_order')
-                ->get(),
-            'articles' => $published(Article::query())
-                ->with('media')
-                ->latest('published_at')
-                ->get(),
+            'pages' => $pages,
+            'service_categories' => $serviceCategories,
+            'services' => $services,
+            'areas' => $areas,
+            'articles' => $articles,
             'galleries' => Gallery::query()
                 ->where('status', 'published')
                 ->with(['media', 'items.media'])

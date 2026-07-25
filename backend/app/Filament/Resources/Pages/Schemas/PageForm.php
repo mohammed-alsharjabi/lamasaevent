@@ -29,7 +29,7 @@ class PageForm
                     ->disabled(fn ($record): bool => (bool) $record?->routeRecord?->slug_locked)
                     ->dehydrated()
                     ->required(),
-                ManagedContentFields::heroMedia(),
+                ...ManagedContentFields::heroMedia(),
                 Textarea::make('summary')->label('الملخص')->columnSpanFull(),
                 ManagedContentFields::status('pages'),
                 ManagedContentFields::publishedAt(),

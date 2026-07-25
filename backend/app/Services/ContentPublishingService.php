@@ -6,6 +6,7 @@ use App\Contracts\ManagedContent;
 use App\Enums\ContentStatus;
 use App\Models\ActivityLog;
 use App\Models\RouteRecord;
+use App\Models\SitemapEntry;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -48,6 +49,8 @@ class ContentPublishingService
                 return;
             }
 
+            $this->syncSitemap($route, $published);
+
             ActivityLog::create([
                 'user_id' => $actorId,
                 'action' => $published ? 'content.published' : 'content.saved_as_draft',
@@ -64,5 +67,38 @@ class ContentPublishingService
 
         Cache::forget('content-export:v2');
         app(PublishPipeline::class)->queue($content, $actorId);
+    }
+
+    private function syncSitemap(RouteRecord $route, bool $published): void
+    {
+        if ($route->is_legacy) {
+            return;
+        }
+
+        $entry = SitemapEntry::query()->firstOrNew(['path' => $route->path]);
+
+        if (! $entry->exists) {
+            $entry->position = ((int) SitemapEntry::query()->max('position')) + 1;
+            $entry->changefreq = 'monthly';
+            $entry->priority = $this->defaultPriority($route->path);
+        }
+
+        $entry->fill([
+            'route_registry_id' => $route->getKey(),
+            'loc' => rtrim(config('app.production_url'), '/').$route->path,
+            'lastmod' => now()->toDateString(),
+            'is_included' => $published,
+        ])->save();
+    }
+
+    private function defaultPriority(string $path): float
+    {
+        return match (true) {
+            $path === '/' => 1.0,
+            str_starts_with($path, '/services/') => 0.8,
+            str_starts_with($path, '/blog/') => 0.7,
+            str_starts_with($path, '/areas/') => 0.7,
+            default => 0.6,
+        };
     }
 }

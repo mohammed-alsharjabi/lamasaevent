@@ -173,7 +173,14 @@ test("generated sitemap preserves every legacy row and its order", () => {
     priority: route.sitemap.priority,
   }));
 
-  assert.deepEqual(actual, expected);
+  assert.deepEqual(actual.slice(0, expected.length), expected);
+
+  const allLocations = actual.map((entry) => entry.loc);
+  assert.equal(
+    new Set(allLocations).size,
+    allLocations.length,
+    "Sitemap contains duplicate locations.",
+  );
 });
 
 test(

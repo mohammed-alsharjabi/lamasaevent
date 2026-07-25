@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -53,6 +53,46 @@ test("Astro global components do not contain fixed business content", () => {
       source.includes(fixedValue),
       false,
       `Fixed business content remains in Astro source: ${fixedValue}`,
+    );
+  }
+});
+
+test("admin forms never expose slug fields and use the shared media picker", () => {
+  const filamentRoot = join(projectRoot, "backend", "app", "Filament");
+  const adminSource = readdirSync(filamentRoot, {
+    recursive: true,
+    encoding: "utf8",
+  })
+    .filter((file) => file.endsWith(".php"))
+    .map((file) => readFileSync(join(filamentRoot, file), "utf8"))
+    .join("\n");
+
+  for (const forbidden of [
+    "TextInput::make('slug')",
+    "TextEntry::make('slug')",
+    "TextColumn::make('slug')",
+    "الرابط المختصر",
+    "slugRedirectAction",
+  ]) {
+    assert.equal(
+      adminSource.includes(forbidden),
+      false,
+      `Admin still exposes slug UI: ${forbidden}`,
+    );
+  }
+
+  for (const form of [
+    "Resources/Articles/Schemas/ArticleForm.php",
+    "Resources/Services/Schemas/ServiceForm.php",
+    "Resources/Pages/Schemas/PageForm.php",
+    "Resources/Areas/Schemas/AreaForm.php",
+    "Resources/ServiceCategories/Schemas/ServiceCategoryForm.php",
+    "Resources/ArticleCategories/Schemas/ArticleCategoryForm.php",
+  ]) {
+    assert.match(
+      readFileSync(join(filamentRoot, form), "utf8"),
+      /ManagedContentFields::heroMedia\(\)/,
+      `Form does not use the shared media picker: ${form}`,
     );
   }
 });

@@ -25,6 +25,7 @@ class LegacyVerificationService
         $expectedUrls = collect($routes)->pluck('url')->sort()->values();
         $actualUrls = SitemapEntry::query()
             ->where('is_included', true)
+            ->whereIn('path', $expectedPaths)
             ->pluck('loc')
             ->sort()
             ->values();

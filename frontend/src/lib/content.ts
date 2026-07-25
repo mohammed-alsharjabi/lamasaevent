@@ -17,7 +17,10 @@ const collections = [
 ] as unknown as ContentEntity[][];
 
 const entitiesByPath = new Map<string, ContentEntity>(
-  collections.flat().map((entity) => [entity.legacy_path, entity]),
+  collections.flat().map((entity) => [
+    entity.public_path ?? entity.legacy_path ?? "",
+    entity,
+  ]),
 );
 
 export const routes = content.routes as unknown as RouteRecord[];

@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\GeneratesInternalSlug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ArticleCategory extends Model
 {
-    use SoftDeletes;
+    use GeneratesInternalSlug, SoftDeletes;
 
     protected $fillable = [
         'hero_media_id', 'name', 'slug', 'description', 'sort_order', 'is_active',

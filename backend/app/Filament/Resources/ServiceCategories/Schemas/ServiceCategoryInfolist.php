@@ -14,7 +14,6 @@ class ServiceCategoryInfolist
         return $schema
             ->components([
                 TextEntry::make('title'),
-                TextEntry::make('slug'),
                 TextEntry::make('summary')
                     ->placeholder('-')
                     ->columnSpanFull(),

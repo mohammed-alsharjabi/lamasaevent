@@ -16,9 +16,8 @@ class AreaForm
         return $schema->components([
             Section::make('بيانات المنطقة')->columns(2)->schema([
                 TextInput::make('title')->label('اسم المنطقة')->required(),
-                ManagedContentFields::slug(),
                 Textarea::make('summary')->label('الملخص')->columnSpanFull(),
-                ManagedContentFields::heroMedia(),
+                ...ManagedContentFields::heroMedia(),
                 ManagedContentFields::status('areas'),
                 ManagedContentFields::publishedAt(),
                 Toggle::make('is_active')->label('نشطة')->default(true),

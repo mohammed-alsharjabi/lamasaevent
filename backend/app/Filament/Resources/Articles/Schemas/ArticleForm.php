@@ -22,10 +22,9 @@ class ArticleForm
                     ->relationship('category', 'name')
                     ->searchable()
                     ->preload(),
-                ManagedContentFields::slug(),
                 TextInput::make('topic')->label('الموضوع'),
                 Textarea::make('excerpt')->label('المقتطف')->rows(3)->columnSpanFull(),
-                ManagedContentFields::heroMedia(),
+                ...ManagedContentFields::heroMedia(),
                 ManagedContentFields::status('articles'),
                 ManagedContentFields::publishedAt(),
                 ManagedContentFields::featured(),

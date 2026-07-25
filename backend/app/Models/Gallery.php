@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\ContentStatus;
+use App\Models\Concerns\GeneratesInternalSlug;
+use App\Models\Concerns\InvalidatesContentExport;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Gallery extends Model
 {
-    use HasFactory, SoftDeletes;
+    use GeneratesInternalSlug, HasFactory, InvalidatesContentExport, SoftDeletes;
 
     protected $fillable = [
         'title', 'slug', 'description', 'status', 'published_at', 'created_by',

@@ -17,7 +17,6 @@ class ArticleCategoryInfolist
                     ->numeric()
                     ->placeholder('-'),
                 TextEntry::make('name'),
-                TextEntry::make('slug'),
                 TextEntry::make('description')
                     ->placeholder('-')
                     ->columnSpanFull(),

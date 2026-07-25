@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\PublishJob;
 use App\Services\ContentExportService;
+use App\Services\ContentSnapshotWriter;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Storage;
@@ -19,8 +20,10 @@ class GenerateFrontendSnapshot implements ShouldQueue
 
     public function __construct(public int $publishJobId) {}
 
-    public function handle(ContentExportService $exporter): void
-    {
+    public function handle(
+        ContentExportService $exporter,
+        ContentSnapshotWriter $writer,
+    ): void {
         $job = PublishJob::findOrFail($this->publishJobId);
         $job->update([
             'status' => 'running',
@@ -29,14 +32,18 @@ class GenerateFrontendSnapshot implements ShouldQueue
         ]);
 
         $payload = $exporter->build();
-        $json = json_encode(
-            $payload,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
-        );
+        $json = $writer->encode($payload);
         $version = substr(hash('sha256', $json), 0, 16);
         $path = "publish/snapshots/content-{$version}.json";
 
         Storage::disk('local')->put($path, $json);
+
+        $frontendSnapshot = config('publishing.frontend_snapshot_path');
+
+        if (is_string($frontendSnapshot) && $frontendSnapshot !== '') {
+            $writer->write($frontendSnapshot, $json);
+        }
+
         $job->update([
             'status' => 'completed',
             'snapshot_path' => $path,

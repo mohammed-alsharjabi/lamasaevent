@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\ManagedContent;
 use App\Enums\ContentStatus;
+use App\Models\Concerns\GeneratesInternalSlug;
 use App\Models\Concerns\HasManagedContent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Area extends Model implements ManagedContent
 {
-    use HasFactory, HasManagedContent, SoftDeletes;
+    use GeneratesInternalSlug, HasFactory, HasManagedContent, SoftDeletes;
 
     protected $fillable = [
         'hero_media_id', 'title', 'slug', 'summary', 'content_blocks', 'status',

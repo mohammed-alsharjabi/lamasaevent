@@ -22,9 +22,14 @@ interface Props {
   routePath: string;
 }
 
-const { page, routePath } = Astro.props;
+const { page, routePath } = Astro.props as Props;
 ---
 
 <BaseLayout seo={page.seo_meta} behaviorScript={behaviorScriptFor(routePath)}>
-  <LegacyContent blocks={page.content_blocks} />
+  <LegacyContent
+    blocks={page.content_blocks}
+    title={page.title}
+    summary={(page.summary || page.excerpt) as string | null}
+    heroMedia={page.hero_media_summary}
+  />
 </BaseLayout>

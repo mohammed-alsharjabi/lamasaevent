@@ -7,7 +7,7 @@ export interface SeoMeta {
   twitter: Record<string, string | null>;
   hreflang: Array<{ lang: string; href: string }> | null;
   json_ld: unknown[];
-  json_ld_sha256: string;
+  json_ld_sha256: string | null;
 }
 
 export interface ContentBlock {
@@ -24,11 +24,19 @@ export interface ContentBlock {
 export interface ContentEntity {
   id: number;
   title: string;
-  legacy_path: string;
+  legacy_path: string | null;
   content_blocks: ContentBlock[];
   status: "published";
   published_at: string;
   seo_meta: SeoMeta;
+  public_path?: string;
+  hero_media_summary?: {
+    original_name: string;
+    public_url: string;
+    alt: string | null;
+  } | null;
+  summary?: string | null;
+  excerpt?: string | null;
   [key: string]: unknown;
 }
 
@@ -36,8 +44,8 @@ export interface RouteRecord {
   id: number;
   path: string;
   exact_url: string;
-  routable_type: string;
-  routable_id: number;
+  routable_type: string | null;
+  routable_id: number | null;
   is_legacy: boolean;
   is_published: boolean;
 }

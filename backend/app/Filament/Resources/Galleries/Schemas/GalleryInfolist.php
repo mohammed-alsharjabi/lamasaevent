@@ -14,7 +14,6 @@ class GalleryInfolist
         return $schema
             ->components([
                 TextEntry::make('title'),
-                TextEntry::make('slug'),
                 TextEntry::make('description')
                     ->placeholder('-')
                     ->columnSpanFull(),

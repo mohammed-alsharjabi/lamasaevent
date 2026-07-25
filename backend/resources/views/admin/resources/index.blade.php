@@ -26,7 +26,7 @@
         @forelse ($records as $record)
             <tr>
                 <td>{{ $record->title }}</td>
-                <td dir="ltr">{{ $record->slug ?? $record->path ?? '—' }}</td>
+                <td dir="ltr">{{ $record->path ?? $record->legacy_path ?? '—' }}</td>
                 <td>
                     <span class="badge {{ $record->status?->value === 'published' ? 'badge-published' : '' }}">
                         {{ $record->status?->value === 'published' ? 'منشور' : 'مسودة' }}

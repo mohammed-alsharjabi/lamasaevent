@@ -5,7 +5,6 @@
     $seo = $record->seoMeta ?? null;
     $json = fn ($value) => $value ? json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : '';
     $labels = [
-        'slug' => 'Slug',
         'path' => 'المسار',
         'type' => 'نوع الصفحة',
         'topic' => 'التصنيف النصي',
@@ -41,6 +40,7 @@
 
             @foreach ($config['fields'] as $field)
                 @continue($field === 'title')
+                @continue($field === 'slug')
                 @if ($field === 'service_category_id')
                     <div class="field">
                         <label for="{{ $field }}">{{ $labels[$field] }}</label>
@@ -64,7 +64,7 @@
                 @else
                     <div class="field">
                         <label for="{{ $field }}">{{ $labels[$field] ?? $field }}</label>
-                        <input id="{{ $field }}" name="{{ $field }}" value="{{ old($field, $record->$field) }}" @if(in_array($field, ['slug', 'path'], true)) dir="ltr" @endif>
+                        <input id="{{ $field }}" name="{{ $field }}" value="{{ old($field, $record->$field) }}" @if($field === 'path') dir="ltr" @endif>
                     </div>
                 @endif
             @endforeach
@@ -81,15 +81,6 @@
                 <input id="published_at" name="published_at" type="datetime-local" value="{{ old('published_at', $record->published_at?->format('Y-m-d\TH:i')) }}">
             </div>
 
-            @if ($editing && isset($record->slug) && $record->status?->value === 'published')
-                <div class="field span-2">
-                    <label>
-                        <input type="checkbox" name="create_redirect" value="1" @checked(old('create_redirect'))>
-                        إنشاء Redirect 301 تلقائيًا إذا تغير slug
-                    </label>
-                    <small class="muted">لن يسمح النظام بتغيير slug المنشور من دون هذا التأكيد.</small>
-                </div>
-            @endif
         </div>
     </section>
 

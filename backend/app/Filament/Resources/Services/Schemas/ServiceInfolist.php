@@ -20,7 +20,9 @@ class ServiceInfolist
                     ->numeric()
                     ->placeholder('-'),
                 TextEntry::make('title'),
-                TextEntry::make('slug'),
+                TextEntry::make('parent.title')
+                    ->label('الخدمة الرئيسية')
+                    ->placeholder('خدمة رئيسية'),
                 TextEntry::make('excerpt')
                     ->placeholder('-')
                     ->columnSpanFull(),

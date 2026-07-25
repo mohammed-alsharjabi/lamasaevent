@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Services\Schemas;
 
 use App\Filament\Forms\ManagedContentFields;
+use App\Models\Service;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -22,8 +23,23 @@ class ServiceForm
                     ->relationship('category', 'title')
                     ->searchable()
                     ->preload(),
-                ManagedContentFields::slug(),
-                ManagedContentFields::heroMedia(),
+                Select::make('parent_id')
+                    ->label('الخدمة الرئيسية')
+                    ->relationship(
+                        'parent',
+                        'title',
+                        modifyQueryUsing: fn ($query) => $query->whereNull('parent_id'),
+                        ignoreRecord: true,
+                    )
+                    ->placeholder('بدون — هذه خدمة رئيسية')
+                    ->helperText('اختر خدمة رئيسية فقط عندما تكون هذه الخدمة فرعية.')
+                    ->searchable()
+                    ->preload()
+                    ->disabled(
+                        fn (?Service $record): bool => $record?->children()->exists() ?? false,
+                    )
+                    ->dehydrated(),
+                ...ManagedContentFields::heroMedia(),
                 Textarea::make('excerpt')->label('الملخص')->rows(3)->columnSpanFull(),
                 ManagedContentFields::status('services'),
                 ManagedContentFields::publishedAt(),
