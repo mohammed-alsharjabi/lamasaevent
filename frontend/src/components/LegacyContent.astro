@@ -1,5 +1,5 @@
 ---
-import CmsPublishedAdditions from "./CmsPublishedAdditions.astro";
+import { integrateNativeListings } from "../lib/native-listings";
 import type { ContentBlock, ContentEntity } from "../types/content";
 
 interface Props {
@@ -11,11 +11,12 @@ interface Props {
 }
 
 const { blocks, title, summary, heroMedia, routePath } = Astro.props;
+const integrated = integrateNativeListings(blocks, routePath);
 ---
 
 <main id="main">
-  {blocks.length > 0 ? (
-    blocks.map((block) => <Fragment set:html={block.html} />)
+  {integrated.blocks.length > 0 ? (
+    integrated.blocks.map((block) => <Fragment set:html={block.html} />)
   ) : (
     <article class="container" style="padding-block: clamp(3rem, 8vw, 7rem);">
       {heroMedia && (
@@ -31,5 +32,7 @@ const { blocks, title, summary, heroMedia, routePath } = Astro.props;
       {summary && <p>{summary}</p>}
     </article>
   )}
-  <CmsPublishedAdditions routePath={routePath} />
+  {integrated.supplementalHtml && (
+    <Fragment set:html={integrated.supplementalHtml} />
+  )}
 </main>

@@ -79,7 +79,9 @@ class Service extends Model implements ManagedContent
 
     public function children(): HasMany
     {
-        return $this->hasMany(Service::class, 'parent_id')->orderBy('sort_order');
+        return $this->hasMany(Service::class, 'parent_id')
+            ->orderBy('sort_order')
+            ->orderBy('id');
     }
 
     public function heroMedia(): BelongsTo

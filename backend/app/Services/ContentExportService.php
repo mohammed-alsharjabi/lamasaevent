@@ -32,14 +32,17 @@ class ContentExportService
             ->where('status', ContentStatus::Published->value)
             ->with(['seoMeta', 'faqs', 'heroMedia']);
 
-        $pages = $published(Page::query())->get();
-        $serviceCategories = $published(ServiceCategory::query())
-            ->with(['services' => fn ($query) => $query->where('status', 'published')])
+        $pages = $published(Page::query())
             ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+        $serviceCategories = $published(ServiceCategory::query())
+            ->orderBy('sort_order')
+            ->orderBy('id')
             ->get();
         $services = $published(Service::query())
             ->with([
-                'category',
+                'category:id,title,slug',
                 'media',
                 'parent:id,title,slug',
                 'children' => fn ($query) => $query
@@ -47,14 +50,18 @@ class ContentExportService
                     ->select(['id', 'parent_id', 'title', 'slug', 'sort_order']),
             ])
             ->orderBy('sort_order')
+            ->orderBy('id')
             ->get();
         $areas = $published(Area::query())
             ->with('media')
             ->orderBy('sort_order')
+            ->orderBy('id')
             ->get();
         $articles = $published(Article::query())
             ->with('media')
+            ->orderBy('sort_order')
             ->latest('published_at')
+            ->latest('id')
             ->get();
 
         foreach ([$pages, $serviceCategories, $services, $areas, $articles] as $records) {
@@ -111,6 +118,7 @@ class ContentExportService
                 ->where('status', 'published')
                 ->with(['media', 'items.media'])
                 ->orderBy('sort_order')
+                ->orderBy('id')
                 ->get(),
             'menus' => Menu::query()
                 ->where('is_active', true)

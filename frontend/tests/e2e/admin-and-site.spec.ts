@@ -1,4 +1,28 @@
 import { expect, test } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+interface ExportedService {
+  id: number;
+  legacy_path: string | null;
+  public_path?: string;
+  sort_order: number;
+  parent?: { id: number } | null;
+}
+
+const exportPayload = JSON.parse(
+  readFileSync(
+    path.resolve(import.meta.dirname, "../../src/data/content-export.json"),
+    "utf8",
+  ),
+) as { services: ExportedService[] };
+const cmsServices = exportPayload.services
+  .filter((service) => service.legacy_path === null)
+  .sort(
+    (left, right) =>
+      left.sort_order - right.sort_order || left.id - right.id,
+  );
+const cmsServicePaths = cmsServices.map((service) => service.public_path);
 
 test("recovered public page preserves Arabic SEO shell", async ({ page }) => {
   await page.goto("/");
@@ -11,29 +35,40 @@ test("recovered public page preserves Arabic SEO shell", async ({ page }) => {
   await expect(page.locator("main")).toBeVisible();
 });
 
-test("published CMS additions are visible on public listing pages", async ({
+test("published CMS services use the native grids everywhere", async ({
   page,
 }) => {
   await page.goto("/");
-  await expect(
-    page.locator(".cms-additions").getByRole("heading", {
-      name: "تصنيف الخدمة",
-    }),
-  ).toBeVisible();
+  const homePaths = await page
+    .locator(".ph-services__grid [data-cms-kind='service']")
+    .evaluateAll((nodes) =>
+      nodes.map((node) => node.getAttribute("href")),
+    );
+  expect(homePaths).toEqual(cmsServicePaths);
+  await expect(page.locator(".cms-additions")).toHaveCount(0);
 
   await page.goto("/services");
-  await expect(
-    page.locator(".cms-additions").getByRole("link", {
-      name: /تصنيف الخدمة/,
-    }),
-  ).toHaveAttribute("href", "/services/tsnyf-alkhdm");
+  const servicesPaths = await page
+    .locator(".svx-grid [data-cms-kind='service'] .svx-card")
+    .evaluateAll((nodes) =>
+      nodes.map((node) => node.getAttribute("href")),
+    );
+  expect(servicesPaths).toEqual(cmsServicePaths);
 
-  await page.goto("/services/party-arches-riyadh");
+  const child = cmsServices.find((service) => service.parent);
+  const parent = exportPayload.services.find(
+    (service) => service.id === child?.parent?.id,
+  );
+
+  expect(child?.public_path).toBeTruthy();
+  expect(parent?.public_path || parent?.legacy_path).toBeTruthy();
+
+  await page.goto((parent?.public_path || parent?.legacy_path) as string);
   await expect(
-    page.locator(".cms-additions").getByRole("heading", {
-      name: "الخدمات الفرعية",
-    }),
-  ).toBeVisible();
+    page.locator(
+      `.svc-detail__sibling-grid [data-cms-id='${child?.id}']`,
+    ),
+  ).toHaveAttribute("href", child?.public_path as string);
 });
 
 test("local administrator can enter the Arabic Filament dashboard", async ({

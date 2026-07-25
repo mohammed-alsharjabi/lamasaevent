@@ -29,10 +29,15 @@ const stripTags = (value = "") =>
   decodeEntities(value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim());
 
 const stripCmsAdditions = (html = "") =>
-  html.replace(
-    /<section\b[^>]*\bdata-cms-additions\b[^>]*>[\s\S]*?<\/section>/gi,
-    "",
-  );
+  html
+    .replace(
+      /<!--cms-native:[^>]*:start-->[\s\S]*?<!--cms-native:[^>]*:end-->/gi,
+      "",
+    )
+    .replace(
+      /<section\b[^>]*\bdata-cms-additions\b[^>]*>[\s\S]*?<\/section>/gi,
+      "",
+    );
 
 const getAttribute = (tag, attribute) => {
   const match = tag.match(

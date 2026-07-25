@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Models\Gallery;
 use App\Models\PublishJob;
 use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Services\ContentExportService;
 use App\Services\ContentPublishingService;
 use App\Services\ContentSnapshotWriter;
@@ -84,6 +85,31 @@ class CmsContentStructureTest extends TestCase
 
         $this->assertSame($main->id, $exportedChild->parent->id);
         $this->assertSame($child->id, $exportedMain->children->sole()->id);
+    }
+
+    public function test_public_export_avoids_duplicate_nested_service_payloads(): void
+    {
+        $category = ServiceCategory::create([
+            'title' => 'تصنيف خفيف',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+        Service::create([
+            'title' => 'خدمة مرتبطة',
+            'service_category_id' => $category->id,
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        $payload = app(ContentExportService::class)->build();
+        $exportedCategory = $payload['service_categories']->sole();
+        $exportedService = $payload['services']->sole();
+
+        $this->assertFalse($exportedCategory->relationLoaded('services'));
+        $this->assertSame(
+            ['id', 'title', 'slug'],
+            array_keys($exportedService->category->getAttributes()),
+        );
     }
 
     public function test_new_published_content_is_synchronized_to_the_sitemap(): void
