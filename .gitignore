@@ -3,6 +3,7 @@
 .env.*
 !.env.example
 !backend/.env.production.example
+!frontend/.env.production.example
 node_modules/
 vendor/
 storage/*.key

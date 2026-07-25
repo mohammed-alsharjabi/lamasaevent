@@ -34,6 +34,15 @@ class Gallery extends Model
 
     protected static function booted(): void
     {
+        static::saving(function (self $gallery): void {
+            if (
+                $gallery->getAttribute('status') === ContentStatus::Published
+                && ! $gallery->getAttribute('published_at')
+            ) {
+                $gallery->setAttribute('published_at', now());
+            }
+        });
+
         static::updating(function (self $gallery): void {
             if (
                 $gallery->getRawOriginal('is_legacy')

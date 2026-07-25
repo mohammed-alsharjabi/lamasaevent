@@ -3,6 +3,9 @@
 set -euo pipefail
 
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+source "${project_dir}/scripts/runtime.sh"
+lams_use_node
+
 legacy_dir="${LEGACY_DIST:-}"
 staging_db="${STAGING_DB:-${project_dir}/backend/database/staging.sqlite}"
 
@@ -42,10 +45,10 @@ fi
 php artisan content:export
 
 cd "${project_dir}/frontend"
-PATH="/usr/local/bin:/usr/bin:/bin:${PATH}" npm ci
-PATH="/usr/local/bin:/usr/bin:/bin:${PATH}" npm run check
-PATH="/usr/local/bin:/usr/bin:/bin:${PATH}" npm run build
-LEGACY_DIST="${legacy_dir}" PATH="/usr/local/bin:/usr/bin:/bin:${PATH}" npm run test:contract
+npm ci
+npm run check
+npm run build
+LEGACY_DIST="${legacy_dir}" npm run test:contract
 
 echo
 echo "Staging database: ${staging_db}"
