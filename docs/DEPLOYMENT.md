@@ -20,7 +20,9 @@
 4. شغّل `php artisan migrate --force`.
 5. شغّل `legacy:import` فقط عند bootstrap الأول، ثم `legacy:verify`.
 6. شغّل `php artisan optimize`.
-7. شغّل Queue worker عبر Supervisor/systemd.
+7. شغّل Queue worker عبر Supervisor/systemd بالأمر
+   `php artisan queue:work --timeout=180 --tries=3 --max-time=3600`، واجعل
+   `DB_QUEUE_RETRY_AFTER=240` أكبر من مهلة المهمة.
 8. ابنِ Astro مع `CMS_API_URL` الخاص بـStaging.
 9. شغّل العقد والروابط وE2E والمقارنة البصرية.
 10. انشر الـartifact على Staging واطلب اعتمادًا بشريًا.
