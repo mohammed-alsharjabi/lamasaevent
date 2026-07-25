@@ -1,5 +1,7 @@
-import content from "../data/content-export.json";
+import { loadContentExport } from "./api-client";
 import type { ContentEntity, RouteRecord } from "../types/content";
+
+const { payload: content, source } = await loadContentExport();
 
 const collections = [
   content.pages,
@@ -16,6 +18,7 @@ const entitiesByPath = new Map<string, ContentEntity>(
 export const routes = content.routes as unknown as RouteRecord[];
 export const sitemap = content.sitemap;
 export const contact = content.contact;
+export const contentSource = source;
 
 export function getContentByPath(path: string): ContentEntity {
   const entity = entitiesByPath.get(path);
