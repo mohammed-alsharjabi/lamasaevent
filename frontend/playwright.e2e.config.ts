@@ -22,7 +22,7 @@ export default defineConfig({
     },
     {
       command:
-        "CMS_API_URL=http://127.0.0.1:8000 CMS_ALLOW_STATIC_FALLBACK=true npm run dev -- --host 127.0.0.1 --port 4321",
+        "STAGING_HOST=127.0.0.1 STAGING_PORT=4321 STAGING_BACKEND_URL=http://127.0.0.1:8000 node ../staging/server.mjs",
       cwd: import.meta.dirname,
       url: "http://127.0.0.1:4321/",
       reuseExistingServer: true,

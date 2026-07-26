@@ -366,13 +366,26 @@ export function integrateNativeListings(
       const categoryServices = cmsServices.filter(
         (service) => Number(service.service_category_id) === category.id,
       );
+      const categoryServicesMarkup = categoryServices
+        .map(categoryServicePath)
+        .join("");
 
       result = integrate(
         blocks,
         "sct-paths",
         `service-category-${category.id}`,
-        categoryServices.map(categoryServicePath).join(""),
+        categoryServicesMarkup,
       );
+
+      if (categoryServicesMarkup !== "" && !result.inserted) {
+        supplementalHtml = slot(
+          `service-category-${category.id}`,
+          `<section class="container" data-cms-additions data-cms-kind="service-category">
+            <h2 class="svc-detail__h2">خدمات التصنيف</h2>
+            <ul class="sct-paths">${categoryServicesMarkup}</ul>
+          </section>`,
+        );
+      }
     } else {
       const parent = services.find(
         (candidate) => publicPath(candidate) === routePath,
