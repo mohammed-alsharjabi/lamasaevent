@@ -49,4 +49,38 @@ return [
         'branch' => env('FRONTEND_GIT_BRANCH', 'feature/admin-cms'),
         'ssh_key_path' => env('FRONTEND_GIT_SSH_KEY_PATH'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Built frontend deployment webhook
+    |--------------------------------------------------------------------------
+    |
+    | GitHub Actions publishes the verified Astro build to an isolated branch,
+    | then calls a signed Laravel webhook. This outbound-only flow works on
+    | shared hosts that block inbound SSH from GitHub runners and do not ship
+    | Node.js or cron.
+    |
+    */
+    'deployment' => [
+        'enabled' => (bool) env('FRONTEND_DEPLOYMENT_ENABLED', false),
+        'webhook_secret' => env('FRONTEND_DEPLOYMENT_WEBHOOK_SECRET'),
+        'repository_root' => env(
+            'FRONTEND_DEPLOYMENT_REPOSITORY_ROOT',
+            base_path('..'),
+        ),
+        'repository_url' => env(
+            'FRONTEND_DEPLOYMENT_REPOSITORY_URL',
+            'git@github.com:mohammed-alsharjabi/lamasaevent.git',
+        ),
+        'branch' => env('FRONTEND_DEPLOYMENT_BRANCH', 'staging-dist'),
+        'public_root' => env('FRONTEND_DEPLOYMENT_PUBLIC_ROOT'),
+        'ssh_key_path' => env(
+            'FRONTEND_DEPLOYMENT_SSH_KEY_PATH',
+            env('FRONTEND_GIT_SSH_KEY_PATH'),
+        ),
+        'max_signature_age' => (int) env(
+            'FRONTEND_DEPLOYMENT_SIGNATURE_MAX_AGE',
+            300,
+        ),
+    ],
 ];

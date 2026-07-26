@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ContentExportController;
+use App\Http\Controllers\Api\DeployStaticFrontendController;
 use App\Http\Controllers\Api\PublishedContentController;
 use App\Http\Controllers\Api\RedirectLookupController;
 use App\Http\Controllers\Api\SitemapXmlController;
@@ -13,4 +14,6 @@ Route::prefix('v1')->middleware('throttle:api')->group(function (): void {
         ->whereNumber('id');
     Route::get('/sitemap.xml', SitemapXmlController::class);
     Route::get('/redirect', RedirectLookupController::class);
+    Route::post('/deploy-static', DeployStaticFrontendController::class)
+        ->middleware('throttle:6,1');
 });

@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: hostinger-staging
@@ -36,43 +36,58 @@ jobs:
           npm run check
           npm run build
 
-      - name: Configure the Hostinger deployment key
+      - name: Publish the verified static build
+        id: publish
         env:
-          DEPLOY_KEY: ${{ secrets.HOSTINGER_SSH_KEY }}
-          KNOWN_HOSTS: ${{ secrets.HOSTINGER_KNOWN_HOSTS }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/hostinger_staging
-          chmod 600 ~/.ssh/hostinger_staging
-          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
+          set -euo pipefail
 
-      - name: Deploy static files without touching Laravel
+          deploy_dir="$(mktemp -d)"
+          trap 'rm -rf "$deploy_dir"' EXIT
+          cp -a frontend/dist/. "$deploy_dir/"
+
+          cd "$deploy_dir"
+          git init -b staging-dist
+          git config user.name "Lamsa Staging Deployment"
+          git config user.email "deploy@lams-event.com"
+          git add --all
+          git commit -m "deploy: ${GITHUB_SHA}"
+          deployment_commit="$(git rev-parse HEAD)"
+          git remote add origin \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin staging-dist
+
+          echo "commit=$deployment_commit" >> "$GITHUB_OUTPUT"
+
+      - name: Notify the signed Hostinger deployment webhook
         env:
-          DEPLOY_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
-          DEPLOY_PORT: ${{ secrets.HOSTINGER_SSH_PORT }}
-          DEPLOY_USER: ${{ secrets.HOSTINGER_SSH_USER }}
-          PUBLIC_ROOT: ${{ secrets.HOSTINGER_PUBLIC_ROOT }}
+          WEBHOOK_URL: ${{ secrets.HOSTINGER_DEPLOY_WEBHOOK_URL }}
+          WEBHOOK_SECRET: ${{ secrets.HOSTINGER_DEPLOY_WEBHOOK_SECRET }}
+          DEPLOYMENT_COMMIT: ${{ steps.publish.outputs.commit }}
         run: |
-          rsync -az --delete --delay-updates --timeout=60 \
-            --exclude='.htaccess' \
-            --exclude='index.php' \
-            --exclude='storage' \
-            --exclude='admin.css' \
-            --exclude='css/' \
-            --exclude='fonts/' \
-            --exclude='js/' \
-            --exclude='favicon.ico' \
-            -e "ssh -i ~/.ssh/hostinger_staging -p $DEPLOY_PORT -o IdentitiesOnly=yes -o BatchMode=yes -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=2" \
-            frontend/dist/ \
-            "$DEPLOY_USER@$DEPLOY_HOST:$PUBLIC_ROOT/"
+          set -euo pipefail
 
-          ssh -i ~/.ssh/hostinger_staging \
-            -p "$DEPLOY_PORT" \
-            -o IdentitiesOnly=yes \
-            -o BatchMode=yes \
-            -o ConnectTimeout=15 \
-            -o ServerAliveInterval=15 \
-            -o ServerAliveCountMax=2 \
-            "$DEPLOY_USER@$DEPLOY_HOST" \
-            "test -s '$PUBLIC_ROOT/index.html' && test -s '$PUBLIC_ROOT/sitemap.xml'"
+          test -n "$WEBHOOK_URL"
+          test -n "$WEBHOOK_SECRET"
+          test -n "$DEPLOYMENT_COMMIT"
+
+          payload="$(printf '{"commit":"%s"}' "$DEPLOYMENT_COMMIT")"
+          timestamp="$(date +%s)"
+          signature="$(
+            printf '%s' "$timestamp.$payload" |
+              openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" -hex |
+              awk '{print $NF}'
+          )"
+
+          curl --fail-with-body \
+            --retry 3 \
+            --retry-delay 5 \
+            --connect-timeout 15 \
+            --max-time 180 \
+            -H 'Accept: application/json' \
+            -H 'Content-Type: application/json' \
+            -H "X-Lamasaevent-Timestamp: $timestamp" \
+            -H "X-Lamasaevent-Signature: $signature" \
+            --data "$payload" \
+            "$WEBHOOK_URL"
