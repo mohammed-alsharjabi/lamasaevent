@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-07-27T01:04:44+03:00",
+    "generated_at": "2026-07-27T01:05:32+03:00",
     "pages": [
         {
             "id": 1,
@@ -17937,6 +17937,83 @@
                     }
                 }
             ],
+            "parent": null,
+            "children": []
+        },
+        {
+            "id": 48,
+            "service_category_id": 5,
+            "parent_id": null,
+            "hero_media_id": 84,
+            "title": "تأجير ركن شعبيه والديكورات التراثيه",
+            "slug": "tagyr-rkn-shaabyh-oaldykorat-altrathyh",
+            "excerpt": "تأجير ركن شعبيه والديكورات التراثيه",
+            "content_blocks": [],
+            "status": "published",
+            "published_at": "2026-07-26T22:05:00.000000Z",
+            "legacy_path": null,
+            "sort_order": 34,
+            "created_at": "2026-07-26T22:05:32.000000Z",
+            "updated_at": "2026-07-26T22:05:32.000000Z",
+            "deleted_at": null,
+            "created_by": 1,
+            "updated_by": 1,
+            "is_featured": false,
+            "cta_label": null,
+            "cta_url": null,
+            "whatsapp_enabled": true,
+            "public_path": "/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh",
+            "hero_media_summary": {
+                "original_name": "nds6lbagqmo2ljx7ioki.webp",
+                "public_url": "https://aya.technovizen.com/storage/media/2026/07/20f644e0-79ae-4c24-b8f1-25029db800d7.webp",
+                "alt": "تأجير ركن شعبيه والديكورات التراثيه"
+            },
+            "seo_meta": {
+                "id": 164,
+                "seoable_type": "App\\Models\\Service",
+                "seoable_id": 48,
+                "title": "تأجير ركن شعبيه والديكورات التراثيه",
+                "description": "تأجير ركن شعبيه والديكورات التراثيه",
+                "canonical": "https://lams-event.com/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh",
+                "robots": "index, follow",
+                "keywords": [
+                    "تأجير ركن شعبيه والديكورات التراثيه"
+                ],
+                "open_graph": {
+                    "type": "website",
+                    "locale": "ar_SA",
+                    "site_name": "لمسه التميز",
+                    "title": "تأجير ركن شعبيه والديكورات التراثيه",
+                    "description": "تأجير ركن شعبيه والديكورات التراثيه",
+                    "url": "https://lams-event.com/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh"
+                },
+                "twitter": {
+                    "card": "summary",
+                    "title": "تأجير ركن شعبيه والديكورات التراثيه",
+                    "description": "تأجير ركن شعبيه والديكورات التراثيه"
+                },
+                "hreflang": [
+                    {
+                        "lang": "ar-SA",
+                        "href": "https://lams-event.com/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh"
+                    },
+                    {
+                        "lang": "x-default",
+                        "href": "https://lams-event.com/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh"
+                    }
+                ],
+                "json_ld": [],
+                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                "created_at": "2026-07-26T22:05:32.000000Z",
+                "updated_at": "2026-07-26T22:05:32.000000Z"
+            },
+            "faqs": [],
+            "category": {
+                "id": 5,
+                "title": "الاستقبال والمداخل",
+                "slug": "reception-entrances"
+            },
+            "media": [],
             "parent": null,
             "children": []
         },
@@ -85563,6 +85640,20 @@
             "published_at": "2026-07-26T21:22:35.000000Z",
             "created_at": "2026-07-26T21:22:38.000000Z",
             "updated_at": "2026-07-26T21:33:00.000000Z"
+        },
+        {
+            "id": 164,
+            "path": "/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh",
+            "exact_url": "https://lams-event.com/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh",
+            "routable_type": "App\\Models\\Service",
+            "routable_id": 48,
+            "is_legacy": false,
+            "slug_locked": true,
+            "is_published": true,
+            "legacy_html_sha256": null,
+            "published_at": "2026-07-26T22:05:00.000000Z",
+            "created_at": "2026-07-26T22:05:32.000000Z",
+            "updated_at": "2026-07-26T22:05:32.000000Z"
         }
     ],
     "redirects": [],
@@ -87672,6 +87763,19 @@
             "is_included": true,
             "created_at": "2026-07-26T21:22:38.000000Z",
             "updated_at": "2026-07-26T21:33:00.000000Z"
+        },
+        {
+            "id": 164,
+            "route_registry_id": 164,
+            "loc": "https://lams-event.com/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh",
+            "path": "/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh",
+            "lastmod": "2026-07-27",
+            "changefreq": "monthly",
+            "priority": "0.80",
+            "position": 164,
+            "is_included": true,
+            "created_at": "2026-07-26T22:05:32.000000Z",
+            "updated_at": "2026-07-26T22:05:32.000000Z"
         }
     ],
     "contact": {
