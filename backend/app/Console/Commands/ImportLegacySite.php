@@ -405,7 +405,8 @@ class ImportLegacySite extends Command
 
     private function seedGlobalSettings(): void
     {
-        ContactSetting::updateOrCreate(['id' => 1], [
+        $contact = ContactSetting::query()->first() ?? new ContactSetting;
+        $contact->fill([
             'phone' => '+966502560106',
             'phone_display' => '050 256 0106',
             'whatsapp' => '966502560106',
@@ -414,6 +415,7 @@ class ImportLegacySite extends Command
             'region' => 'منطقة الرياض',
             'country_code' => 'SA',
         ]);
+        $contact->save();
 
         foreach ([
             'site_name' => [
