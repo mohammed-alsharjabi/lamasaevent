@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\PublishJob;
 use App\Services\ContentExportService;
+use App\Services\ContentSnapshotGitPublisher;
 use App\Services\ContentSnapshotWriter;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -38,6 +39,7 @@ class GenerateFrontendSnapshot implements ShouldQueue
     public function handle(
         ContentExportService $exporter,
         ContentSnapshotWriter $writer,
+        ContentSnapshotGitPublisher $gitPublisher,
     ): void {
         $job = PublishJob::findOrFail($this->publishJobId);
         $job->update([
@@ -60,6 +62,8 @@ class GenerateFrontendSnapshot implements ShouldQueue
         if (is_string($frontendSnapshot) && $frontendSnapshot !== '') {
             $writer->write($frontendSnapshot, $json);
         }
+
+        $gitPublisher->publish($version);
 
         $job->update([
             'status' => 'completed',

@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\Media\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
@@ -30,7 +32,12 @@ class MediaTable
                 TextColumn::make('created_at')->label('تاريخ الرفع')->dateTime('Y-m-d H:i')->sortable(),
             ])
             ->filters([TrashedFilter::make()->label('المحذوفات')])
-            ->recordActions([ViewAction::make(), EditAction::make()])
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+                DeleteAction::make()->label('حذف'),
+                RestoreAction::make()->label('استعادة'),
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

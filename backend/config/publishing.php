@@ -24,4 +24,29 @@ return [
         'FRONTEND_CONTENT_SNAPSHOT_PATH',
         $defaultFrontendSnapshot,
     ),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Static frontend Git publisher
+    |--------------------------------------------------------------------------
+    |
+    | Shared hosting cannot run Astro itself. When enabled, the snapshot job
+    | commits only the generated content export and pushes it to the configured
+    | branch. GitHub Actions then builds Astro and deploys the static artifact.
+    |
+    */
+    'git' => [
+        'enabled' => (bool) env('FRONTEND_GIT_PUBLISH_ENABLED', false),
+        'repository_root' => env(
+            'FRONTEND_GIT_REPOSITORY_ROOT',
+            base_path('..'),
+        ),
+        'snapshot_relative_path' => env(
+            'FRONTEND_GIT_SNAPSHOT_PATH',
+            'frontend/src/data/content-export.json',
+        ),
+        'remote' => env('FRONTEND_GIT_REMOTE', 'origin'),
+        'branch' => env('FRONTEND_GIT_BRANCH', 'feature/admin-cms'),
+        'ssh_key_path' => env('FRONTEND_GIT_SSH_KEY_PATH'),
+    ],
 ];

@@ -10,6 +10,7 @@ use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Services\ContentExportService;
 use App\Services\ContentPublishingService;
+use App\Services\ContentSnapshotGitPublisher;
 use App\Services\ContentSnapshotWriter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -302,6 +303,7 @@ class CmsContentStructureTest extends TestCase
             (new GenerateFrontendSnapshot($publishJob->id))->handle(
                 app(ContentExportService::class),
                 app(ContentSnapshotWriter::class),
+                app(ContentSnapshotGitPublisher::class),
             );
 
             $snapshot = json_decode(

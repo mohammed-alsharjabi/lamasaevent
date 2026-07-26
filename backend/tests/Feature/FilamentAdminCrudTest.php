@@ -14,6 +14,7 @@ use App\Filament\Resources\ServiceCategories\Pages\CreateServiceCategory;
 use App\Filament\Resources\ServiceCategories\Pages\EditServiceCategory;
 use App\Filament\Resources\Services\Pages\CreateService;
 use App\Filament\Resources\Services\Pages\EditService;
+use App\Filament\Resources\Services\Pages\ListServices;
 use App\Jobs\GenerateFrontendSnapshot;
 use App\Models\Area;
 use App\Models\Article;
@@ -114,6 +115,24 @@ class FilamentAdminCrudTest extends TestCase
             'is_included' => true,
         ]);
         Queue::assertPushed(GenerateFrontendSnapshot::class);
+    }
+
+    public function test_service_list_shows_delete_for_new_content_but_not_legacy_routes(): void
+    {
+        $newService = Service::create([
+            'title' => 'خدمة جديدة قابلة للحذف',
+            'status' => 'draft',
+        ]);
+        $legacyService = Service::create([
+            'title' => 'خدمة قديمة محمية',
+            'legacy_path' => 'services/protected/index.html',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        Livewire::test(ListServices::class)
+            ->assertTableActionVisible('delete', $newService)
+            ->assertTableActionHidden('delete', $legacyService);
     }
 
     /**

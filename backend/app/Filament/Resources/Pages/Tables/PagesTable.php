@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\Pages\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
@@ -66,6 +68,8 @@ class PagesTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make()->label('حذف'),
+                RestoreAction::make()->label('استعادة'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
