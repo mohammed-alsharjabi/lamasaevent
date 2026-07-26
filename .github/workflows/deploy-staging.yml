@@ -54,7 +54,7 @@ jobs:
           DEPLOY_USER: ${{ secrets.HOSTINGER_SSH_USER }}
           PUBLIC_ROOT: ${{ secrets.HOSTINGER_PUBLIC_ROOT }}
         run: |
-          rsync -az --delete --delay-updates \
+          rsync -az --delete --delay-updates --timeout=60 \
             --exclude='.htaccess' \
             --exclude='index.php' \
             --exclude='storage' \
@@ -63,12 +63,16 @@ jobs:
             --exclude='fonts/' \
             --exclude='js/' \
             --exclude='favicon.ico' \
-            -e "ssh -i ~/.ssh/hostinger_staging -p $DEPLOY_PORT -o IdentitiesOnly=yes" \
+            -e "ssh -i ~/.ssh/hostinger_staging -p $DEPLOY_PORT -o IdentitiesOnly=yes -o BatchMode=yes -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=2" \
             frontend/dist/ \
             "$DEPLOY_USER@$DEPLOY_HOST:$PUBLIC_ROOT/"
 
           ssh -i ~/.ssh/hostinger_staging \
             -p "$DEPLOY_PORT" \
             -o IdentitiesOnly=yes \
+            -o BatchMode=yes \
+            -o ConnectTimeout=15 \
+            -o ServerAliveInterval=15 \
+            -o ServerAliveCountMax=2 \
             "$DEPLOY_USER@$DEPLOY_HOST" \
             "test -s '$PUBLIC_ROOT/index.html' && test -s '$PUBLIC_ROOT/sitemap.xml'"
