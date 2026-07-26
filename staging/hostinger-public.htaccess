@@ -2,6 +2,16 @@ DirectoryIndex index.html index.php
 
 <IfModule mod_headers.c>
     Header always set X-Robots-Tag "noindex, nofollow, noarchive"
+
+    # HTML and SEO documents must be revalidated after each atomic deployment.
+    # Hashed Astro assets remain immutable and can be cached aggressively.
+    <FilesMatch "^(?:.*\.html?|sitemap\.xml|robots\.txt)$">
+        Header always set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+
+    <FilesMatch "\.(?:css|js|mjs)$">
+        Header always set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
 </IfModule>
 
 <IfModule mod_rewrite.c>

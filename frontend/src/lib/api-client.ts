@@ -163,6 +163,7 @@ export async function loadContentExport(): Promise<{
   if (apiBase) {
     try {
       const response = await fetch(`${apiBase}/api/v1/content-export`, {
+        cache: "no-store",
         headers: { Accept: "application/json" },
         signal: AbortSignal.timeout(5_000),
       });

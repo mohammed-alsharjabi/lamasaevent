@@ -58,6 +58,21 @@ test("Astro global components do not contain fixed business content", () => {
   }
 });
 
+test("CMS reads and deployed HTML use freshness-safe cache directives", () => {
+  const apiClient = readFileSync(
+    join(sourceRoot, "lib", "api-client.ts"),
+    "utf8",
+  );
+  const hostingerConfig = readFileSync(
+    join(projectRoot, "staging", "hostinger-public.htaccess"),
+    "utf8",
+  );
+
+  assert.match(apiClient, /cache:\s*"no-store"/);
+  assert.match(hostingerConfig, /no-cache,\s*must-revalidate/);
+  assert.match(hostingerConfig, /max-age=31536000,\s*immutable/);
+});
+
 test("admin forms never expose slug fields and use the shared media picker", () => {
   const filamentRoot = join(projectRoot, "backend", "app", "Filament");
   const adminSource = readdirSync(filamentRoot, {
