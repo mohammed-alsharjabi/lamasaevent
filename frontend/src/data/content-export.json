@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-07-27T23:41:23+03:00",
+    "generated_at": "2026-07-27T23:45:11+03:00",
     "pages": [
         {
             "id": 1,
@@ -88115,12 +88115,12 @@
             "quick_links_heading": "روابط سريعة",
             "contact_heading": "تواصل معنا",
             "legal": "© 2026 لمسه التميز لتنسيق الحفلات والمناسبات — الرياض",
-            "credit_aria_label": "برمجة الموقع",
-            "credit_title": "برمجة م/ محمد الشرجبي",
-            "credit_whatsapp_url": "https://wa.me/966568767724",
-            "credit_whatsapp_label": "واتساب",
-            "credit_profile_url": "https://www.google.com/search?q=%40mashrjbi",
-            "credit_profile_label": "@mashrjbi"
+            "credit_aria_label": "",
+            "credit_title": "",
+            "credit_whatsapp_url": "",
+            "credit_whatsapp_label": "",
+            "credit_profile_url": "",
+            "credit_profile_label": ""
         },
         "booking_form": {
             "heading": "طلب حجز",
