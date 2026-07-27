@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-07-27T22:56:28+03:00",
+    "generated_at": "2026-07-27T22:56:57+03:00",
     "pages": [
         {
             "id": 1,
@@ -6560,6 +6560,81 @@
         }
     ],
     "services": [
+        {
+            "id": 49,
+            "service_category_id": 5,
+            "parent_id": null,
+            "hero_media_id": 85,
+            "title": "منسق عيد ميلاد االرياض",
+            "slug": "mnsk-aayd-mylad-aalryad",
+            "excerpt": "منسق عيد ميلاد االرياض",
+            "content_blocks": [],
+            "status": "published",
+            "published_at": "2026-07-27T19:56:00.000000Z",
+            "legacy_path": null,
+            "sort_order": 6,
+            "created_at": "2026-07-27T19:56:57.000000Z",
+            "updated_at": "2026-07-27T19:56:57.000000Z",
+            "deleted_at": null,
+            "created_by": 1,
+            "updated_by": 1,
+            "is_featured": false,
+            "cta_label": null,
+            "cta_url": null,
+            "whatsapp_enabled": true,
+            "public_path": "/services/mnsk-aayd-mylad-aalryad",
+            "hero_media_summary": {
+                "original_name": "٤.webp",
+                "public_url": "https://aya.technovizen.com/storage/media/2026/07/cf9278e0-055f-431e-8a07-bb7f66d03fc5.webp",
+                "alt": "تأجير ركن شعبيه والديكورات التراثيه"
+            },
+            "seo_meta": {
+                "id": 165,
+                "seoable_type": "App\\Models\\Service",
+                "seoable_id": 49,
+                "title": "منسق عيد ميلاد االرياض",
+                "description": "منسق عيد ميلاد االرياض",
+                "canonical": "https://lams-event.com/services/mnsk-aayd-mylad-aalryad",
+                "robots": "index, follow",
+                "keywords": [],
+                "open_graph": {
+                    "type": "website",
+                    "locale": "ar_SA",
+                    "site_name": "لمسه التميز",
+                    "title": "منسق عيد ميلاد االرياض",
+                    "description": "منسق عيد ميلاد االرياض",
+                    "url": "https://lams-event.com/services/mnsk-aayd-mylad-aalryad"
+                },
+                "twitter": {
+                    "card": "summary",
+                    "title": "منسق عيد ميلاد االرياض",
+                    "description": "منسق عيد ميلاد االرياض"
+                },
+                "hreflang": [
+                    {
+                        "lang": "ar-SA",
+                        "href": "https://lams-event.com/services/mnsk-aayd-mylad-aalryad"
+                    },
+                    {
+                        "lang": "x-default",
+                        "href": "https://lams-event.com/services/mnsk-aayd-mylad-aalryad"
+                    }
+                ],
+                "json_ld": [],
+                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                "created_at": "2026-07-27T19:56:57.000000Z",
+                "updated_at": "2026-07-27T19:56:57.000000Z"
+            },
+            "faqs": [],
+            "category": {
+                "id": 5,
+                "title": "الاستقبال والمداخل",
+                "slug": "reception-entrances"
+            },
+            "media": [],
+            "parent": null,
+            "children": []
+        },
         {
             "id": 1,
             "service_category_id": 1,
@@ -85654,6 +85729,20 @@
             "published_at": "2026-07-26T22:05:00.000000Z",
             "created_at": "2026-07-26T22:05:32.000000Z",
             "updated_at": "2026-07-26T22:05:32.000000Z"
+        },
+        {
+            "id": 165,
+            "path": "/services/mnsk-aayd-mylad-aalryad",
+            "exact_url": "https://lams-event.com/services/mnsk-aayd-mylad-aalryad",
+            "routable_type": "App\\Models\\Service",
+            "routable_id": 49,
+            "is_legacy": false,
+            "slug_locked": true,
+            "is_published": true,
+            "legacy_html_sha256": null,
+            "published_at": "2026-07-27T19:56:00.000000Z",
+            "created_at": "2026-07-27T19:56:57.000000Z",
+            "updated_at": "2026-07-27T19:56:57.000000Z"
         }
     ],
     "redirects": [],
@@ -87776,6 +87865,19 @@
             "is_included": true,
             "created_at": "2026-07-26T22:05:32.000000Z",
             "updated_at": "2026-07-26T22:05:32.000000Z"
+        },
+        {
+            "id": 165,
+            "route_registry_id": 165,
+            "loc": "https://lams-event.com/services/mnsk-aayd-mylad-aalryad",
+            "path": "/services/mnsk-aayd-mylad-aalryad",
+            "lastmod": "2026-07-27",
+            "changefreq": "monthly",
+            "priority": "0.80",
+            "position": 165,
+            "is_included": true,
+            "created_at": "2026-07-27T19:56:57.000000Z",
+            "updated_at": "2026-07-27T19:56:57.000000Z"
         }
     ],
     "contact": {
