@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-07-27T23:45:11+03:00",
+    "generated_at": "2026-07-28T00:12:35+03:00",
     "pages": [
         {
             "id": 1,
@@ -88080,7 +88080,7 @@
     "contact": {
         "id": 1,
         "phone": "+966568767724",
-        "phone_display": "050 256 0106",
+        "phone_display": "056 876 7724",
         "whatsapp": "966568767724",
         "email": "info@lams-event.com",
         "city": "الرياض",
@@ -88088,7 +88088,7 @@
         "country_code": "SA",
         "social_links": [],
         "created_at": "2026-07-26T00:19:35.000000Z",
-        "updated_at": "2026-07-27T20:41:23.000000Z",
+        "updated_at": "2026-07-27T21:12:35.000000Z",
         "singleton_key": "primary"
     },
     "settings": {
