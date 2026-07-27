@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-07-27T22:59:16+03:00",
+    "generated_at": "2026-07-27T23:00:25+03:00",
     "pages": [
         {
             "id": 1,
@@ -6560,6 +6560,81 @@
         }
     ],
     "services": [
+        {
+            "id": 50,
+            "service_category_id": 11,
+            "parent_id": null,
+            "hero_media_id": 86,
+            "title": "افضل منسق حفلات الرياض",
+            "slug": "afdl-mnsk-hflat-alryad",
+            "excerpt": "افضل منسق حفلات الرياض",
+            "content_blocks": [],
+            "status": "published",
+            "published_at": "2026-07-27T20:00:00.000000Z",
+            "legacy_path": null,
+            "sort_order": 1,
+            "created_at": "2026-07-27T20:00:24.000000Z",
+            "updated_at": "2026-07-27T20:00:24.000000Z",
+            "deleted_at": null,
+            "created_by": 1,
+            "updated_by": 1,
+            "is_featured": false,
+            "cta_label": null,
+            "cta_url": null,
+            "whatsapp_enabled": true,
+            "public_path": "/services/afdl-mnsk-hflat-alryad",
+            "hero_media_summary": {
+                "original_name": "ChatGPT Image 27 يوليو 2026، 04_06_28 ص (3).webp",
+                "public_url": "https://aya.technovizen.com/storage/media/2026/07/3da9a900-622e-436f-9948-c7a8dc606c2b.webp",
+                "alt": "افضل منسق حفلات الرياض"
+            },
+            "seo_meta": {
+                "id": 166,
+                "seoable_type": "App\\Models\\Service",
+                "seoable_id": 50,
+                "title": "افضل منسق حفلات الرياض",
+                "description": "افضل منسق حفلات الرياض",
+                "canonical": "https://lams-event.com/services/afdl-mnsk-hflat-alryad",
+                "robots": "index, follow",
+                "keywords": [],
+                "open_graph": {
+                    "type": "website",
+                    "locale": "ar_SA",
+                    "site_name": "لمسه التميز",
+                    "title": "افضل منسق حفلات الرياض",
+                    "description": "افضل منسق حفلات الرياض",
+                    "url": "https://lams-event.com/services/afdl-mnsk-hflat-alryad"
+                },
+                "twitter": {
+                    "card": "summary",
+                    "title": "افضل منسق حفلات الرياض",
+                    "description": "افضل منسق حفلات الرياض"
+                },
+                "hreflang": [
+                    {
+                        "lang": "ar-SA",
+                        "href": "https://lams-event.com/services/afdl-mnsk-hflat-alryad"
+                    },
+                    {
+                        "lang": "x-default",
+                        "href": "https://lams-event.com/services/afdl-mnsk-hflat-alryad"
+                    }
+                ],
+                "json_ld": [],
+                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                "created_at": "2026-07-27T20:00:24.000000Z",
+                "updated_at": "2026-07-27T20:00:24.000000Z"
+            },
+            "faqs": [],
+            "category": {
+                "id": 11,
+                "title": "Neymar Events FCB",
+                "slug": "neymar-events-fcb"
+            },
+            "media": [],
+            "parent": null,
+            "children": []
+        },
         {
             "id": 49,
             "service_category_id": 5,
@@ -85743,6 +85818,20 @@
             "published_at": "2026-07-27T19:56:00.000000Z",
             "created_at": "2026-07-27T19:56:57.000000Z",
             "updated_at": "2026-07-27T19:56:57.000000Z"
+        },
+        {
+            "id": 166,
+            "path": "/services/afdl-mnsk-hflat-alryad",
+            "exact_url": "https://lams-event.com/services/afdl-mnsk-hflat-alryad",
+            "routable_type": "App\\Models\\Service",
+            "routable_id": 50,
+            "is_legacy": false,
+            "slug_locked": true,
+            "is_published": true,
+            "legacy_html_sha256": null,
+            "published_at": "2026-07-27T20:00:00.000000Z",
+            "created_at": "2026-07-27T20:00:24.000000Z",
+            "updated_at": "2026-07-27T20:00:24.000000Z"
         }
     ],
     "redirects": [],
@@ -87878,6 +87967,19 @@
             "is_included": true,
             "created_at": "2026-07-27T19:56:57.000000Z",
             "updated_at": "2026-07-27T19:56:57.000000Z"
+        },
+        {
+            "id": 166,
+            "route_registry_id": 166,
+            "loc": "https://lams-event.com/services/afdl-mnsk-hflat-alryad",
+            "path": "/services/afdl-mnsk-hflat-alryad",
+            "lastmod": "2026-07-27",
+            "changefreq": "monthly",
+            "priority": "0.80",
+            "position": 166,
+            "is_included": true,
+            "created_at": "2026-07-27T20:00:24.000000Z",
+            "updated_at": "2026-07-27T20:00:24.000000Z"
         }
     ],
     "contact": {
