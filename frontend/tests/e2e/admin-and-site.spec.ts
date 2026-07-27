@@ -25,7 +25,7 @@ const cmsServices = exportPayload.services
 const cmsServicePaths = cmsServices.map((service) => service.public_path);
 
 test("recovered public page preserves Arabic SEO shell", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
 
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(page.locator("link[rel='canonical']")).toHaveAttribute(
@@ -38,7 +38,7 @@ test("recovered public page preserves Arabic SEO shell", async ({ page }) => {
 test("published CMS services use the native grids everywhere", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   const homePaths = await page
     .locator(".ph-services__grid [data-cms-kind='service']")
     .evaluateAll((nodes) =>
@@ -47,7 +47,7 @@ test("published CMS services use the native grids everywhere", async ({
   expect(homePaths).toEqual(cmsServicePaths);
   await expect(page.locator(".cms-additions")).toHaveCount(0);
 
-  await page.goto("/services");
+  await page.goto("/services", { waitUntil: "domcontentloaded" });
   const servicesPaths = await page
     .locator(".svx-grid [data-cms-kind='service'] .svx-card")
     .evaluateAll((nodes) =>
@@ -63,7 +63,9 @@ test("published CMS services use the native grids everywhere", async ({
   expect(child?.public_path).toBeTruthy();
   expect(parent?.public_path || parent?.legacy_path).toBeTruthy();
 
-  await page.goto((parent?.public_path || parent?.legacy_path) as string);
+  await page.goto((parent?.public_path || parent?.legacy_path) as string, {
+    waitUntil: "domcontentloaded",
+  });
   await expect(
     page.locator(
       `.svc-detail__sibling-grid [data-cms-id='${child?.id}']`,
