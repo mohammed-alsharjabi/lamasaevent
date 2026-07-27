@@ -152,6 +152,7 @@ class FilamentAdminCrudTest extends TestCase
         ]);
 
         Livewire::test(EditContactSetting::class, ['record' => $contact->id])
+            ->assertSee('تعديل بيانات التواصل')
             ->assertSee('أين تظهر هذه البيانات؟')
             ->assertSee('إنستغرام')
             ->fillForm([

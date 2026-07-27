@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ContactSettings\Pages;
 use App\Filament\Resources\ContactSettings\ContactSettingResource;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class EditContactSetting extends EditRecord
 {
@@ -13,6 +14,11 @@ class EditContactSetting extends EditRecord
     protected function getHeaderActions(): array
     {
         return [];
+    }
+
+    public function getTitle(): string|Htmlable
+    {
+        return 'تعديل بيانات التواصل';
     }
 
     protected function getSavedNotification(): ?Notification

@@ -168,6 +168,18 @@ test("global settings forms hide technical keys and name social networks", () =>
     "utf8",
   );
   const siteSettingsSource = `${siteForm}\n${sitePresentation}`;
+  const siteResource = readFileSync(
+    join(
+      projectRoot,
+      "backend",
+      "app",
+      "Filament",
+      "Resources",
+      "SiteSettings",
+      "SiteSettingResource.php",
+    ),
+    "utf8",
+  );
 
   assert.equal(contactForm.includes("KeyValue::make('social_links')"), false);
   for (const label of ["إنستغرام", "تيك توك", "سناب شات", "إكس (تويتر)"]) {
@@ -175,6 +187,7 @@ test("global settings forms hide technical keys and name social networks", () =>
   }
   assert.equal(siteForm.includes("TextInput::make('key')"), false);
   assert.equal(siteForm.includes("Toggle::make('is_public')"), false);
+  assert.ok(siteResource.includes("محتوى الموقع وSEO"));
   assert.ok(siteSettingsSource.includes("محتوى الفوتر"));
   assert.ok(siteSettingsSource.includes("يظهر"));
 });

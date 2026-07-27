@@ -25,7 +25,7 @@ class SiteSettingResource extends Resource
 
     protected static ?string $modelLabel = 'إعداد';
 
-    protected static ?string $pluralModelLabel = 'إعدادات الموقع وSEO';
+    protected static ?string $pluralModelLabel = 'محتوى الموقع وSEO';
 
     protected static ?string $navigationLabel = 'محتوى الموقع وSEO';
 
