@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\SiteSettings\Pages;
 
 use App\Filament\Resources\SiteSettings\SiteSettingResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ListSiteSettings extends ListRecords
 {
@@ -12,8 +12,11 @@ class ListSiteSettings extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
-            CreateAction::make(),
-        ];
+        return [];
+    }
+
+    public function getSubheading(): string|Htmlable|null
+    {
+        return 'اختر القسم الذي تريد تغييره. ستجد داخل كل قسم وصفًا واضحًا لمكان ظهور كل قيمة في الموقع.';
     }
 }

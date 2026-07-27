@@ -37,6 +37,15 @@ class ContactSettingResource extends Resource
         return 'SEO والنشر';
     }
 
+    public static function getNavigationUrl(): string
+    {
+        $contact = ContactSetting::query()->first();
+
+        return $contact
+            ? static::getUrl('edit', ['record' => $contact])
+            : static::getUrl('create');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ContactSettingForm::configure($schema);

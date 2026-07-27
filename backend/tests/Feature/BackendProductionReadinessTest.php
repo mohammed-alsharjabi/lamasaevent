@@ -182,6 +182,26 @@ class BackendProductionReadinessTest extends TestCase
         ContactSetting::create(['email' => 'second@example.test']);
     }
 
+    public function test_contact_phone_display_follows_the_primary_number_safely(): void
+    {
+        $contact = ContactSetting::create([
+            'phone' => '+966501234567',
+            'phone_display' => '050 123 4567',
+            'email' => 'contact@example.test',
+        ]);
+
+        $contact->update(['phone' => '+966568767724']);
+
+        $this->assertSame('056 876 7724', $contact->fresh()->phone_display);
+
+        $contact->update([
+            'phone' => '+966501111111',
+            'phone_display' => 'اتصل بنا الآن',
+        ]);
+
+        $this->assertSame('اتصل بنا الآن', $contact->fresh()->phone_display);
+    }
+
     public function test_public_api_validates_pagination_and_filters_inactive_content(): void
     {
         Area::create([

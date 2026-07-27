@@ -73,6 +73,22 @@ test("CMS reads and deployed HTML use freshness-safe cache directives", () => {
   assert.match(hostingerConfig, /max-age=31536000,\s*immutable/);
 });
 
+test("contact and footer controls render exactly what the CMS stores", () => {
+  const home = readFileSync(join(distRoot, "index.html"), "utf8");
+  const contact = exportPayload.contact;
+  const footer = exportPayload.settings.footer;
+
+  assert.ok(home.includes(`href="tel:${contact.phone}"`));
+  assert.ok(home.includes(contact.phone_display));
+
+  const hasCredit = Boolean(
+    footer.credit_title ||
+      footer.credit_whatsapp_url ||
+      footer.credit_profile_url,
+  );
+  assert.equal(home.includes('class="site-footer__credit"'), hasCredit);
+});
+
 test("admin forms never expose slug fields and use the shared media picker", () => {
   const filamentRoot = join(projectRoot, "backend", "app", "Filament");
   const adminSource = readdirSync(filamentRoot, {
@@ -111,6 +127,56 @@ test("admin forms never expose slug fields and use the shared media picker", () 
       `Form does not use the shared media picker: ${form}`,
     );
   }
+});
+
+test("global settings forms hide technical keys and name social networks", () => {
+  const contactForm = readFileSync(
+    join(
+      projectRoot,
+      "backend",
+      "app",
+      "Filament",
+      "Resources",
+      "ContactSettings",
+      "Schemas",
+      "ContactSettingForm.php",
+    ),
+    "utf8",
+  );
+  const siteForm = readFileSync(
+    join(
+      projectRoot,
+      "backend",
+      "app",
+      "Filament",
+      "Resources",
+      "SiteSettings",
+      "Schemas",
+      "SiteSettingForm.php",
+    ),
+    "utf8",
+  );
+  const sitePresentation = readFileSync(
+    join(
+      projectRoot,
+      "backend",
+      "app",
+      "Filament",
+      "Support",
+      "SiteSettingPresentation.php",
+    ),
+    "utf8",
+  );
+  const siteSettingsSource = `${siteForm}\n${sitePresentation}`;
+
+  assert.equal(contactForm.includes("KeyValue::make('social_links')"), false);
+  for (const label of ["إنستغرام", "تيك توك", "سناب شات", "إكس (تويتر)"]) {
+    assert.ok(contactForm.includes(label));
+  }
+  assert.equal(siteForm.includes("TextInput::make('key')"), false);
+  assert.equal(siteForm.includes("Toggle::make('is_public')"), false);
+  assert.ok(siteSettingsSource.includes("محتوى الفوتر"));
+  assert.ok(siteSettingsSource.includes("يظهر"));
 });
 
 const outputFileFor = (routePath) =>

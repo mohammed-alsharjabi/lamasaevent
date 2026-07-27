@@ -24,7 +24,7 @@ trait InvalidatesContentExport
         Cache::forget(ContentExportService::CACHE_KEY);
         Cache::forget('sitemap-xml:v1');
 
-        if (! app()->runningInConsole() && auth()->check()) {
+        if (auth()->check()) {
             app(PublishPipeline::class)->queue($model, auth()->id());
         }
     }

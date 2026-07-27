@@ -3,8 +3,7 @@
 namespace App\Filament\Resources\ContactSettings\Pages;
 
 use App\Filament\Resources\ContactSettings\ContactSettingResource;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\ViewAction;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
 class EditContactSetting extends EditRecord
@@ -13,9 +12,14 @@ class EditContactSetting extends EditRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            ViewAction::make(),
-            DeleteAction::make(),
-        ];
+        return [];
+    }
+
+    protected function getSavedNotification(): ?Notification
+    {
+        return Notification::make()
+            ->success()
+            ->title('تم حفظ بيانات التواصل')
+            ->body('بدأ تحديث الموقع تلقائيًا. ستظهر الأرقام والروابط الجديدة عادة خلال أقل من دقيقة.');
     }
 }

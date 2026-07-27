@@ -6,6 +6,20 @@ const nullableStringRecordSchema = z.preprocess(
   z.record(z.string(), z.string().nullable()),
 );
 
+const socialLinksSchema = z.preprocess(
+  (value) => {
+    if (Array.isArray(value) && value.length === 0) return {};
+    if (!value || typeof value !== "object" || Array.isArray(value)) return value;
+
+    return Object.fromEntries(
+      Object.entries(value).filter(
+        ([, url]) => typeof url === "string" && url.trim() !== "",
+      ),
+    );
+  },
+  z.record(z.string(), z.string()),
+);
+
 const seoSchema = z.looseObject({
     title: z.string().min(1),
     description: z.string().min(1),
@@ -120,10 +134,13 @@ const contactSchema = z.looseObject({
     city: z.string().min(1),
     region: z.string().min(1),
     country_code: z.string().length(2),
-    social_links: z.record(z.string(), z.string()).nullable(),
+    social_links: socialLinksSchema.nullable(),
   });
 
-const settingSchema = z.record(z.string(), z.string());
+const settingSchema = z.record(
+  z.string(),
+  z.preprocess((value) => value ?? "", z.string()),
+);
 
 export const contentExportSchema = z.looseObject({
     schema_version: z.union([z.literal(1), z.literal(2)]),

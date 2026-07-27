@@ -2,11 +2,9 @@
 
 namespace App\Filament\Resources\SiteSettings\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
+use App\Filament\Support\SiteSettingPresentation;
+use App\Models\SiteSetting;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -17,36 +15,35 @@ class SiteSettingsTable
         return $table
             ->columns([
                 TextColumn::make('key')
+                    ->label('القسم')
+                    ->formatStateUsing(
+                        fn (?string $state): string => SiteSettingPresentation::title($state),
+                    )
+                    ->description(
+                        fn (SiteSetting $record): string => SiteSettingPresentation::group(
+                            $record->key,
+                        ),
+                    )
                     ->searchable(),
                 TextColumn::make('group')
-                    ->searchable(),
-                IconColumn::make('is_public')
-                    ->boolean(),
-                IconColumn::make('is_sensitive')
-                    ->boolean(),
-                TextColumn::make('updated_by')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('أين يظهر؟')
+                    ->formatStateUsing(
+                        fn (SiteSetting $record): string => SiteSettingPresentation::location(
+                            $record->key,
+                        ),
+                    )
+                    ->wrap(),
                 TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('آخر تحديث')
+                    ->since()
+                    ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                EditAction::make()->label('تعديل'),
             ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->toolbarActions([]);
     }
 }

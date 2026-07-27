@@ -2,10 +2,7 @@
 
 namespace App\Filament\Resources\ContactSettings\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -16,19 +13,25 @@ class ContactSettingsTable
         return $table
             ->columns([
                 TextColumn::make('phone')
+                    ->label('رقم الاتصال')
                     ->searchable(),
                 TextColumn::make('phone_display')
+                    ->label('الرقم الظاهر')
                     ->searchable(),
                 TextColumn::make('whatsapp')
+                    ->label('واتساب')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('البريد الإلكتروني')
                     ->searchable(),
                 TextColumn::make('city')
+                    ->label('المدينة')
                     ->searchable(),
                 TextColumn::make('region')
+                    ->label('المنطقة')
                     ->searchable(),
                 TextColumn::make('country_code')
+                    ->label('الدولة')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -43,13 +46,8 @@ class ContactSettingsTable
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                EditAction::make()->label('تعديل'),
             ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->toolbarActions([]);
     }
 }

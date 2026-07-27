@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\SiteSettings;
 
-use App\Filament\Resources\SiteSettings\Pages\CreateSiteSetting;
 use App\Filament\Resources\SiteSettings\Pages\EditSiteSetting;
 use App\Filament\Resources\SiteSettings\Pages\ListSiteSettings;
 use App\Filament\Resources\SiteSettings\Pages\ViewSiteSetting;
@@ -28,7 +27,7 @@ class SiteSettingResource extends Resource
 
     protected static ?string $pluralModelLabel = 'إعدادات الموقع وSEO';
 
-    protected static ?string $navigationLabel = 'إعدادات الموقع وSEO';
+    protected static ?string $navigationLabel = 'محتوى الموقع وSEO';
 
     protected static ?int $navigationSort = 30;
 
@@ -63,7 +62,6 @@ class SiteSettingResource extends Resource
     {
         return [
             'index' => ListSiteSettings::route('/'),
-            'create' => CreateSiteSetting::route('/create'),
             'view' => ViewSiteSetting::route('/{record}'),
             'edit' => EditSiteSetting::route('/{record}/edit'),
         ];

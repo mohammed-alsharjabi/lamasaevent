@@ -6,6 +6,7 @@ use App\Filament\Resources\Areas\Pages\CreateArea;
 use App\Filament\Resources\Areas\Pages\EditArea;
 use App\Filament\Resources\Articles\Pages\CreateArticle;
 use App\Filament\Resources\Articles\Pages\EditArticle;
+use App\Filament\Resources\ContactSettings\Pages\EditContactSetting;
 use App\Filament\Resources\Galleries\Pages\CreateGallery;
 use App\Filament\Resources\Galleries\Pages\EditGallery;
 use App\Filament\Resources\Pages\Pages\CreatePage;
@@ -15,14 +16,17 @@ use App\Filament\Resources\ServiceCategories\Pages\EditServiceCategory;
 use App\Filament\Resources\Services\Pages\CreateService;
 use App\Filament\Resources\Services\Pages\EditService;
 use App\Filament\Resources\Services\Pages\ListServices;
+use App\Filament\Resources\SiteSettings\Pages\EditSiteSetting;
 use App\Jobs\GenerateFrontendSnapshot;
 use App\Models\Area;
 use App\Models\Article;
+use App\Models\ContactSetting;
 use App\Models\Gallery;
 use App\Models\Page;
 use App\Models\Role;
 use App\Models\Service;
 use App\Models\ServiceCategory;
+use App\Models\SiteSetting;
 use App\Models\User;
 use App\Services\ContentExportService;
 use Database\Seeders\DatabaseSeeder;
@@ -133,6 +137,84 @@ class FilamentAdminCrudTest extends TestCase
         Livewire::test(ListServices::class)
             ->assertTableActionVisible('delete', $newService)
             ->assertTableActionHidden('delete', $legacyService);
+    }
+
+    public function test_contact_settings_form_is_clear_and_updates_the_visible_number(): void
+    {
+        $contact = ContactSetting::create([
+            'phone' => '+966501234567',
+            'phone_display' => '050 123 4567',
+            'whatsapp' => '966501234567',
+            'email' => 'contact@example.test',
+            'city' => 'الرياض',
+            'region' => 'منطقة الرياض',
+            'country_code' => 'SA',
+        ]);
+
+        Livewire::test(EditContactSetting::class, ['record' => $contact->id])
+            ->assertSee('أين تظهر هذه البيانات؟')
+            ->assertSee('إنستغرام')
+            ->fillForm([
+                'phone' => '+966568767724',
+                'social_links' => [
+                    'instagram' => 'https://instagram.com/lamasaevent',
+                ],
+            ])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        $contact->refresh();
+
+        $this->assertSame('056 876 7724', $contact->phone_display);
+        $this->assertSame(
+            'https://instagram.com/lamasaevent',
+            $contact->social_links['instagram'],
+        );
+        Queue::assertPushed(GenerateFrontendSnapshot::class);
+    }
+
+    public function test_footer_settings_are_edited_as_named_fields_and_can_hide_credit(): void
+    {
+        $footer = SiteSetting::create([
+            'key' => 'footer',
+            'value' => [
+                'description' => 'الوصف القديم',
+                'company_line' => 'سطر المنشأة',
+                'quick_links_heading' => 'روابط سريعة',
+                'contact_heading' => 'تواصل معنا',
+                'legal' => 'جميع الحقوق محفوظة',
+                'credit_aria_label' => 'بيانات المنفذ',
+                'credit_title' => 'اسم المنفذ',
+                'credit_whatsapp_url' => 'https://wa.me/966500000000',
+                'credit_whatsapp_label' => 'واتساب',
+                'credit_profile_url' => 'https://example.test/profile',
+                'credit_profile_label' => 'الملف الشخصي',
+            ],
+            'group' => 'general',
+            'is_public' => true,
+            'is_sensitive' => false,
+        ]);
+        $value = $footer->value;
+        $value['description'] = 'وصف واضح من لوحة التحكم';
+        $value['credit_title'] = '';
+        $value['credit_whatsapp_url'] = '';
+        $value['credit_whatsapp_label'] = '';
+        $value['credit_profile_url'] = '';
+        $value['credit_profile_label'] = '';
+
+        Livewire::test(EditSiteSetting::class, ['record' => $footer->id])
+            ->assertSee('محتوى الفوتر')
+            ->assertSee('اسم منفذ الموقع أو النسبة')
+            ->fillForm(['value' => $value])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        $footer->refresh();
+
+        $this->assertSame('وصف واضح من لوحة التحكم', $footer->value['description']);
+        $this->assertSame('', $footer->value['credit_title']);
+        $this->assertArrayHasKey('quick_links_heading', $footer->value);
+        Queue::assertPushed(GenerateFrontendSnapshot::class);
     }
 
     /**
