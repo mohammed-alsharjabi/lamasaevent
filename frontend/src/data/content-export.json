@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-07-28T04:18:12+03:00",
+    "generated_at": "2026-07-29T02:24:45+03:00",
     "pages": [
         {
             "id": 1,
@@ -4206,69 +4206,6 @@
                 "updated_at": "2026-07-26T00:14:49.000000Z"
             },
             "faqs": []
-        },
-        {
-            "id": 8,
-            "type": "page",
-            "title": "تاجير كراسي وطوالات الرياض  TestTestTest",
-            "path": "/test",
-            "summary": null,
-            "content_blocks": [],
-            "status": "published",
-            "published_at": "2026-07-28T01:18:12.000000Z",
-            "legacy_path": null,
-            "created_at": "2026-07-28T01:18:12.000000Z",
-            "updated_at": "2026-07-28T01:18:12.000000Z",
-            "deleted_at": null,
-            "hero_media_id": 1,
-            "created_by": 1,
-            "updated_by": 1,
-            "is_featured": true,
-            "sort_order": 1,
-            "public_path": "/test",
-            "hero_media_summary": {
-                "original_name": "banar.png",
-                "public_url": "https://aya.technovizen.com/storage/legacy/icons/banar.webp",
-                "alt": null
-            },
-            "seo_meta": {
-                "id": 168,
-                "seoable_type": "App\\Models\\Page",
-                "seoable_id": 8,
-                "title": "تاجير كراسي وطوالات الرياض  TestTestTest",
-                "description": "تاجير كراسي وطوالات الرياض TestTestTest",
-                "canonical": "https://lams-event.com/test",
-                "robots": "index, follow",
-                "keywords": [],
-                "open_graph": {
-                    "type": "website",
-                    "locale": "ar_SA",
-                    "site_name": "لمسه التميز",
-                    "title": "تاجير كراسي وطوالات الرياض  TestTestTest",
-                    "description": "تاجير كراسي وطوالات الرياض TestTestTest",
-                    "url": "https://lams-event.com/test"
-                },
-                "twitter": {
-                    "card": "summary",
-                    "title": "تاجير كراسي وطوالات الرياض  TestTestTest",
-                    "description": "تاجير كراسي وطوالات الرياض TestTestTest"
-                },
-                "hreflang": [
-                    {
-                        "lang": "ar-SA",
-                        "href": "https://lams-event.com/test"
-                    },
-                    {
-                        "lang": "x-default",
-                        "href": "https://lams-event.com/test"
-                    }
-                ],
-                "json_ld": [],
-                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-                "created_at": "2026-07-28T01:18:12.000000Z",
-                "updated_at": "2026-07-28T01:18:12.000000Z"
-            },
-            "faqs": []
         }
     ],
     "service_categories": [
@@ -6554,78 +6491,12 @@
                 "updated_at": "2026-07-26T00:14:50.000000Z"
             },
             "faqs": []
-        },
-        {
-            "id": 11,
-            "title": "Neymar Events FCB",
-            "slug": "neymar-events-fcb",
-            "summary": "تصنيف تجريبي موثّق للتحقق من إدارة خدمات Neymar Events FCB.",
-            "content_blocks": [],
-            "status": "published",
-            "published_at": "2026-07-26T21:22:35.000000Z",
-            "legacy_path": null,
-            "sort_order": 990,
-            "created_at": "2026-07-26T21:22:35.000000Z",
-            "updated_at": "2026-07-26T21:22:35.000000Z",
-            "deleted_at": null,
-            "hero_media_id": 1,
-            "created_by": 1,
-            "updated_by": 1,
-            "is_active": true,
-            "public_path": "/services/category/neymar-events-fcb/",
-            "hero_media_summary": {
-                "original_name": "banar.png",
-                "public_url": "https://aya.technovizen.com/storage/legacy/icons/banar.webp",
-                "alt": null
-            },
-            "seo_meta": {
-                "id": 159,
-                "seoable_type": "App\\Models\\ServiceCategory",
-                "seoable_id": 11,
-                "title": "Neymar Events FCB",
-                "description": "تصنيف تجريبي موثّق للتحقق من إدارة خدمات Neymar Events FCB.",
-                "canonical": "https://lams-event.com/services/category/neymar-events-fcb/",
-                "robots": "index, follow",
-                "keywords": [
-                    "Neymar Events FCB",
-                    "تنظيم المناسبات",
-                    "لمسة التميز"
-                ],
-                "open_graph": {
-                    "type": "website",
-                    "locale": "ar_SA",
-                    "site_name": "لمسه التميز",
-                    "title": "Neymar Events FCB",
-                    "description": "تصنيف تجريبي موثّق للتحقق من إدارة خدمات Neymar Events FCB.",
-                    "url": "https://lams-event.com/services/category/neymar-events-fcb/"
-                },
-                "twitter": {
-                    "card": "summary",
-                    "title": "Neymar Events FCB",
-                    "description": "تصنيف تجريبي موثّق للتحقق من إدارة خدمات Neymar Events FCB."
-                },
-                "hreflang": [
-                    {
-                        "lang": "ar-SA",
-                        "href": "https://lams-event.com/services/category/neymar-events-fcb/"
-                    },
-                    {
-                        "lang": "x-default",
-                        "href": "https://lams-event.com/services/category/neymar-events-fcb/"
-                    }
-                ],
-                "json_ld": [],
-                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-                "created_at": "2026-07-26T21:22:35.000000Z",
-                "updated_at": "2026-07-26T21:22:39.000000Z"
-            },
-            "faqs": []
         }
     ],
     "services": [
         {
             "id": 50,
-            "service_category_id": 11,
+            "service_category_id": 10,
             "parent_id": null,
             "hero_media_id": 86,
             "title": "افضل منسق حفلات الرياض",
@@ -6637,7 +6508,7 @@
             "legacy_path": null,
             "sort_order": 1,
             "created_at": "2026-07-27T20:00:24.000000Z",
-            "updated_at": "2026-07-27T20:00:24.000000Z",
+            "updated_at": "2026-07-28T23:24:45.000000Z",
             "deleted_at": null,
             "created_by": 1,
             "updated_by": 1,
@@ -6690,9 +6561,9 @@
             },
             "faqs": [],
             "category": {
-                "id": 11,
-                "title": "Neymar Events FCB",
-                "slug": "neymar-events-fcb"
+                "id": 10,
+                "title": "مناسبات مدعومة بصور الأعمال",
+                "slug": "occasions-mixed"
             },
             "media": [],
             "parent": null,
@@ -37686,176 +37557,6 @@
             ],
             "parent": null,
             "children": []
-        },
-        {
-            "id": 46,
-            "service_category_id": 11,
-            "parent_id": null,
-            "hero_media_id": 1,
-            "title": "Neymar Events FCB",
-            "slug": "neymar-events-fcb",
-            "excerpt": "خدمة Neymar Events FCB لتنظيم وتجهيز المناسبات باحتراف.",
-            "content_blocks": [],
-            "status": "published",
-            "published_at": "2026-07-26T21:22:35.000000Z",
-            "legacy_path": null,
-            "sort_order": 990,
-            "created_at": "2026-07-26T21:22:35.000000Z",
-            "updated_at": "2026-07-26T21:33:01.000000Z",
-            "deleted_at": null,
-            "created_by": 1,
-            "updated_by": 1,
-            "is_featured": true,
-            "cta_label": "اطلب الخدمة",
-            "cta_url": "/contact",
-            "whatsapp_enabled": true,
-            "public_path": "/services/neymar-events-fcb",
-            "hero_media_summary": {
-                "original_name": "banar.png",
-                "public_url": "https://aya.technovizen.com/storage/legacy/icons/banar.webp",
-                "alt": null
-            },
-            "seo_meta": {
-                "id": 160,
-                "seoable_type": "App\\Models\\Service",
-                "seoable_id": 46,
-                "title": "Neymar Events FCB",
-                "description": "خدمة Neymar Events FCB لتنظيم وتجهيز المناسبات باحتراف.",
-                "canonical": "https://lams-event.com/services/neymar-events-fcb",
-                "robots": "index, follow",
-                "keywords": [
-                    "Neymar Events FCB",
-                    "تنظيم المناسبات",
-                    "لمسة التميز"
-                ],
-                "open_graph": {
-                    "type": "website",
-                    "locale": "ar_SA",
-                    "site_name": "لمسه التميز",
-                    "title": "Neymar Events FCB",
-                    "description": "خدمة Neymar Events FCB لتنظيم وتجهيز المناسبات باحتراف.",
-                    "url": "https://lams-event.com/services/neymar-events-fcb"
-                },
-                "twitter": {
-                    "card": "summary",
-                    "title": "Neymar Events FCB",
-                    "description": "خدمة Neymar Events FCB لتنظيم وتجهيز المناسبات باحتراف."
-                },
-                "hreflang": [
-                    {
-                        "lang": "ar-SA",
-                        "href": "https://lams-event.com/services/neymar-events-fcb"
-                    },
-                    {
-                        "lang": "x-default",
-                        "href": "https://lams-event.com/services/neymar-events-fcb"
-                    }
-                ],
-                "json_ld": [],
-                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-                "created_at": "2026-07-26T21:22:36.000000Z",
-                "updated_at": "2026-07-26T21:22:39.000000Z"
-            },
-            "faqs": [],
-            "category": {
-                "id": 11,
-                "title": "Neymar Events FCB",
-                "slug": "neymar-events-fcb"
-            },
-            "media": [],
-            "parent": null,
-            "children": [
-                {
-                    "id": 47,
-                    "parent_id": 46,
-                    "title": "Neymar Events FCB — خدمة فرعية",
-                    "slug": "neymar-events-fcb-child",
-                    "sort_order": 991
-                }
-            ]
-        },
-        {
-            "id": 47,
-            "service_category_id": 11,
-            "parent_id": 46,
-            "hero_media_id": 1,
-            "title": "Neymar Events FCB — خدمة فرعية",
-            "slug": "neymar-events-fcb-child",
-            "excerpt": "خدمة فرعية لاختبار هيكلة الخدمات الرئيسية والفرعية.",
-            "content_blocks": [],
-            "status": "published",
-            "published_at": "2026-07-26T21:22:35.000000Z",
-            "legacy_path": null,
-            "sort_order": 991,
-            "created_at": "2026-07-26T21:22:35.000000Z",
-            "updated_at": "2026-07-26T21:32:56.000000Z",
-            "deleted_at": null,
-            "created_by": 1,
-            "updated_by": 1,
-            "is_featured": false,
-            "cta_label": "اطلب الخدمة",
-            "cta_url": "/contact",
-            "whatsapp_enabled": true,
-            "public_path": "/services/neymar-events-fcb-child",
-            "hero_media_summary": {
-                "original_name": "banar.png",
-                "public_url": "https://aya.technovizen.com/storage/legacy/icons/banar.webp",
-                "alt": null
-            },
-            "seo_meta": {
-                "id": 161,
-                "seoable_type": "App\\Models\\Service",
-                "seoable_id": 47,
-                "title": "Neymar Events FCB — خدمة فرعية",
-                "description": "خدمة فرعية لاختبار هيكلة الخدمات الرئيسية والفرعية.",
-                "canonical": "https://lams-event.com/services/neymar-events-fcb-child",
-                "robots": "index, follow",
-                "keywords": [
-                    "Neymar Events FCB",
-                    "تنظيم المناسبات",
-                    "لمسة التميز"
-                ],
-                "open_graph": {
-                    "type": "website",
-                    "locale": "ar_SA",
-                    "site_name": "لمسه التميز",
-                    "title": "Neymar Events FCB — خدمة فرعية",
-                    "description": "خدمة فرعية لاختبار هيكلة الخدمات الرئيسية والفرعية.",
-                    "url": "https://lams-event.com/services/neymar-events-fcb-child"
-                },
-                "twitter": {
-                    "card": "summary",
-                    "title": "Neymar Events FCB — خدمة فرعية",
-                    "description": "خدمة فرعية لاختبار هيكلة الخدمات الرئيسية والفرعية."
-                },
-                "hreflang": [
-                    {
-                        "lang": "ar-SA",
-                        "href": "https://lams-event.com/services/neymar-events-fcb-child"
-                    },
-                    {
-                        "lang": "x-default",
-                        "href": "https://lams-event.com/services/neymar-events-fcb-child"
-                    }
-                ],
-                "json_ld": [],
-                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-                "created_at": "2026-07-26T21:22:37.000000Z",
-                "updated_at": "2026-07-26T21:22:39.000000Z"
-            },
-            "faqs": [],
-            "category": {
-                "id": 11,
-                "title": "Neymar Events FCB",
-                "slug": "neymar-events-fcb"
-            },
-            "media": [],
-            "parent": {
-                "id": 46,
-                "title": "Neymar Events FCB",
-                "slug": "neymar-events-fcb"
-            },
-            "children": []
         }
     ],
     "areas": [
@@ -39469,73 +39170,6 @@
                     }
                 }
             ]
-        },
-        {
-            "id": 6,
-            "hero_media_id": 1,
-            "title": "Neymar Events FCB",
-            "slug": "neymar-events-fcb",
-            "summary": "منطقة Neymar Events FCB لاختبار إدارة مناطق التغطية.",
-            "content_blocks": [],
-            "status": "published",
-            "published_at": "2026-07-26T21:22:35.000000Z",
-            "legacy_path": null,
-            "sort_order": 990,
-            "created_at": "2026-07-26T21:22:35.000000Z",
-            "updated_at": "2026-07-26T21:33:00.000000Z",
-            "deleted_at": null,
-            "created_by": 1,
-            "updated_by": 1,
-            "is_active": true,
-            "public_path": "/areas/neymar-events-fcb",
-            "hero_media_summary": {
-                "original_name": "banar.png",
-                "public_url": "https://aya.technovizen.com/storage/legacy/icons/banar.webp",
-                "alt": null
-            },
-            "seo_meta": {
-                "id": 163,
-                "seoable_type": "App\\Models\\Area",
-                "seoable_id": 6,
-                "title": "Neymar Events FCB",
-                "description": "منطقة Neymar Events FCB لاختبار إدارة مناطق التغطية.",
-                "canonical": "https://lams-event.com/areas/neymar-events-fcb",
-                "robots": "index, follow",
-                "keywords": [
-                    "Neymar Events FCB",
-                    "تنظيم المناسبات",
-                    "لمسة التميز"
-                ],
-                "open_graph": {
-                    "type": "website",
-                    "locale": "ar_SA",
-                    "site_name": "لمسه التميز",
-                    "title": "Neymar Events FCB",
-                    "description": "منطقة Neymar Events FCB لاختبار إدارة مناطق التغطية.",
-                    "url": "https://lams-event.com/areas/neymar-events-fcb"
-                },
-                "twitter": {
-                    "card": "summary",
-                    "title": "Neymar Events FCB",
-                    "description": "منطقة Neymar Events FCB لاختبار إدارة مناطق التغطية."
-                },
-                "hreflang": [
-                    {
-                        "lang": "ar-SA",
-                        "href": "https://lams-event.com/areas/neymar-events-fcb"
-                    },
-                    {
-                        "lang": "x-default",
-                        "href": "https://lams-event.com/areas/neymar-events-fcb"
-                    }
-                ],
-                "json_ld": [],
-                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-                "created_at": "2026-07-26T21:22:38.000000Z",
-                "updated_at": "2026-07-26T21:22:39.000000Z"
-            },
-            "faqs": [],
-            "media": []
         }
     ],
     "articles": [
@@ -78111,79 +77745,6 @@
                     }
                 }
             ]
-        },
-        {
-            "id": 92,
-            "hero_media_id": 1,
-            "title": "Neymar Events FCB",
-            "slug": "neymar-events-fcb",
-            "topic": "تنظيم المناسبات",
-            "excerpt": "مقال Neymar Events FCB للتحقق من النشر والتحديث داخل المدونة.",
-            "content_blocks": [],
-            "status": "published",
-            "published_at": "2026-07-26T21:22:35.000000Z",
-            "legacy_path": null,
-            "created_at": "2026-07-26T21:22:35.000000Z",
-            "updated_at": "2026-07-26T21:32:58.000000Z",
-            "deleted_at": null,
-            "article_category_id": 72,
-            "created_by": 1,
-            "updated_by": 1,
-            "is_featured": true,
-            "internal_keywords": [
-                "Neymar Events FCB",
-                "تنظيم المناسبات"
-            ],
-            "sort_order": 990,
-            "public_path": "/blog/neymar-events-fcb",
-            "hero_media_summary": {
-                "original_name": "banar.png",
-                "public_url": "https://aya.technovizen.com/storage/legacy/icons/banar.webp",
-                "alt": null
-            },
-            "seo_meta": {
-                "id": 162,
-                "seoable_type": "App\\Models\\Article",
-                "seoable_id": 92,
-                "title": "Neymar Events FCB",
-                "description": "مقال Neymar Events FCB للتحقق من النشر والتحديث داخل المدونة.",
-                "canonical": "https://lams-event.com/blog/neymar-events-fcb",
-                "robots": "index, follow",
-                "keywords": [
-                    "Neymar Events FCB",
-                    "تنظيم المناسبات",
-                    "لمسة التميز"
-                ],
-                "open_graph": {
-                    "type": "article",
-                    "locale": "ar_SA",
-                    "site_name": "لمسه التميز",
-                    "title": "Neymar Events FCB",
-                    "description": "مقال Neymar Events FCB للتحقق من النشر والتحديث داخل المدونة.",
-                    "url": "https://lams-event.com/blog/neymar-events-fcb"
-                },
-                "twitter": {
-                    "card": "summary",
-                    "title": "Neymar Events FCB",
-                    "description": "مقال Neymar Events FCB للتحقق من النشر والتحديث داخل المدونة."
-                },
-                "hreflang": [
-                    {
-                        "lang": "ar-SA",
-                        "href": "https://lams-event.com/blog/neymar-events-fcb"
-                    },
-                    {
-                        "lang": "x-default",
-                        "href": "https://lams-event.com/blog/neymar-events-fcb"
-                    }
-                ],
-                "json_ld": [],
-                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-                "created_at": "2026-07-26T21:22:37.000000Z",
-                "updated_at": "2026-07-26T21:22:39.000000Z"
-            },
-            "faqs": [],
-            "media": []
         }
     ],
     "galleries": [
@@ -83365,62 +82926,6 @@
                     }
                 }
             ]
-        },
-        {
-            "id": 2,
-            "title": "Neymar Events FCB",
-            "slug": "neymar-events-fcb",
-            "is_legacy": false,
-            "description": "معرض Neymar Events FCB لاختبار الصور وربطها بالمحتوى.",
-            "status": "published",
-            "published_at": "2026-07-26T21:22:35.000000Z",
-            "created_at": "2026-07-26T21:22:35.000000Z",
-            "updated_at": "2026-07-26T21:33:01.000000Z",
-            "deleted_at": null,
-            "created_by": 1,
-            "updated_by": 1,
-            "is_featured": true,
-            "sort_order": 990,
-            "media": [],
-            "items": [
-                {
-                    "id": 78,
-                    "gallery_id": 2,
-                    "media_id": 1,
-                    "title": "Neymar Events FCB",
-                    "alt": "Neymar Events FCB",
-                    "caption": "Neymar Events FCB",
-                    "sort_order": 1,
-                    "is_active": true,
-                    "created_at": "2026-07-26T21:22:35.000000Z",
-                    "updated_at": "2026-07-26T21:22:35.000000Z",
-                    "media": {
-                        "id": 1,
-                        "disk": "public",
-                        "path": "legacy/icons/banar.png",
-                        "webp_path": "legacy/icons/banar.webp",
-                        "source_path": "icons/banar.png",
-                        "original_name": "banar.png",
-                        "mime_type": "image/png",
-                        "size": 1379541,
-                        "width": 1344,
-                        "height": 768,
-                        "sha256": "85be0f1204ffd2c89bcbe475d8a61b9a2a4610b22680e8045d998df051c6060c",
-                        "upload_fingerprint": null,
-                        "alt": null,
-                        "caption": null,
-                        "status": "ready",
-                        "uploaded_by": null,
-                        "created_at": "2026-07-26T00:14:32.000000Z",
-                        "updated_at": "2026-07-26T00:14:32.000000Z",
-                        "deleted_at": null,
-                        "avif_path": null,
-                        "variants": null,
-                        "title": null,
-                        "public_url": "https://aya.technovizen.com/storage/legacy/icons/banar.webp"
-                    }
-                }
-            ]
         }
     ],
     "menus": [
@@ -85853,76 +85358,6 @@
             "updated_at": "2026-07-26T00:29:21.000000Z"
         },
         {
-            "id": 159,
-            "path": "/services/category/neymar-events-fcb/",
-            "exact_url": "https://lams-event.com/services/category/neymar-events-fcb/",
-            "routable_type": "App\\Models\\ServiceCategory",
-            "routable_id": 11,
-            "is_legacy": false,
-            "slug_locked": true,
-            "is_published": true,
-            "legacy_html_sha256": null,
-            "published_at": "2026-07-26T21:22:35.000000Z",
-            "created_at": "2026-07-26T21:22:35.000000Z",
-            "updated_at": "2026-07-26T21:22:35.000000Z"
-        },
-        {
-            "id": 160,
-            "path": "/services/neymar-events-fcb",
-            "exact_url": "https://lams-event.com/services/neymar-events-fcb",
-            "routable_type": "App\\Models\\Service",
-            "routable_id": 46,
-            "is_legacy": false,
-            "slug_locked": true,
-            "is_published": true,
-            "legacy_html_sha256": null,
-            "published_at": "2026-07-26T21:22:35.000000Z",
-            "created_at": "2026-07-26T21:22:36.000000Z",
-            "updated_at": "2026-07-26T21:22:36.000000Z"
-        },
-        {
-            "id": 161,
-            "path": "/services/neymar-events-fcb-child",
-            "exact_url": "https://lams-event.com/services/neymar-events-fcb-child",
-            "routable_type": "App\\Models\\Service",
-            "routable_id": 47,
-            "is_legacy": false,
-            "slug_locked": true,
-            "is_published": true,
-            "legacy_html_sha256": null,
-            "published_at": "2026-07-26T21:22:35.000000Z",
-            "created_at": "2026-07-26T21:22:37.000000Z",
-            "updated_at": "2026-07-26T21:32:56.000000Z"
-        },
-        {
-            "id": 162,
-            "path": "/blog/neymar-events-fcb",
-            "exact_url": "https://lams-event.com/blog/neymar-events-fcb",
-            "routable_type": "App\\Models\\Article",
-            "routable_id": 92,
-            "is_legacy": false,
-            "slug_locked": true,
-            "is_published": true,
-            "legacy_html_sha256": null,
-            "published_at": "2026-07-26T21:22:35.000000Z",
-            "created_at": "2026-07-26T21:22:37.000000Z",
-            "updated_at": "2026-07-26T21:32:58.000000Z"
-        },
-        {
-            "id": 163,
-            "path": "/areas/neymar-events-fcb",
-            "exact_url": "https://lams-event.com/areas/neymar-events-fcb",
-            "routable_type": "App\\Models\\Area",
-            "routable_id": 6,
-            "is_legacy": false,
-            "slug_locked": true,
-            "is_published": true,
-            "legacy_html_sha256": null,
-            "published_at": "2026-07-26T21:22:35.000000Z",
-            "created_at": "2026-07-26T21:22:38.000000Z",
-            "updated_at": "2026-07-26T21:33:00.000000Z"
-        },
-        {
             "id": 164,
             "path": "/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh",
             "exact_url": "https://lams-event.com/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh",
@@ -85977,20 +85412,6 @@
             "published_at": "2026-07-27T20:37:34.000000Z",
             "created_at": "2026-07-27T20:37:34.000000Z",
             "updated_at": "2026-07-27T20:37:34.000000Z"
-        },
-        {
-            "id": 168,
-            "path": "/test",
-            "exact_url": "https://lams-event.com/test",
-            "routable_type": "App\\Models\\Page",
-            "routable_id": 8,
-            "is_legacy": false,
-            "slug_locked": true,
-            "is_published": true,
-            "legacy_html_sha256": null,
-            "published_at": "2026-07-28T01:18:12.000000Z",
-            "created_at": "2026-07-28T01:18:12.000000Z",
-            "updated_at": "2026-07-28T01:18:12.000000Z"
         }
     ],
     "redirects": [],
@@ -88037,71 +87458,6 @@
             "updated_at": "2026-07-26T00:29:21.000000Z"
         },
         {
-            "id": 159,
-            "route_registry_id": 159,
-            "loc": "https://lams-event.com/services/category/neymar-events-fcb/",
-            "path": "/services/category/neymar-events-fcb/",
-            "lastmod": "2026-07-27",
-            "changefreq": "monthly",
-            "priority": "0.80",
-            "position": 159,
-            "is_included": true,
-            "created_at": "2026-07-26T21:22:35.000000Z",
-            "updated_at": "2026-07-26T21:22:35.000000Z"
-        },
-        {
-            "id": 160,
-            "route_registry_id": 160,
-            "loc": "https://lams-event.com/services/neymar-events-fcb",
-            "path": "/services/neymar-events-fcb",
-            "lastmod": "2026-07-27",
-            "changefreq": "monthly",
-            "priority": "0.80",
-            "position": 160,
-            "is_included": true,
-            "created_at": "2026-07-26T21:22:36.000000Z",
-            "updated_at": "2026-07-26T21:22:36.000000Z"
-        },
-        {
-            "id": 161,
-            "route_registry_id": 161,
-            "loc": "https://lams-event.com/services/neymar-events-fcb-child",
-            "path": "/services/neymar-events-fcb-child",
-            "lastmod": "2026-07-27",
-            "changefreq": "monthly",
-            "priority": "0.80",
-            "position": 161,
-            "is_included": true,
-            "created_at": "2026-07-26T21:22:37.000000Z",
-            "updated_at": "2026-07-26T21:32:56.000000Z"
-        },
-        {
-            "id": 162,
-            "route_registry_id": 162,
-            "loc": "https://lams-event.com/blog/neymar-events-fcb",
-            "path": "/blog/neymar-events-fcb",
-            "lastmod": "2026-07-27",
-            "changefreq": "monthly",
-            "priority": "0.70",
-            "position": 162,
-            "is_included": true,
-            "created_at": "2026-07-26T21:22:37.000000Z",
-            "updated_at": "2026-07-26T21:32:58.000000Z"
-        },
-        {
-            "id": 163,
-            "route_registry_id": 163,
-            "loc": "https://lams-event.com/areas/neymar-events-fcb",
-            "path": "/areas/neymar-events-fcb",
-            "lastmod": "2026-07-27",
-            "changefreq": "monthly",
-            "priority": "0.70",
-            "position": 163,
-            "is_included": true,
-            "created_at": "2026-07-26T21:22:38.000000Z",
-            "updated_at": "2026-07-26T21:33:00.000000Z"
-        },
-        {
             "id": 164,
             "route_registry_id": 164,
             "loc": "https://lams-event.com/services/tagyr-rkn-shaabyh-oaldykorat-altrathyh",
@@ -88152,19 +87508,6 @@
             "is_included": true,
             "created_at": "2026-07-27T20:37:34.000000Z",
             "updated_at": "2026-07-27T20:37:34.000000Z"
-        },
-        {
-            "id": 168,
-            "route_registry_id": 168,
-            "loc": "https://lams-event.com/test",
-            "path": "/test",
-            "lastmod": "2026-07-28",
-            "changefreq": "monthly",
-            "priority": "0.60",
-            "position": 168,
-            "is_included": true,
-            "created_at": "2026-07-28T01:18:12.000000Z",
-            "updated_at": "2026-07-28T01:18:12.000000Z"
         }
     ],
     "contact": {
