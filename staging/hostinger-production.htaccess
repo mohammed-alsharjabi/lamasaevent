@@ -1,0 +1,39 @@
+DirectoryIndex index.html index.php
+
+<IfModule mod_headers.c>
+    # HTML and SEO documents must be revalidated after each atomic deployment.
+    # Hashed Astro assets remain immutable and can be cached aggressively.
+    <FilesMatch "^(?:.*\.html?|sitemap\.xml|robots\.txt)$">
+        Header always set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+
+    <FilesMatch "\.(?:css|js|mjs)$">
+        Header always set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Keep one canonical production host.
+    RewriteCond %{HTTP_HOST} ^www\.lams-event\.com$ [NC]
+    RewriteRule ^ https://lams-event.com%{REQUEST_URI} [R=301,L]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Handle X-XSRF-Token Header
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Static Astro routes are physical directories. Missing former routes must
+    # reach Laravel unchanged so a cached DirectorySlash redirect cannot loop.
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>

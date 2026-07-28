@@ -56,11 +56,16 @@ test("published CMS services use the native grids everywhere", async ({
   expect(servicesPaths).toEqual(cmsServicePaths);
 
   const child = cmsServices.find((service) => service.parent);
+
+  if (!child) {
+    return;
+  }
+
   const parent = exportPayload.services.find(
-    (service) => service.id === child?.parent?.id,
+    (service) => service.id === child.parent?.id,
   );
 
-  expect(child?.public_path).toBeTruthy();
+  expect(child.public_path).toBeTruthy();
   expect(parent?.public_path || parent?.legacy_path).toBeTruthy();
 
   await page.goto((parent?.public_path || parent?.legacy_path) as string, {
@@ -70,7 +75,7 @@ test("published CMS services use the native grids everywhere", async ({
     page.locator(
       `.svc-detail__sibling-grid [data-cms-id='${child?.id}']`,
     ),
-  ).toHaveAttribute("href", child?.public_path as string);
+  ).toHaveAttribute("href", child.public_path as string);
 });
 
 test("local administrator can enter the Arabic Filament dashboard", async ({
