@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-07-28T00:12:35+03:00",
+    "generated_at": "2026-07-28T04:18:12+03:00",
     "pages": [
         {
             "id": 1,
@@ -4204,6 +4204,69 @@
                 "json_ld_sha256": "501a375466fef98ce464704963a836368e0fc4a31c9af9f299814857c2128bc0",
                 "created_at": "2026-07-26T00:14:49.000000Z",
                 "updated_at": "2026-07-26T00:14:49.000000Z"
+            },
+            "faqs": []
+        },
+        {
+            "id": 8,
+            "type": "page",
+            "title": "تاجير كراسي وطوالات الرياض  TestTestTest",
+            "path": "/test",
+            "summary": null,
+            "content_blocks": [],
+            "status": "published",
+            "published_at": "2026-07-28T01:18:12.000000Z",
+            "legacy_path": null,
+            "created_at": "2026-07-28T01:18:12.000000Z",
+            "updated_at": "2026-07-28T01:18:12.000000Z",
+            "deleted_at": null,
+            "hero_media_id": 1,
+            "created_by": 1,
+            "updated_by": 1,
+            "is_featured": true,
+            "sort_order": 1,
+            "public_path": "/test",
+            "hero_media_summary": {
+                "original_name": "banar.png",
+                "public_url": "https://aya.technovizen.com/storage/legacy/icons/banar.webp",
+                "alt": null
+            },
+            "seo_meta": {
+                "id": 168,
+                "seoable_type": "App\\Models\\Page",
+                "seoable_id": 8,
+                "title": "تاجير كراسي وطوالات الرياض  TestTestTest",
+                "description": "تاجير كراسي وطوالات الرياض TestTestTest",
+                "canonical": "https://lams-event.com/test",
+                "robots": "index, follow",
+                "keywords": [],
+                "open_graph": {
+                    "type": "website",
+                    "locale": "ar_SA",
+                    "site_name": "لمسه التميز",
+                    "title": "تاجير كراسي وطوالات الرياض  TestTestTest",
+                    "description": "تاجير كراسي وطوالات الرياض TestTestTest",
+                    "url": "https://lams-event.com/test"
+                },
+                "twitter": {
+                    "card": "summary",
+                    "title": "تاجير كراسي وطوالات الرياض  TestTestTest",
+                    "description": "تاجير كراسي وطوالات الرياض TestTestTest"
+                },
+                "hreflang": [
+                    {
+                        "lang": "ar-SA",
+                        "href": "https://lams-event.com/test"
+                    },
+                    {
+                        "lang": "x-default",
+                        "href": "https://lams-event.com/test"
+                    }
+                ],
+                "json_ld": [],
+                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                "created_at": "2026-07-28T01:18:12.000000Z",
+                "updated_at": "2026-07-28T01:18:12.000000Z"
             },
             "faqs": []
         }
@@ -85914,6 +85977,20 @@
             "published_at": "2026-07-27T20:37:34.000000Z",
             "created_at": "2026-07-27T20:37:34.000000Z",
             "updated_at": "2026-07-27T20:37:34.000000Z"
+        },
+        {
+            "id": 168,
+            "path": "/test",
+            "exact_url": "https://lams-event.com/test",
+            "routable_type": "App\\Models\\Page",
+            "routable_id": 8,
+            "is_legacy": false,
+            "slug_locked": true,
+            "is_published": true,
+            "legacy_html_sha256": null,
+            "published_at": "2026-07-28T01:18:12.000000Z",
+            "created_at": "2026-07-28T01:18:12.000000Z",
+            "updated_at": "2026-07-28T01:18:12.000000Z"
         }
     ],
     "redirects": [],
@@ -88075,6 +88152,19 @@
             "is_included": true,
             "created_at": "2026-07-27T20:37:34.000000Z",
             "updated_at": "2026-07-27T20:37:34.000000Z"
+        },
+        {
+            "id": 168,
+            "route_registry_id": 168,
+            "loc": "https://lams-event.com/test",
+            "path": "/test",
+            "lastmod": "2026-07-28",
+            "changefreq": "monthly",
+            "priority": "0.60",
+            "position": 168,
+            "is_included": true,
+            "created_at": "2026-07-28T01:18:12.000000Z",
+            "updated_at": "2026-07-28T01:18:12.000000Z"
         }
     ],
     "contact": {
