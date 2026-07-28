@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-07-29T02:38:26+03:00",
+    "generated_at": "2026-07-29T02:39:56+03:00",
     "pages": [
         {
             "id": 1,
@@ -6639,6 +6639,83 @@
                 "id": 5,
                 "title": "الاستقبال والمداخل",
                 "slug": "reception-entrances"
+            },
+            "media": [],
+            "parent": null,
+            "children": []
+        },
+        {
+            "id": 51,
+            "service_category_id": 10,
+            "parent_id": null,
+            "hero_media_id": 87,
+            "title": "تاجير سماعات في الرياض ",
+            "slug": "tagyr-smaaaat-fy-alryad",
+            "excerpt": "تصميم وتنفيذ كوش أفراح في الرياض حسب عمق المسرح والإضاءة والتصوير. تنسيق لمسه التميز للحفلات في القاعات والاستراحات.",
+            "content_blocks": [],
+            "status": "published",
+            "published_at": "2026-07-28T23:38:00.000000Z",
+            "legacy_path": null,
+            "sort_order": 11,
+            "created_at": "2026-07-28T23:39:56.000000Z",
+            "updated_at": "2026-07-28T23:39:56.000000Z",
+            "deleted_at": null,
+            "created_by": 1,
+            "updated_by": 1,
+            "is_featured": true,
+            "cta_label": null,
+            "cta_url": null,
+            "whatsapp_enabled": true,
+            "public_path": "/services/tagyr-smaaaat-fy-alryad",
+            "hero_media_summary": {
+                "original_name": "684x900_DEB6A5E8-0628-4CB8-AC13-01C6EA32780C.jpg",
+                "public_url": "https://lams-event.com/storage/media/2026/07/680cc0dd-71f7-4b0c-96a8-ef416271ba3b.webp",
+                "alt": "تاجير سماعات "
+            },
+            "seo_meta": {
+                "id": 169,
+                "seoable_type": "App\\Models\\Service",
+                "seoable_id": 51,
+                "title": "تصميم وتنفيذ كوش أفراح في الرياض حسب",
+                "description": "تصميم وتنفيذ كوش أفراح في الرياض حسب عمق المسرح والإضاءة والتصوير. تنسيق لمسه التميز للحفلات في القاعات والاستراحات.",
+                "canonical": "https://lams-event.com/services/tagyr-smaaaat-fy-alryad",
+                "robots": "index, follow",
+                "keywords": [
+                    "تاجير سماعات"
+                ],
+                "open_graph": {
+                    "type": "website",
+                    "locale": "ar_SA",
+                    "site_name": "لمسه التميز",
+                    "title": "تصميم وتنفيذ كوش أفراح في الرياض حسب",
+                    "description": "تصميم وتنفيذ كوش أفراح في الرياض حسب عمق المسرح والإضاءة والتصوير. تنسيق لمسه التميز للحفلات في القاعات والاستراحات.",
+                    "url": "https://lams-event.com/services/tagyr-smaaaat-fy-alryad"
+                },
+                "twitter": {
+                    "card": "summary",
+                    "title": "تصميم وتنفيذ كوش أفراح في الرياض حسب",
+                    "description": "تصميم وتنفيذ كوش أفراح في الرياض حسب عمق المسرح والإضاءة والتصوير. تنسيق لمسه التميز للحفلات في القاعات والاستراحات."
+                },
+                "hreflang": [
+                    {
+                        "lang": "ar-SA",
+                        "href": "https://lams-event.com/services/tagyr-smaaaat-fy-alryad"
+                    },
+                    {
+                        "lang": "x-default",
+                        "href": "https://lams-event.com/services/tagyr-smaaaat-fy-alryad"
+                    }
+                ],
+                "json_ld": [],
+                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                "created_at": "2026-07-28T23:39:56.000000Z",
+                "updated_at": "2026-07-28T23:39:56.000000Z"
+            },
+            "faqs": [],
+            "category": {
+                "id": 10,
+                "title": "مناسبات مدعومة بصور الأعمال",
+                "slug": "occasions-mixed"
             },
             "media": [],
             "parent": null,
@@ -85330,6 +85407,20 @@
             "published_at": "2026-07-27T20:00:00.000000Z",
             "created_at": "2026-07-27T20:00:24.000000Z",
             "updated_at": "2026-07-27T20:00:24.000000Z"
+        },
+        {
+            "id": 169,
+            "path": "/services/tagyr-smaaaat-fy-alryad",
+            "exact_url": "https://lams-event.com/services/tagyr-smaaaat-fy-alryad",
+            "routable_type": "App\\Models\\Service",
+            "routable_id": 51,
+            "is_legacy": false,
+            "slug_locked": true,
+            "is_published": true,
+            "legacy_html_sha256": null,
+            "published_at": "2026-07-28T23:38:00.000000Z",
+            "created_at": "2026-07-28T23:39:56.000000Z",
+            "updated_at": "2026-07-28T23:39:56.000000Z"
         }
     ],
     "redirects": [],
@@ -87413,6 +87504,19 @@
             "is_included": true,
             "created_at": "2026-07-27T20:00:24.000000Z",
             "updated_at": "2026-07-27T20:00:24.000000Z"
+        },
+        {
+            "id": 169,
+            "route_registry_id": 169,
+            "loc": "https://lams-event.com/services/tagyr-smaaaat-fy-alryad",
+            "path": "/services/tagyr-smaaaat-fy-alryad",
+            "lastmod": "2026-07-29",
+            "changefreq": "monthly",
+            "priority": "0.80",
+            "position": 169,
+            "is_included": true,
+            "created_at": "2026-07-28T23:39:56.000000Z",
+            "updated_at": "2026-07-28T23:39:56.000000Z"
         }
     ],
     "contact": {
