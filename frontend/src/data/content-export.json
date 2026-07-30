@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-07-30T14:51:30+03:00",
+    "generated_at": "2026-07-30T14:52:19+03:00",
     "pages": [
         {
             "id": 1,
@@ -6494,6 +6494,90 @@
         }
     ],
     "services": [
+        {
+            "id": 52,
+            "service_category_id": null,
+            "parent_id": null,
+            "hero_media_id": 88,
+            "title": "خدمه تأجير شيش",
+            "slug": "khdmh-tagyr-shysh",
+            "excerpt": "تأجير الشيش   مع جمع الملحقات\nعرجيله    جميع انواع الشيشه والمعسلات\nنهتم بادق التفاصيل ",
+            "content_blocks": [],
+            "status": "published",
+            "published_at": "2026-07-30T11:52:18.000000Z",
+            "legacy_path": null,
+            "sort_order": 0,
+            "created_at": "2026-07-30T11:52:18.000000Z",
+            "updated_at": "2026-07-30T11:52:18.000000Z",
+            "deleted_at": null,
+            "created_by": 1,
+            "updated_by": 1,
+            "is_featured": true,
+            "cta_label": null,
+            "cta_url": null,
+            "whatsapp_enabled": true,
+            "public_path": "/services/khdmh-tagyr-shysh",
+            "hero_media_summary": {
+                "original_name": "1000468592.jpg",
+                "public_url": "https://lams-event.com/storage/media/2026/07/0529dd6f-d830-45b1-9de8-c9d78cd03255.webp",
+                "alt": "تأجير شيش مع جميع الملحقات"
+            },
+            "seo_meta": {
+                "id": 170,
+                "seoable_type": "App\\Models\\Service",
+                "seoable_id": 52,
+                "title": "خدمه تأجير شيش",
+                "description": "تأجير الشيش مع جمع الملحقات عرجيله جميع انواع الشيشه والمعسلات نهتم بادق التفاصيل",
+                "canonical": "https://lams-event.com/services/khdmh-tagyr-shysh",
+                "robots": "index, follow",
+                "keywords": [],
+                "open_graph": {
+                    "type": "website",
+                    "locale": "ar_SA",
+                    "site_name": "لمسه التميز",
+                    "title": "خدمه تأجير شيش",
+                    "description": "تأجير الشيش مع جمع الملحقات عرجيله جميع انواع الشيشه والمعسلات نهتم بادق التفاصيل",
+                    "url": "https://lams-event.com/services/khdmh-tagyr-shysh"
+                },
+                "twitter": {
+                    "card": "summary",
+                    "title": "خدمه تأجير شيش",
+                    "description": "تأجير الشيش مع جمع الملحقات عرجيله جميع انواع الشيشه والمعسلات نهتم بادق التفاصيل"
+                },
+                "hreflang": [
+                    {
+                        "lang": "ar-SA",
+                        "href": "https://lams-event.com/services/khdmh-tagyr-shysh"
+                    },
+                    {
+                        "lang": "x-default",
+                        "href": "https://lams-event.com/services/khdmh-tagyr-shysh"
+                    }
+                ],
+                "json_ld": [],
+                "json_ld_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+                "created_at": "2026-07-30T11:52:18.000000Z",
+                "updated_at": "2026-07-30T11:52:18.000000Z"
+            },
+            "faqs": [
+                {
+                    "id": 269,
+                    "faqable_type": "App\\Models\\Service",
+                    "faqable_id": 52,
+                    "question": " خدمه",
+                    "answer": "تأجير الشيشه ",
+                    "sort_order": 1,
+                    "is_active": true,
+                    "created_at": "2026-07-30T11:52:18.000000Z",
+                    "updated_at": "2026-07-30T11:52:18.000000Z",
+                    "deleted_at": null
+                }
+            ],
+            "category": null,
+            "media": [],
+            "parent": null,
+            "children": []
+        },
         {
             "id": 50,
             "service_category_id": 10,
@@ -85332,6 +85416,20 @@
             "published_at": "2026-07-28T23:38:00.000000Z",
             "created_at": "2026-07-28T23:39:56.000000Z",
             "updated_at": "2026-07-28T23:39:56.000000Z"
+        },
+        {
+            "id": 170,
+            "path": "/services/khdmh-tagyr-shysh",
+            "exact_url": "https://lams-event.com/services/khdmh-tagyr-shysh",
+            "routable_type": "App\\Models\\Service",
+            "routable_id": 52,
+            "is_legacy": false,
+            "slug_locked": true,
+            "is_published": true,
+            "legacy_html_sha256": null,
+            "published_at": "2026-07-30T11:52:18.000000Z",
+            "created_at": "2026-07-30T11:52:18.000000Z",
+            "updated_at": "2026-07-30T11:52:18.000000Z"
         }
     ],
     "redirects": [],
@@ -87415,6 +87513,19 @@
             "is_included": true,
             "created_at": "2026-07-28T23:39:56.000000Z",
             "updated_at": "2026-07-28T23:39:56.000000Z"
+        },
+        {
+            "id": 170,
+            "route_registry_id": 170,
+            "loc": "https://lams-event.com/services/khdmh-tagyr-shysh",
+            "path": "/services/khdmh-tagyr-shysh",
+            "lastmod": "2026-07-30",
+            "changefreq": "monthly",
+            "priority": "0.80",
+            "position": 170,
+            "is_included": true,
+            "created_at": "2026-07-30T11:52:18.000000Z",
+            "updated_at": "2026-07-30T11:52:18.000000Z"
         }
     ],
     "contact": {
