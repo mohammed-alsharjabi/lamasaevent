@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-07-30T14:52:19+03:00",
+    "generated_at": "2026-08-01T08:01:15+03:00",
     "pages": [
         {
             "id": 1,
@@ -6496,7 +6496,7 @@
     "services": [
         {
             "id": 52,
-            "service_category_id": null,
+            "service_category_id": 10,
             "parent_id": null,
             "hero_media_id": 88,
             "title": "خدمه تأجير شيش",
@@ -6504,16 +6504,16 @@
             "excerpt": "تأجير الشيش   مع جمع الملحقات\nعرجيله    جميع انواع الشيشه والمعسلات\nنهتم بادق التفاصيل ",
             "content_blocks": [],
             "status": "published",
-            "published_at": "2026-07-30T11:52:18.000000Z",
+            "published_at": "2026-07-30T11:52:00.000000Z",
             "legacy_path": null,
             "sort_order": 0,
             "created_at": "2026-07-30T11:52:18.000000Z",
-            "updated_at": "2026-07-30T11:52:18.000000Z",
+            "updated_at": "2026-08-01T05:01:15.000000Z",
             "deleted_at": null,
             "created_by": 1,
             "updated_by": 1,
             "is_featured": true,
-            "cta_label": null,
+            "cta_label": "تأجير شيش",
             "cta_url": null,
             "whatsapp_enabled": true,
             "public_path": "/services/khdmh-tagyr-shysh",
@@ -6573,7 +6573,11 @@
                     "deleted_at": null
                 }
             ],
-            "category": null,
+            "category": {
+                "id": 10,
+                "title": "مناسبات مدعومة بصور الأعمال",
+                "slug": "occasions-mixed"
+            },
             "media": [],
             "parent": null,
             "children": []
@@ -85427,9 +85431,9 @@
             "slug_locked": true,
             "is_published": true,
             "legacy_html_sha256": null,
-            "published_at": "2026-07-30T11:52:18.000000Z",
+            "published_at": "2026-07-30T11:52:00.000000Z",
             "created_at": "2026-07-30T11:52:18.000000Z",
-            "updated_at": "2026-07-30T11:52:18.000000Z"
+            "updated_at": "2026-08-01T05:01:15.000000Z"
         }
     ],
     "redirects": [],
@@ -87519,13 +87523,13 @@
             "route_registry_id": 170,
             "loc": "https://lams-event.com/services/khdmh-tagyr-shysh",
             "path": "/services/khdmh-tagyr-shysh",
-            "lastmod": "2026-07-30",
+            "lastmod": "2026-08-01",
             "changefreq": "monthly",
             "priority": "0.80",
             "position": 170,
             "is_included": true,
             "created_at": "2026-07-30T11:52:18.000000Z",
-            "updated_at": "2026-07-30T11:52:18.000000Z"
+            "updated_at": "2026-08-01T05:01:15.000000Z"
         }
     ],
     "contact": {
