@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-08-01T21:04:01+03:00",
+    "generated_at": "2026-08-01T21:06:24+03:00",
     "pages": [
         {
             "id": 1,
@@ -6699,6 +6699,170 @@
                 "id": 10,
                 "title": "مناسبات مدعومة بصور الأعمال",
                 "slug": "occasions-mixed"
+            },
+            "media": [],
+            "parent": null,
+            "children": []
+        },
+        {
+            "id": 53,
+            "service_category_id": 12,
+            "parent_id": null,
+            "hero_media_id": 90,
+            "title": " كوش أفراح في الرياض",
+            "slug": "kosh-afrah-fy-alryad",
+            "excerpt": "\nتصميم وتنفيذ كوشة عرس في الرياض وفق مساحة القاعة وارتفاع المسرح والإضاءة ومسار دخول العروس، مع تجهيز متكامل للتركيب والتفكيك.\n",
+            "content_blocks": {
+                "version": 1,
+                "sections": [
+                    {
+                        "type": "rich_text",
+                        "title": "وصف الخدمة",
+                        "content": "نصمم كوشة العرس بناءً على مساحة القاعة وارتفاع المسرح والمسافة بين العروسين والصف الأول، حتى يظهر التنسيق متوازنًا أمام الضيوف وفي الصور. نراعي كذلك لون إضاءة القاعة ومسار دخول العروس وموقع الكاميرات قبل اعتماد التصميم النهائي."
+                    },
+                    {
+                        "type": "list",
+                        "title": "ما تتضمنه الخدمة",
+                        "items": [
+                            "مراجعة مساحة المسرح وأبعاد القاعة",
+                            "اقتراح تصميم وألوان مناسبة للموقع",
+                            "تجهيز خلفية الكوشة ومنطقة جلوس العروسين",
+                            "تنسيق الورد والإضاءة والعناصر الجمالية",
+                            "تركيب الكوشة قبل المناسبة في الوقت المتفق عليه",
+                            "فك التجهيزات بعد انتهاء المناسبة"
+                        ]
+                    },
+                    {
+                        "type": "list",
+                        "title": "مناسبات تناسب الخدمة",
+                        "items": [
+                            "حفلات الزواج",
+                            "حفلات الزفاف في القاعات",
+                            "حفلات الزفاف في الاستراحات",
+                            "استقبال العروس بعد عقد القران",
+                            "المناسبات العائلية الرسمية"
+                        ]
+                    },
+                    {
+                        "type": "rich_text",
+                        "title": "تنفيذ يناسب القاعة والتصوير",
+                        "content": "لا نعتمد مقاسًا واحدًا لجميع المواقع، لأن القاعات والاستراحات تختلف في ارتفاع السقف وعمق المسرح ومواقع الإضاءة. لذلك يتم تكييف التصميم حتى يحافظ على جمال الكوشة ووضوح العروسين دون ازدحام بصري."
+                    },
+                    {
+                        "type": "cta",
+                        "title": "اطلبي تصورًا مناسبًا لموقعك",
+                        "text": "أرسلي اسم القاعة أو الاستراحة وتاريخ المناسبة وصورة للمسرح إن توفرت.",
+                        "label": "اطلبي عرض سعر",
+                        "url": "https://wa.me/966568767724"
+                    }
+                ]
+            },
+            "status": "published",
+            "published_at": "2026-08-01T18:04:00.000000Z",
+            "legacy_path": null,
+            "sort_order": 0,
+            "created_at": "2026-08-01T18:06:24.000000Z",
+            "updated_at": "2026-08-01T18:06:24.000000Z",
+            "deleted_at": null,
+            "created_by": 1,
+            "updated_by": 1,
+            "is_featured": false,
+            "cta_label": null,
+            "cta_url": null,
+            "whatsapp_enabled": true,
+            "public_path": "/services/kosh-afrah-fy-alryad",
+            "hero_media_summary": {
+                "original_name": "ChatGPT Image 29 يوليو 2026، 11_47_58 م (1).webp",
+                "public_url": "https://lams-event.com/storage/media/2026/08/251c05af-8fcc-4028-9939-d88b6032adee.webp",
+                "alt": "الكوش وتقديم الأفراح"
+            },
+            "seo_meta": {
+                "id": 172,
+                "seoable_type": "App\\Models\\Service",
+                "seoable_id": 53,
+                "title": " كوش أفراح الرياض | تصميم وتنفيذ كوشة العرس",
+                "description": "\nتصميم وتنفيذ كوش أفراح في الرياض للقاعات والاستراحات، مع تنسيق الخلفية والورد والإضاءة ومنطقة جلوس العروسين بما يناسب الموقع والتصوير.\n",
+                "canonical": "https://lams-event.com/services/kosh-afrah-fy-alryad",
+                "robots": "index, follow",
+                "keywords": [
+                    "كوش أفراح الرياض",
+                    "كوشة عروس بالرياض",
+                    "تصميم كوشة زفاف",
+                    "تنسيق كوش أعراس",
+                    "كوش فخمة الرياض"
+                ],
+                "open_graph": {
+                    "title": "كوش أفراح الرياض | تصميم وتنفيذ كوشة العرس",
+                    "description": "تصميم وتنفيذ كوش أفراح في الرياض وفق مساحة القاعة والإضاءة ومسار التصوير.",
+                    "type": "website",
+                    "url": "https://lams-event.com/services/kosh-riyadh/",
+                    "locale": "ar_SA",
+                    "site_name": "لمسة التميز"
+                },
+                "twitter": {
+                    "title": "كوش أفراح الرياض | تصميم وتنفيذ كوشة العرس",
+                    "description": "تصميم وتنفيذ كوش أفراح في الرياض وفق مساحة القاعة والإضاءة ومسار التصوير.",
+                    "type": "website",
+                    "url": "https://lams-event.com/services/kosh-riyadh/",
+                    "locale": "ar_SA",
+                    "site_name": "لمسة التميز"
+                },
+                "hreflang": [
+                    {
+                        "lang": "ar-SA",
+                        "url": "https://lams-event.com/services/kosh-riyadh/"
+                    },
+                    {
+                        "lang": "x-default",
+                        "url": "https://lams-event.com/services/kosh-riyadh/"
+                    }
+                ],
+                "json_ld": {
+                    "@context": "https://schema.org",
+                    "@type": "Service",
+                    "name": "كوش أفراح في الرياض",
+                    "description": "تصميم وتنفيذ كوشة عرس في الرياض وفق مساحة القاعة والإضاءة ومسار التصوير.",
+                    "serviceType": "تصميم وتنفيذ كوش أفراح",
+                    "url": "https://lams-event.com/services/kosh-riyadh/",
+                    "inLanguage": "ar-SA",
+                    "areaServed": {
+                        "@type": "City",
+                        "name": "الرياض"
+                    },
+                    "provider": {
+                        "@type": "LocalBusiness",
+                        "name": "لمسة التميز",
+                        "url": "https://lams-event.com/",
+                        "telephone": "+966568767724"
+                    },
+                    "availableChannel": {
+                        "@type": "ServiceChannel",
+                        "serviceUrl": "https://wa.me/966568767724",
+                        "availableLanguage": "Arabic"
+                    }
+                },
+                "json_ld_sha256": "c8338361eda3ca162c7a86808c249315a4771d15c2b5439fab22326406c2cf8f",
+                "created_at": "2026-08-01T18:06:24.000000Z",
+                "updated_at": "2026-08-01T18:06:24.000000Z"
+            },
+            "faqs": [
+                {
+                    "id": 270,
+                    "faqable_type": "App\\Models\\Service",
+                    "faqable_id": 53,
+                    "question": "كم يحتاج تجهيز الكوشة في قاعة بالرياض؟",
+                    "answer": "\nيعتمد الوقت على حجم الكوشة ونوع الخلفية والإضاءة والعناصر المستخدمة. يتم تحديد وقت التركيب مسبقًا بالتنسيق مع العميل وإدارة القاعة.",
+                    "sort_order": 1,
+                    "is_active": true,
+                    "created_at": "2026-08-01T18:06:24.000000Z",
+                    "updated_at": "2026-08-01T18:06:24.000000Z",
+                    "deleted_at": null
+                }
+            ],
+            "category": {
+                "id": 12,
+                "title": "الكوش وتقديم الأفراح",
+                "slug": "alkosh-otkdym-alafrah"
             },
             "media": [],
             "parent": null,
@@ -85570,6 +85734,20 @@
             "published_at": "2026-08-01T18:00:00.000000Z",
             "created_at": "2026-08-01T18:02:44.000000Z",
             "updated_at": "2026-08-01T18:02:44.000000Z"
+        },
+        {
+            "id": 172,
+            "path": "/services/kosh-afrah-fy-alryad",
+            "exact_url": "https://lams-event.com/services/kosh-afrah-fy-alryad",
+            "routable_type": "App\\Models\\Service",
+            "routable_id": 53,
+            "is_legacy": false,
+            "slug_locked": true,
+            "is_published": true,
+            "legacy_html_sha256": null,
+            "published_at": "2026-08-01T18:04:00.000000Z",
+            "created_at": "2026-08-01T18:06:24.000000Z",
+            "updated_at": "2026-08-01T18:06:24.000000Z"
         }
     ],
     "redirects": [],
@@ -87679,6 +87857,19 @@
             "is_included": true,
             "created_at": "2026-08-01T18:02:44.000000Z",
             "updated_at": "2026-08-01T18:02:44.000000Z"
+        },
+        {
+            "id": 172,
+            "route_registry_id": 172,
+            "loc": "https://lams-event.com/services/kosh-afrah-fy-alryad",
+            "path": "/services/kosh-afrah-fy-alryad",
+            "lastmod": "2026-08-01",
+            "changefreq": "monthly",
+            "priority": "0.80",
+            "position": 172,
+            "is_included": true,
+            "created_at": "2026-08-01T18:06:24.000000Z",
+            "updated_at": "2026-08-01T18:06:24.000000Z"
         }
     ],
     "contact": {
