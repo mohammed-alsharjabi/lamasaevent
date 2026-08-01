@@ -150,7 +150,10 @@ class CmsContentStructureTest extends TestCase
         app(ContentPublishingService::class)->sync($service);
 
         $seo = $service->fresh()->seoMeta;
-        $this->assertSame('خدمة بدون حقول SEO | لمسة التميز CMS', $seo->title);
+        $this->assertSame(
+            'خدمة بدون حقول SEO | '.config('app.name'),
+            $seo->title,
+        );
         $this->assertSame('وصف مختصر للخدمة الجديدة.', $seo->description);
         $this->assertSame(
             'https://lams-event.com'.$service->routePath(),
