@@ -20,6 +20,29 @@ const socialLinksSchema = z.preprocess(
   z.record(z.string(), z.string()),
 );
 
+const normalizeJsonLd = (value: unknown): unknown[] => {
+  if (!value || typeof value !== "object") return [];
+
+  return Array.isArray(value) ? value : [value];
+};
+
+const normalizeHreflang = (value: unknown): unknown => {
+  if (!Array.isArray(value)) return value ?? [];
+
+  return value.map((alternate) => {
+    if (!alternate || typeof alternate !== "object" || Array.isArray(alternate)) {
+      return alternate;
+    }
+
+    const entry = alternate as Record<string, unknown>;
+
+    return {
+      ...entry,
+      href: entry.href ?? entry.url,
+    };
+  });
+};
+
 const seoSchema = z.looseObject({
     title: z.string().min(1),
     description: z.string().min(1),
@@ -45,10 +68,11 @@ const seoSchema = z.looseObject({
     ),
     open_graph: nullableStringRecordSchema,
     twitter: nullableStringRecordSchema,
-    hreflang: z
-      .array(z.object({ lang: z.string(), href: z.url() }))
-      .nullable(),
-    json_ld: z.array(z.unknown()),
+    hreflang: z.preprocess(
+      normalizeHreflang,
+      z.array(z.object({ lang: z.string(), href: z.url() })),
+    ).nullable(),
+    json_ld: z.preprocess(normalizeJsonLd, z.array(z.unknown())),
     json_ld_sha256: z.string().nullable(),
   });
 
@@ -84,11 +108,56 @@ const contentBlockSchema = z.looseObject({
     })).optional(),
   });
 
+const normalizeContentBlocks = (value: unknown): unknown => {
+  let blocks = value;
+
+  if (blocks && typeof blocks === "object" && !Array.isArray(blocks)) {
+    blocks = (blocks as Record<string, unknown>).sections;
+  }
+
+  if (!Array.isArray(blocks)) return blocks ?? [];
+
+  return blocks.map((candidate) => {
+    if (!candidate || typeof candidate !== "object" || Array.isArray(candidate)) {
+      return candidate;
+    }
+
+    const block = { ...(candidate as Record<string, unknown>) };
+    const aliases: Record<string, string> = {
+      rich_text: "text",
+      list: "features",
+      process: "steps",
+    };
+    const type = typeof block.type === "string"
+      ? (aliases[block.type] ?? block.type)
+      : block.type;
+
+    block.type = type;
+    block.heading ??= block.title;
+
+    if (type === "intro") block.lead ??= block.content;
+    if (type === "text") block.body ??= block.content;
+
+    if (Array.isArray(block.items)) {
+      block.items = block.items.map((item) =>
+        typeof item === "string" ? { title: item } : item,
+      );
+    }
+
+    return block;
+  });
+};
+
+const contentBlocksSchema = z.preprocess(
+  normalizeContentBlocks,
+  z.array(contentBlockSchema),
+);
+
 const entitySchema = z.looseObject({
     id: z.number().int(),
     title: z.string().min(1),
     legacy_path: z.string().startsWith("/").nullable(),
-    content_blocks: z.array(contentBlockSchema),
+    content_blocks: contentBlocksSchema,
     status: z.literal("published"),
     published_at: z.string(),
     seo_meta: seoSchema,

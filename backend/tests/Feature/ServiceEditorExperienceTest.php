@@ -144,6 +144,56 @@ class ServiceEditorExperienceTest extends TestCase
         );
     }
 
+    public function test_export_normalizes_early_visual_editor_and_seo_shapes(): void
+    {
+        $service = Service::create([
+            'title' => 'خدمة بتنسيق قديم للمحرر',
+            'excerpt' => 'وصف الخدمة',
+            'status' => 'published',
+            'published_at' => now(),
+            'content_blocks' => [
+                'version' => 1,
+                'sections' => [
+                    [
+                        'type' => 'rich_text',
+                        'title' => 'التفاصيل',
+                        'content' => 'نص الخدمة',
+                    ],
+                    [
+                        'type' => 'process',
+                        'title' => 'الخطوات',
+                        'items' => ['الخطوة الأولى', 'الخطوة الثانية'],
+                    ],
+                ],
+            ],
+        ]);
+        app(ContentPublishingService::class)->sync($service);
+        $service->seoMeta()->update([
+            'hreflang' => [
+                ['lang' => 'ar-SA', 'url' => 'https://lams-event.com/legacy-shape'],
+            ],
+            'json_ld' => [
+                '@context' => 'https://schema.org',
+                '@type' => 'Service',
+                'name' => 'خدمة بتنسيق قديم للمحرر',
+            ],
+        ]);
+
+        $exported = app(ContentExportService::class)
+            ->build()['services']
+            ->firstWhere('id', $service->id);
+
+        $this->assertSame('text', $exported->content_blocks[0]['type']);
+        $this->assertSame('نص الخدمة', $exported->content_blocks[0]['body']);
+        $this->assertSame('steps', $exported->content_blocks[1]['type']);
+        $this->assertSame('الخطوة الأولى', $exported->content_blocks[1]['items'][0]['title']);
+        $this->assertSame(
+            'https://lams-event.com/legacy-shape',
+            $exported->seoMeta->hreflang[0]['href'],
+        );
+        $this->assertSame('Service', $exported->seoMeta->json_ld[0]['@type']);
+    }
+
     public function test_service_duplication_creates_an_independent_draft_and_route(): void
     {
         $service = Service::create([

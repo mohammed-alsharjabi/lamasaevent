@@ -20,10 +20,31 @@ class ServiceContentNormalizer
             return [];
         }
 
+        // Some early CMS/import tools stored the visual editor envelope instead
+        // of the sections themselves. Accept it at the boundary so the API has
+        // one stable, list-based contract without rewriting the stored content.
+        if (isset($blocks['sections']) && is_array($blocks['sections'])) {
+            $blocks = $blocks['sections'];
+        }
+
         return collect($blocks)
             ->filter(fn (mixed $block): bool => is_array($block))
             ->map(function (array $block): array {
-                $type = (string) ($block['type'] ?? '');
+                $type = match ((string) ($block['type'] ?? '')) {
+                    'rich_text' => 'text',
+                    'list' => 'features',
+                    'process' => 'steps',
+                    default => (string) ($block['type'] ?? ''),
+                };
+
+                $block['type'] = $type;
+                $block['heading'] ??= $block['title'] ?? null;
+
+                if ($type === 'intro') {
+                    $block['lead'] ??= $block['content'] ?? null;
+                } elseif ($type === 'text') {
+                    $block['body'] ??= $block['content'] ?? null;
+                }
 
                 // Immutable restored blocks keep their original structure and HTML.
                 if (! in_array($type, self::MANAGED_TYPES, true)) {
@@ -70,10 +91,16 @@ class ServiceContentNormalizer
             'type' => $type,
             'heading' => $this->plain($block['heading'] ?? null, 255),
             'items' => collect(Arr::wrap($block['items'] ?? []))
-                ->filter(fn (mixed $item): bool => is_array($item))
-                ->map(fn (array $item): array => [
-                    'title' => $this->plain($item['title'] ?? null, 255),
-                    'description' => $this->plain($item['description'] ?? null, 1000),
+                ->filter(fn (mixed $item): bool => is_array($item) || is_string($item))
+                ->map(fn (mixed $item): array => [
+                    'title' => $this->plain(
+                        is_array($item) ? ($item['title'] ?? null) : $item,
+                        255,
+                    ),
+                    'description' => $this->plain(
+                        is_array($item) ? ($item['description'] ?? null) : null,
+                        1000,
+                    ),
                 ])
                 ->filter(fn (array $item): bool => filled($item['title']) || filled($item['description']))
                 ->values()

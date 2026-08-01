@@ -118,7 +118,41 @@ class ContentExportService
                         'keywords',
                         app(SeoDefaultsService::class)->normalizeKeywords($keywords),
                     );
+
+                    $hreflang = collect((array) $seo->getAttribute('hreflang'))
+                        ->filter(fn (mixed $alternate): bool => is_array($alternate))
+                        ->map(fn (array $alternate): array => [
+                            'lang' => (string) ($alternate['lang'] ?? ''),
+                            'href' => (string) ($alternate['href'] ?? $alternate['url'] ?? ''),
+                        ])
+                        ->filter(fn (array $alternate): bool => filled($alternate['lang']) && filled($alternate['href']))
+                        ->values()
+                        ->all();
+                    $seo->setAttribute('hreflang', $hreflang);
+
+                    $jsonLd = $seo->getAttribute('json_ld');
+                    $jsonLd = is_array($jsonLd)
+                        ? (array_is_list($jsonLd) ? $jsonLd : [$jsonLd])
+                        : [];
+                    $seo->setAttribute('json_ld', $jsonLd);
+                    $seo->setAttribute(
+                        'json_ld_sha256',
+                        hash(
+                            'sha256',
+                            json_encode(
+                                $jsonLd,
+                                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
+                            ) ?: '[]',
+                        ),
+                    );
                 }
+
+                $record->setAttribute(
+                    'content_blocks',
+                    app(ServiceContentNormalizer::class)->normalize(
+                        $record->getAttribute('content_blocks'),
+                    ),
+                );
 
                 $hero = $record->getRelation('heroMedia');
                 $record->unsetRelation('heroMedia');
