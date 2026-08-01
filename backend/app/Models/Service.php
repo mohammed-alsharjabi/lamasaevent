@@ -6,6 +6,7 @@ use App\Contracts\ManagedContent;
 use App\Enums\ContentStatus;
 use App\Models\Concerns\GeneratesInternalSlug;
 use App\Models\Concerns\HasManagedContent;
+use App\Services\ServiceDefaultsService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,7 +22,12 @@ class Service extends Model implements ManagedContent
         'service_category_id', 'parent_id', 'hero_media_id', 'title', 'slug', 'excerpt',
         'content_blocks', 'status', 'published_at', 'legacy_path', 'sort_order',
         'created_by', 'updated_by', 'is_featured', 'cta_label', 'cta_url',
-        'whatsapp_enabled',
+        'whatsapp_enabled', 'seo_overrides', 'cta_overrides',
+        'uses_generated_defaults',
+    ];
+
+    protected $hidden = [
+        'seo_overrides', 'cta_overrides', 'uses_generated_defaults',
     ];
 
     protected function casts(): array
@@ -33,11 +39,23 @@ class Service extends Model implements ManagedContent
             'sort_order' => 'integer',
             'is_featured' => 'boolean',
             'whatsapp_enabled' => 'boolean',
+            'seo_overrides' => 'array',
+            'cta_overrides' => 'array',
+            'uses_generated_defaults' => 'boolean',
         ];
     }
 
     protected static function booted(): void
     {
+        static::saving(function (Service $service): void {
+            if (! array_key_exists('uses_generated_defaults', $service->getAttributes())) {
+                $service->uses_generated_defaults = blank($service->legacy_path);
+            }
+        });
+
+        static::saving(fn (Service $service) => app(ServiceDefaultsService::class)
+            ->apply($service));
+
         static::saving(function (Service $service): void {
             $parentId = $service->getAttribute('parent_id');
 

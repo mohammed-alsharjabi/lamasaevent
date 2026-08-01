@@ -32,5 +32,8 @@ const { page, routePath } = Astro.props as Props;
     summary={(page.summary || page.excerpt) as string | null}
     heroMedia={page.hero_media_summary}
     routePath={routePath}
+    ctaLabel={page.cta_label as string | null}
+    ctaUrl={page.cta_url as string | null}
+    whatsappEnabled={page.whatsapp_enabled as boolean | undefined}
   />
 </BaseLayout>

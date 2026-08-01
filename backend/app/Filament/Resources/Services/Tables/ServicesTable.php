@@ -2,7 +2,10 @@
 
 namespace App\Filament\Resources\Services\Tables;
 
+use App\Filament\Resources\Services\ServiceResource;
 use App\Models\Service;
+use App\Services\ServiceDuplicationService;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -71,6 +74,17 @@ class ServicesTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                Action::make('duplicate')
+                    ->label('تكرار')
+                    ->icon('heroicon-o-square-2-stack')
+                    ->color('gray')
+                    ->requiresConfirmation()
+                    ->action(function (Service $record): mixed {
+                        $duplicate = app(ServiceDuplicationService::class)
+                            ->duplicate($record, auth()->id());
+
+                        return redirect(ServiceResource::getUrl('edit', ['record' => $duplicate]));
+                    }),
                 DeleteAction::make()->label('حذف'),
                 RestoreAction::make()->label('استعادة'),
             ])

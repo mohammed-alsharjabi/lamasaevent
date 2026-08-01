@@ -59,6 +59,34 @@ class ContentExportService
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get();
+        $serviceGalleryIds = [];
+
+        foreach ($services as $service) {
+            if (! $service instanceof Service) {
+                continue;
+            }
+
+            $blocks = $service->getAttribute('content_blocks');
+
+            if (! is_array($blocks)) {
+                continue;
+            }
+
+            foreach ($blocks as $block) {
+                if (! is_array($block) || ($block['type'] ?? null) !== 'gallery') {
+                    continue;
+                }
+
+                foreach ((array) ($block['media_ids'] ?? []) as $mediaId) {
+                    $serviceGalleryIds[(int) $mediaId] = (int) $mediaId;
+                }
+            }
+        }
+
+        $serviceGalleryMedia = Media::query()
+            ->whereKey(array_values($serviceGalleryIds))
+            ->get()
+            ->keyBy('id');
         $areas = $published(Area::query())
             ->where('is_active', true)
             ->with('media')
@@ -110,6 +138,46 @@ class ContentExportService
                         ]
                         : null,
                 );
+
+                if ($record instanceof Service) {
+                    if ($record->uses_generated_defaults) {
+                        $cta = app(ServiceDefaultsService::class)->cta($record);
+                        $record->setAttribute('cta_label', $cta['label']);
+                        $record->setAttribute('cta_url', $cta['url']);
+                        $record->setAttribute('whatsapp_enabled', $cta['enabled']);
+                    }
+
+                    $blocks = $record->getAttribute('content_blocks');
+
+                    if (is_array($blocks)) {
+                        foreach ($blocks as &$block) {
+                            if (! is_array($block) || ($block['type'] ?? null) !== 'gallery') {
+                                continue;
+                            }
+
+                            $block['media'] = [];
+
+                            foreach ((array) ($block['media_ids'] ?? []) as $mediaId) {
+                                $media = $serviceGalleryMedia->get((int) $mediaId);
+
+                                if (! $media instanceof Media) {
+                                    continue;
+                                }
+
+                                $block['media'][] = [
+                                    'id' => $media->id,
+                                    'original_name' => $media->original_name,
+                                    'public_url' => $media->url(),
+                                    'alt' => $media->alt,
+                                    'caption' => $media->caption,
+                                ];
+                            }
+                        }
+                        unset($block);
+
+                        $record->setAttribute('content_blocks', $blocks);
+                    }
+                }
             }
         }
 

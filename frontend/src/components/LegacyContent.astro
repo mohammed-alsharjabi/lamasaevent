@@ -1,5 +1,6 @@
 ---
 import { integrateNativeListings } from "../lib/native-listings";
+import ManagedServiceBlock from "./ManagedServiceBlock.astro";
 import type { ContentBlock, ContentEntity } from "../types/content";
 
 interface Props {
@@ -8,15 +9,53 @@ interface Props {
   summary?: string | null;
   heroMedia?: ContentEntity["hero_media_summary"];
   routePath: string;
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+  whatsappEnabled?: boolean;
 }
 
-const { blocks, title, summary, heroMedia, routePath } = Astro.props;
+const {
+  blocks,
+  title,
+  summary,
+  heroMedia,
+  routePath,
+  ctaLabel,
+  ctaUrl,
+  whatsappEnabled,
+} = Astro.props;
 const integrated = integrateNativeListings(blocks, routePath);
+const hasManagedIntro = integrated.blocks.some((block) => block.type === "intro");
 ---
 
 <main id="main">
   {integrated.blocks.length > 0 ? (
-    integrated.blocks.map((block) => <Fragment set:html={block.html} />)
+    <>
+      {!hasManagedIntro && integrated.blocks.some((block) => !block.html) && (
+        <ManagedServiceBlock
+          block={{ type: "intro" }}
+          title={title}
+          summary={summary}
+          heroMedia={heroMedia}
+          ctaLabel={ctaLabel}
+          ctaUrl={ctaUrl}
+          whatsappEnabled={whatsappEnabled}
+        />
+      )}
+      {integrated.blocks.map((block) => block.html ? (
+        <Fragment set:html={block.html} />
+      ) : (
+        <ManagedServiceBlock
+          block={block}
+          title={title}
+          summary={summary}
+          heroMedia={heroMedia}
+          ctaLabel={ctaLabel}
+          ctaUrl={ctaUrl}
+          whatsappEnabled={whatsappEnabled}
+        />
+      ))}
+    </>
   ) : (
     <article class="container" style="padding-block: clamp(3rem, 8vw, 7rem);">
       {heroMedia && (

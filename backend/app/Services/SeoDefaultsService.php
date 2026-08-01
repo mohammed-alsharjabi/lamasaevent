@@ -4,7 +4,11 @@ namespace App\Services;
 
 use App\Contracts\ManagedContent;
 use App\Models\Article;
+use App\Models\ContactSetting;
+use App\Models\Faq;
+use App\Models\Media;
 use App\Models\SeoMeta;
+use App\Models\Service;
 use App\Models\SiteSetting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -23,21 +27,37 @@ class SeoDefaultsService
         if (! $seo instanceof SeoMeta) {
             $seo = new SeoMeta;
         }
-        $title = $this->title($content);
+        $usesGeneratedDefaults = $content instanceof Service
+            && $content->uses_generated_defaults;
+        $overrides = $usesGeneratedDefaults && is_array($content->seo_overrides)
+            ? $content->seo_overrides
+            : [];
+        $title = $this->title($content, $usesGeneratedDefaults);
         $description = $this->description($content, $title);
         $canonical = rtrim((string) config('app.production_url'), '/').$path;
 
-        if (blank($seo->title)) {
+        if ($usesGeneratedDefaults) {
+            $seo->title = $this->override($overrides, 'title', $title);
+            $seo->description = $this->override($overrides, 'description', $description);
+            $seo->canonical = $this->override($overrides, 'canonical', $canonical);
+            $seo->robots = $this->override(
+                $overrides,
+                'robots',
+                $content->isPublished() ? 'index,follow' : 'noindex,nofollow',
+            );
+        } elseif (blank($seo->title)) {
             $seo->title = $title;
         }
 
-        if (blank($seo->description)) {
+        if (! $usesGeneratedDefaults && blank($seo->description)) {
             $seo->description = $description;
         }
 
         if (
+            ! $usesGeneratedDefaults &&
             blank($seo->canonical)
             || (
+                ! $usesGeneratedDefaults &&
                 blank($content->getAttribute('legacy_path'))
                 && $this->isLocalUrl((string) $seo->canonical)
             )
@@ -45,16 +65,29 @@ class SeoDefaultsService
             $seo->canonical = $canonical;
         }
 
-        if (blank($seo->robots)) {
+        if (! $usesGeneratedDefaults && blank($seo->robots)) {
             $seo->robots = 'index, follow';
         }
 
         $seo->setAttribute(
             'keywords',
-            $this->normalizeKeywords($seo->getAttribute('keywords')),
+            $this->normalizeKeywords(
+                $usesGeneratedDefaults
+                    ? ($overrides['keywords'] ?? [])
+                    : $seo->getAttribute('keywords'),
+            ),
         );
 
-        if (blank($seo->getAttribute('open_graph'))) {
+        if ($usesGeneratedDefaults) {
+            $seo->setAttribute(
+                'open_graph',
+                $this->arrayOverride(
+                    $overrides,
+                    'open_graph',
+                    $this->openGraph($content, $seo),
+                ),
+            );
+        } elseif (blank($seo->getAttribute('open_graph'))) {
             $seo->setAttribute('open_graph', [
                 'type' => $content instanceof Article ? 'article' : 'website',
                 'locale' => 'ar_SA',
@@ -65,7 +98,19 @@ class SeoDefaultsService
             ]);
         }
 
-        if (blank($seo->getAttribute('twitter'))) {
+        if ($usesGeneratedDefaults) {
+            $seo->setAttribute(
+                'twitter',
+                $this->arrayOverride($overrides, 'twitter', [
+                    'card' => filled($seo->open_graph['image'] ?? null)
+                        ? 'summary_large_image'
+                        : 'summary',
+                    'title' => (string) $seo->title,
+                    'description' => (string) $seo->description,
+                    'image' => $seo->open_graph['image'] ?? null,
+                ]),
+            );
+        } elseif (blank($seo->getAttribute('twitter'))) {
             $seo->setAttribute('twitter', [
                 'card' => 'summary',
                 'title' => (string) $seo->title,
@@ -73,14 +118,31 @@ class SeoDefaultsService
             ]);
         }
 
-        if (blank($seo->getAttribute('hreflang'))) {
+        if ($usesGeneratedDefaults) {
+            $seo->setAttribute(
+                'hreflang',
+                $this->arrayOverride($overrides, 'hreflang', [
+                    ['lang' => 'ar-SA', 'href' => (string) $seo->canonical],
+                    ['lang' => 'x-default', 'href' => (string) $seo->canonical],
+                ]),
+            );
+        } elseif (blank($seo->getAttribute('hreflang'))) {
             $seo->setAttribute('hreflang', [
                 ['lang' => 'ar-SA', 'href' => (string) $seo->canonical],
                 ['lang' => 'x-default', 'href' => (string) $seo->canonical],
             ]);
         }
 
-        if ($seo->getAttribute('json_ld') === null) {
+        if ($usesGeneratedDefaults) {
+            $seo->setAttribute(
+                'json_ld',
+                $this->arrayOverride(
+                    $overrides,
+                    'json_ld',
+                    [$this->serviceSchema($content, $seo)],
+                ),
+            );
+        } elseif ($seo->getAttribute('json_ld') === null) {
             $seo->setAttribute('json_ld', []);
         }
 
@@ -124,13 +186,21 @@ class SeoDefaultsService
         return array_slice(array_values($normalized), 0, 20);
     }
 
-    private function title(Model $content): string
+    private function title(Model $content, bool $includeBrand = false): string
     {
         $title = trim((string) (
             $content->getAttribute('title')
             ?: $content->getAttribute('name')
             ?: config('app.name')
         ));
+
+        if ($includeBrand) {
+            $brand = $this->siteName();
+
+            if ($brand !== '' && ! str_contains(mb_strtolower($title), mb_strtolower($brand))) {
+                $title .= ' | '.$brand;
+            }
+        }
 
         return Str::limit($title, 70, '');
     }
@@ -164,5 +234,92 @@ class SeoDefaultsService
         return $host === 'localhost'
             || $host === '127.0.0.1'
             || $host === '::1';
+    }
+
+    /** @param array<string, mixed> $overrides */
+    private function override(array $overrides, string $key, string $default): string
+    {
+        return filled($overrides[$key] ?? null)
+            ? trim((string) $overrides[$key])
+            : $default;
+    }
+
+    /**
+     * @param  array<string, mixed>  $overrides
+     * @param  array<mixed>  $default
+     * @return array<mixed>
+     */
+    private function arrayOverride(array $overrides, string $key, array $default): array
+    {
+        $value = $overrides[$key] ?? null;
+
+        return is_array($value) && $value !== [] ? $value : $default;
+    }
+
+    /** @return array<string, string|null> */
+    private function openGraph(Model $content, SeoMeta $seo): array
+    {
+        $heroMedia = $content instanceof Service
+            ? $content->heroMedia()->first()
+            : null;
+        $image = $heroMedia instanceof Media ? $heroMedia->url() : null;
+
+        return [
+            'type' => 'website',
+            'locale' => 'ar_SA',
+            'site_name' => $this->siteName(),
+            'title' => (string) $seo->title,
+            'description' => (string) $seo->description,
+            'url' => (string) $seo->canonical,
+            'image' => $image,
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    private function serviceSchema(Service $service, SeoMeta $seo): array
+    {
+        $contact = ContactSetting::query()->first();
+        $heroMedia = $service->heroMedia()->first();
+        $image = $heroMedia instanceof Media ? $heroMedia->url() : null;
+        $faqs = $service->faqs()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get(['question', 'answer']);
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Service',
+            'name' => $service->title,
+            'description' => (string) $seo->description,
+            'url' => (string) $seo->canonical,
+            'inLanguage' => 'ar-SA',
+            'provider' => array_filter([
+                '@type' => 'Organization',
+                'name' => $this->siteName(),
+                'telephone' => $contact?->phone,
+                'email' => $contact?->email,
+            ]),
+            'image' => $image,
+        ];
+
+        if ($faqs->isNotEmpty()) {
+            $schema['subjectOf'] = [
+                '@type' => 'FAQPage',
+                'mainEntity' => $faqs
+                    ->filter(fn ($faq): bool => $faq instanceof Faq)
+                    ->map(fn (Faq $faq): array => [
+                        '@type' => 'Question',
+                        'name' => $faq->question,
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => $faq->answer,
+                        ],
+                    ])->values()->all(),
+            ];
+        }
+
+        return array_filter(
+            $schema,
+            fn (mixed $value): bool => $value !== null && $value !== '',
+        );
     }
 }

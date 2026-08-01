@@ -12,14 +12,24 @@ export interface SeoMeta {
 }
 
 export interface ContentBlock {
-  type: "article" | "section" | "navigation" | "component";
-  tag: string;
-  id: string | null;
-  classes: string[];
-  headings: Array<{ level: string; id: string | null; text: string }>;
-  paragraphs: string[];
-  links: Array<{ href: string; text: string }>;
-  html: string;
+  type: string;
+  tag?: string;
+  id?: string | null;
+  classes?: string[];
+  headings?: Array<{ level: string; id: string | null; text: string }>;
+  paragraphs?: string[];
+  links?: Array<{ href: string; text: string }>;
+  html?: string;
+  heading?: string | null;
+  lead?: string | null;
+  body?: string | null;
+  text?: string | null;
+  label?: string | null;
+  url?: string | null;
+  items?: Array<Record<string, unknown>>;
+  media_ids?: number[];
+  media?: GalleryMedia[];
+  [key: string]: unknown;
 }
 
 export interface ContentEntity {

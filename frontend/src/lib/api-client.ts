@@ -53,20 +53,35 @@ const seoSchema = z.looseObject({
   });
 
 const contentBlockSchema = z.looseObject({
-    type: z.enum(["article", "section", "navigation", "component"]),
-    tag: z.string(),
-    id: z.string().nullable(),
-    classes: z.array(z.string()),
+    type: z.string().min(1),
+    tag: z.string().optional(),
+    id: z.string().nullable().optional(),
+    classes: z.array(z.string()).optional(),
     headings: z.array(
       z.object({
         level: z.string(),
         id: z.string().nullable(),
         text: z.string(),
       }),
-    ),
-    paragraphs: z.array(z.string()),
-    links: z.array(z.object({ href: z.string(), text: z.string() })),
-    html: z.string(),
+    ).optional(),
+    paragraphs: z.array(z.string()).optional(),
+    links: z.array(z.object({ href: z.string(), text: z.string() })).optional(),
+    html: z.string().optional(),
+    heading: z.string().nullable().optional(),
+    lead: z.string().nullable().optional(),
+    body: z.string().nullable().optional(),
+    text: z.string().nullable().optional(),
+    label: z.string().nullable().optional(),
+    url: z.string().nullable().optional(),
+    items: z.array(z.record(z.string(), z.unknown())).optional(),
+    media_ids: z.array(z.number().int()).optional(),
+    media: z.array(z.looseObject({
+      id: z.number().int(),
+      original_name: z.string(),
+      public_url: z.string(),
+      alt: z.string().nullable(),
+      caption: z.string().nullable(),
+    })).optional(),
   });
 
 const entitySchema = z.looseObject({

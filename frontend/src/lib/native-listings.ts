@@ -288,10 +288,14 @@ const integrate = (
   }
 
   for (let index = 0; index < blocks.length; index += 1) {
+    if (!blocks[index].html) {
+      continue;
+    }
+
     const injected =
       position === "before"
-        ? injectBeforeClass(blocks[index].html, className, marker, markup)
-        : injectIntoClass(blocks[index].html, className, marker, markup);
+        ? injectBeforeClass(blocks[index].html as string, className, marker, markup)
+        : injectIntoClass(blocks[index].html as string, className, marker, markup);
 
     if (injected === null) {
       continue;

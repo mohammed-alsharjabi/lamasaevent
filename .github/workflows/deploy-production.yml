@@ -36,6 +36,107 @@ jobs:
           npm run check
           npm run build
 
+      - name: Back up and deploy the Laravel CMS
+        env:
+          SSH_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
+          SSH_PORT: ${{ secrets.HOSTINGER_SSH_PORT }}
+          SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
+          SSH_KEY: ${{ secrets.HOSTINGER_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.HOSTINGER_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+
+          test -n "$SSH_HOST"
+          test -n "$SSH_PORT"
+          test -n "$SSH_USER"
+          test -n "$SSH_KEY"
+          test -n "$SSH_KNOWN_HOSTS"
+
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$SSH_KEY" > "$HOME/.ssh/hostinger_deploy"
+          chmod 600 "$HOME/.ssh/hostinger_deploy"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+          ssh \
+            -i "$HOME/.ssh/hostinger_deploy" \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -p "$SSH_PORT" \
+            "$SSH_USER@$SSH_HOST" 'bash -se' <<'REMOTE'
+          set -euo pipefail
+          umask 077
+
+          app_root="$HOME/apps/lamasaevent"
+          backend_root="$app_root/backend"
+          backup_root="$HOME/deployment_backups/production"
+          timestamp="$(date -u +%Y%m%d-%H%M%S)"
+
+          test -d "$app_root/.git"
+          test -f "$backend_root/artisan"
+          mkdir -p "$backup_root"
+
+          cd "$app_root"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          git fetch --prune origin feature/admin-cms
+
+          code_backup="$backup_root/backend-before-$timestamp.tar.gz"
+          tar \
+            --exclude='backend/vendor' \
+            --exclude='backend/storage/logs/*' \
+            --exclude='backend/storage/framework/cache/*' \
+            --exclude='backend/storage/framework/sessions/*' \
+            --exclude='backend/storage/framework/views/*' \
+            -czf "$code_backup" backend
+          test -s "$code_backup"
+
+          cd "$backend_root"
+          dump_binary="$(command -v mysqldump || command -v mariadb-dump)"
+          test -n "$dump_binary"
+          db_host="$(php artisan tinker --execute='echo config("database.connections.mysql.host");')"
+          db_port="$(php artisan tinker --execute='echo config("database.connections.mysql.port");')"
+          db_name="$(php artisan tinker --execute='echo config("database.connections.mysql.database");')"
+          db_user="$(php artisan tinker --execute='echo config("database.connections.mysql.username");')"
+          db_password="$(php artisan tinker --execute='echo config("database.connections.mysql.password");')"
+          database_backup="$backup_root/database-before-$timestamp.sql.gz"
+          MYSQL_PWD="$db_password" "$dump_binary" \
+            --host="$db_host" \
+            --port="$db_port" \
+            --user="$db_user" \
+            --single-transaction \
+            --quick \
+            --skip-lock-tables \
+            "$db_name" | gzip -9 > "$database_backup"
+          unset db_password MYSQL_PWD
+          test -s "$database_backup"
+
+          cd "$app_root"
+          git merge --ff-only origin/feature/admin-cms
+
+          cd "$backend_root"
+          if command -v composer2 >/dev/null 2>&1; then
+            composer_command='composer2'
+          else
+            composer_command='composer'
+          fi
+          "$composer_command" install \
+            --no-dev \
+            --prefer-dist \
+            --no-interaction \
+            --no-progress \
+            --optimize-autoloader
+          php artisan migrate --force --no-interaction
+          php artisan storage:link --no-interaction || true
+          php artisan optimize:clear
+          php artisan optimize
+          php artisan queue:restart
+          php artisan migrate:status --no-ansi | grep '2026_08_01_000000' | grep -q 'Ran'
+
+          echo "LARAVEL_DEPLOYED=$(git rev-parse --short HEAD)"
+          echo "CODE_BACKUP=$code_backup"
+          echo "DATABASE_BACKUP=$database_backup"
+          REMOTE
+
       - name: Publish the verified production build
         id: publish
         env:

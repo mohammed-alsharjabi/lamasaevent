@@ -1,0 +1,229 @@
+---
+import type { ContentBlock, ContentEntity, GalleryMedia } from "../types/content";
+
+interface Props {
+  block: ContentBlock;
+  title?: string;
+  summary?: string | null;
+  heroMedia?: ContentEntity["hero_media_summary"];
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+  whatsappEnabled?: boolean;
+}
+
+const {
+  block,
+  title,
+  summary,
+  heroMedia,
+  ctaLabel,
+  ctaUrl,
+  whatsappEnabled = true,
+} = Astro.props;
+const items = Array.isArray(block.items) ? block.items : [];
+const media = Array.isArray(block.media) ? block.media as GalleryMedia[] : [];
+const heading = typeof block.heading === "string" ? block.heading : null;
+const blockUrl = typeof block.url === "string" && block.url !== "" ? block.url : ctaUrl;
+const blockLabel = typeof block.label === "string" && block.label !== "" ? block.label : ctaLabel;
+---
+
+{block.type === "intro" && (
+  <header class="managed-service-hero container">
+    {heroMedia && (
+      <img
+        src={heroMedia.public_url}
+        alt={heroMedia.alt || title || heroMedia.original_name}
+        loading="eager"
+        decoding="async"
+      />
+    )}
+    <div class="managed-service-hero__body">
+      <h1>{heading || title}</h1>
+      {block.lead ? <div class="managed-rich" set:html={block.lead} /> : summary && <p>{summary}</p>}
+    </div>
+  </header>
+)}
+
+{block.type === "text" && (
+  <section class="managed-service-section container">
+    {heading && <h2>{heading}</h2>}
+    {block.body && <div class="managed-rich" set:html={block.body} />}
+  </section>
+)}
+
+{(block.type === "features" || block.type === "steps") && (
+  <section class="managed-service-section container">
+    {heading && <h2>{heading}</h2>}
+    <div class="managed-service-grid">
+      {items.map((item, index) => (
+        <article class="managed-service-card">
+          {block.type === "steps" && <span class="managed-service-card__number">{index + 1}</span>}
+          {typeof item.title === "string" && item.title !== "" && <h3>{item.title}</h3>}
+          {typeof item.description === "string" && item.description !== "" && <p>{item.description}</p>}
+        </article>
+      ))}
+    </div>
+  </section>
+)}
+
+{block.type === "gallery" && media.length > 0 && (
+  <section class="managed-service-section container">
+    {heading && <h2>{heading}</h2>}
+    <div class="managed-service-gallery">
+      {media.map((image) => (
+        <figure>
+          <img
+            src={image.public_url}
+            alt={image.alt || image.original_name}
+            loading="lazy"
+            decoding="async"
+          />
+          {image.caption && <figcaption>{image.caption}</figcaption>}
+        </figure>
+      ))}
+    </div>
+  </section>
+)}
+
+{block.type === "cta" && (
+  <section class="managed-service-cta container">
+    <h2>{heading || "هل ترغب في هذه الخدمة؟"}</h2>
+    {block.text && <p>{block.text}</p>}
+    {whatsappEnabled && blockUrl && (
+      <a href={blockUrl}>{blockLabel || "تواصل معنا"}</a>
+    )}
+  </section>
+)}
+
+{block.type === "faq" && items.length > 0 && (
+  <section class="managed-service-section container">
+    <h2>{heading || "الأسئلة الشائعة"}</h2>
+    <div class="managed-service-faqs">
+      {items.map((item) => (
+        typeof item.question === "string" && typeof item.answer === "string" && (
+          <details>
+            <summary>{item.question}</summary>
+            <p>{item.answer}</p>
+          </details>
+        )
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .managed-service-hero {
+    padding-block: clamp(3rem, 8vw, 7rem) clamp(2rem, 5vw, 4rem);
+  }
+
+  .managed-service-hero img {
+    display: block;
+    width: 100%;
+    max-height: 34rem;
+    object-fit: cover;
+    border-radius: 1rem;
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .managed-service-hero__body {
+    max-width: 54rem;
+  }
+
+  .managed-service-hero h1 {
+    margin: 0 0 0.75rem;
+  }
+
+  .managed-service-hero p,
+  .managed-service-card p,
+  .managed-service-cta p {
+    color: var(--text-muted, #596579);
+  }
+
+  .managed-service-section,
+  .managed-service-cta {
+    margin-block: clamp(1rem, 3vw, 2rem);
+    padding-block: clamp(2rem, 5vw, 4rem);
+  }
+
+  .managed-service-section h2,
+  .managed-service-cta h2 {
+    margin-top: 0;
+  }
+
+  .managed-service-grid,
+  .managed-service-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1rem;
+  }
+
+  .managed-service-card {
+    padding: 1.25rem;
+    border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+    border-radius: 1rem;
+    background: color-mix(in srgb, currentColor 3%, transparent);
+  }
+
+  .managed-service-card__number {
+    display: grid;
+    width: 2.25rem;
+    height: 2.25rem;
+    place-items: center;
+    border-radius: 999px;
+    color: white;
+    background: var(--brand, #173f38);
+    font-weight: 800;
+  }
+
+  .managed-service-gallery figure {
+    margin: 0;
+  }
+
+  .managed-service-gallery img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+
+  .managed-service-gallery figcaption {
+    padding-top: 0.5rem;
+    color: var(--text-muted, #596579);
+    font-size: 0.9rem;
+  }
+
+  .managed-service-cta {
+    text-align: center;
+    color: white;
+    border-radius: 1.25rem;
+    background: var(--brand, #173f38);
+  }
+
+  .managed-service-cta p {
+    color: color-mix(in srgb, white 80%, transparent);
+  }
+
+  .managed-service-cta a {
+    display: inline-flex;
+    padding: 0.75rem 1.2rem;
+    color: var(--brand, #173f38);
+    border-radius: 999px;
+    background: white;
+    text-decoration: none;
+    font-weight: 800;
+  }
+
+  .managed-service-faqs details {
+    padding-block: 1rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  }
+
+  .managed-service-faqs summary {
+    cursor: pointer;
+    font-weight: 800;
+  }
+
+  :global(.managed-rich > :first-child) { margin-top: 0; }
+  :global(.managed-rich > :last-child) { margin-bottom: 0; }
+</style>

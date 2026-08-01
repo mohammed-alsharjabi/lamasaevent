@@ -93,16 +93,16 @@ test("local administrator can enter the Arabic Filament dashboard", async ({
   await expect(page.getByText("لوحة معلومات لمسة")).toBeVisible();
 
   await page.goto("http://127.0.0.1:8000/admin/services/create");
-  await page
-    .getByRole("region", {
-      name: "تحسين محركات البحث وبيانات المشاركة",
-    })
-    .getByRole("button")
-    .click();
-  await expect(page.getByLabel("Canonical URL (اختياري)")).not.toHaveAttribute(
-    "required",
-  );
-  await expect(page.getByLabel("Meta Keywords (اختياري)")).toBeVisible();
+  await expect(page.getByRole("region", { name: "الإضافة السريعة" })).toBeVisible();
+  await expect(page.getByLabel("اسم الخدمة*")).toBeVisible();
+  await expect(page.getByLabel("قالب صفحة الخدمة")).toBeVisible();
+
+  const seo = page.getByRole("region", { name: "SEO" });
+  await seo.getByRole("button").click();
+  await expect(seo.locator("input[type='url']")).not.toHaveAttribute("required");
+  await expect(seo.getByText("Meta Keywords — اختياري")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Open Graph" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Schema" })).toBeVisible();
 
   await page.close();
 });

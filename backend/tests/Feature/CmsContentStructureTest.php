@@ -150,13 +150,13 @@ class CmsContentStructureTest extends TestCase
         app(ContentPublishingService::class)->sync($service);
 
         $seo = $service->fresh()->seoMeta;
-        $this->assertSame('خدمة بدون حقول SEO', $seo->title);
+        $this->assertSame('خدمة بدون حقول SEO | لمسة التميز CMS', $seo->title);
         $this->assertSame('وصف مختصر للخدمة الجديدة.', $seo->description);
         $this->assertSame(
             'https://lams-event.com'.$service->routePath(),
             $seo->canonical,
         );
-        $this->assertSame('index, follow', $seo->robots);
+        $this->assertSame('index,follow', $seo->robots);
         $this->assertSame([], $seo->keywords);
         $this->assertSame($seo->canonical, $seo->open_graph['url']);
     }
@@ -167,9 +167,9 @@ class CmsContentStructureTest extends TestCase
             'title' => 'خدمة بكلمات مفتاحية',
             'status' => 'published',
             'published_at' => now(),
-        ]);
-        $service->seoMeta()->create([
-            'keywords' => ['تنظيم حفلات، مناسبات الرياض', 'تنظيم حفلات'],
+            'seo_overrides' => [
+                'keywords' => ['تنظيم حفلات، مناسبات الرياض', 'تنظيم حفلات'],
+            ],
         ]);
 
         app(ContentPublishingService::class)->sync($service);
