@@ -99,14 +99,28 @@ jobs:
           db_user="$(php artisan tinker --execute='echo config("database.connections.mysql.username");')"
           db_password="$(php artisan tinker --execute='echo config("database.connections.mysql.password");')"
           database_backup="$backup_root/database-before-$timestamp.sql.gz"
-          MYSQL_PWD="$db_password" "$dump_binary" \
-            --host="$db_host" \
-            --port="$db_port" \
-            --user="$db_user" \
-            --single-transaction \
-            --quick \
-            --skip-lock-tables \
-            "$db_name" | gzip -9 > "$database_backup"
+
+          dump_options=(
+            --user="$db_user"
+            --single-transaction
+            --quick
+            --skip-lock-tables
+          )
+
+          if [[ "$db_host" == 'localhost' ]]; then
+            # Hostinger grants this database user through the local Unix socket.
+            # Passing --host=localhost may resolve to IPv6 (::1) on CloudLinux.
+            MYSQL_PWD="$db_password" "$dump_binary" \
+              --protocol=SOCKET \
+              "${dump_options[@]}" \
+              "$db_name" | gzip -9 > "$database_backup"
+          else
+            MYSQL_PWD="$db_password" "$dump_binary" \
+              --host="$db_host" \
+              --port="$db_port" \
+              "${dump_options[@]}" \
+              "$db_name" | gzip -9 > "$database_backup"
+          fi
           unset db_password MYSQL_PWD
           test -s "$database_backup"
 
