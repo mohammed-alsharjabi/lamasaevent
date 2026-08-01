@@ -1,7 +1,7 @@
 {
     "schema_version": 2,
     "production_origin": "https://lams-event.com",
-    "generated_at": "2026-08-01T21:00:00+03:00",
+    "generated_at": "2026-08-01T21:02:44+03:00",
     "pages": [
         {
             "id": 1,
@@ -4209,6 +4209,128 @@
         }
     ],
     "service_categories": [
+        {
+            "id": 12,
+            "title": "الكوش وتقديم الأفراح",
+            "slug": "alkosh-otkdym-alafrah",
+            "summary": "\nتصميم وتنفيذ كوش الأفراح ومنصات تقديم العروس في قاعات واستراحات الرياض، بتنسيقات راقية تراعي مساحة الموقع والإضاءة ومسار التصوير.\n",
+            "content_blocks": {
+                "version": 1,
+                "sections": [
+                    {
+                        "type": "intro",
+                        "title": "الكوش وتقديم الأفراح",
+                        "content": "نقدم تصميم وتنفيذ كوش الأفراح ومنصات تقديم العروس في الرياض، مع اختيار الأبعاد والألوان والعناصر بناءً على مساحة القاعة أو الاستراحة وطبيعة الإضاءة ومسار دخول العروس."
+                    },
+                    {
+                        "type": "features",
+                        "title": "خدمات هذا التصنيف",
+                        "items": [
+                            "كوش أفراح بتصميم يناسب مساحة القاعة",
+                            "كوش فاخرة للأعراس والمناسبات الكبيرة",
+                            "منصات تقديم العروس ومسارات الدخول",
+                            "تنسيق الإضاءة والخلفيات ومناطق التصوير",
+                            "التركيب والتجهيز والفك حسب موعد القاعة"
+                        ]
+                    },
+                    {
+                        "type": "process",
+                        "title": "آلية التنفيذ",
+                        "items": [
+                            "استلام تفاصيل المناسبة واسم الموقع",
+                            "مراجعة أبعاد المسرح أو صور القاعة",
+                            "اختيار التصميم والألوان المناسبة",
+                            "تأكيد موعد التركيب والتفكيك",
+                            "تنفيذ وتجهيز الموقع قبل حضور الضيوف"
+                        ]
+                    },
+                    {
+                        "type": "cta",
+                        "title": "ابدئي التخطيط لكوشة مناسبتك",
+                        "text": "أرسلي تاريخ المناسبة واسم القاعة أو الاستراحة للحصول على تصور أولي وعرض مناسب.",
+                        "label": "طلب استشارة عبر واتساب",
+                        "url": "https://wa.me/"
+                    }
+                ]
+            },
+            "status": "published",
+            "published_at": "2026-08-01T18:00:00.000000Z",
+            "legacy_path": null,
+            "sort_order": 0,
+            "created_at": "2026-08-01T18:02:44.000000Z",
+            "updated_at": "2026-08-01T18:02:44.000000Z",
+            "deleted_at": null,
+            "hero_media_id": 89,
+            "created_by": 1,
+            "updated_by": 1,
+            "is_active": true,
+            "public_path": "/services/category/alkosh-otkdym-alafrah/",
+            "hero_media_summary": {
+                "original_name": "ChatGPT Image 29 يوليو 2026، 11_47_58 م (2).webp",
+                "public_url": "https://lams-event.com/storage/media/2026/08/0f68e2a0-8708-4326-8188-2949d7e4dda9.webp",
+                "alt": " تصميم وتنفيذ كوش الأفراح ومنصات"
+            },
+            "seo_meta": {
+                "id": 171,
+                "seoable_type": "App\\Models\\ServiceCategory",
+                "seoable_id": 12,
+                "title": "الكوش وتقديم الأفراح في الرياض | لمسة التميز",
+                "description": "\nتصميم وتنفيذ كوش الأفراح وتقديم العروس في الرياض بتنسيقات راقية تناسب القاعات والاستراحات، مع تجهيز الإضاءة والخلفيات ومسارات التصوير.\n",
+                "canonical": "https://lams-event.com/services/category/alkosh-otkdym-alafrah/",
+                "robots": "index, follow",
+                "keywords": [
+                    "كوش أفراح الرياض",
+                    "كوشة زفاف",
+                    "تنسيق كوش",
+                    "تقديم عروس",
+                    "كوش فخمة بالرياض",
+                    "تنسيق أفراح الرياض"
+                ],
+                "open_graph": {
+                    "title": "الكوش وتقديم الأفراح في الرياض | لمسة التميز",
+                    "description": "تصميم وتنفيذ كوش الأفراح ومنصات تقديم العروس في الرياض بتنسيق يناسب القاعة والإضاءة والتصوير.",
+                    "type": "website",
+                    "url": "https://lams-event.com/services/category/kosh-wedding-presentation/",
+                    "locale": "ar_SA",
+                    "site_name": "لمسة التميز"
+                },
+                "twitter": {
+                    "title": "الكوش وتقديم الأفراح في الرياض | لمسة التميز",
+                    "description": "تصميم وتنفيذ كوش الأفراح ومنصات تقديم العروس في الرياض بتنسيق يناسب القاعة والإضاءة والتصوير.",
+                    "type": "website",
+                    "url": "https://lams-event.com/services/category/kosh-wedding-presentation/",
+                    "locale": "ar_SA",
+                    "site_name": "لمسة التميز"
+                },
+                "hreflang": [
+                    {
+                        "lang": "ar-SA",
+                        "url": "https://lams-event.com/services/category/kosh-wedding-presentation/"
+                    },
+                    {
+                        "lang": "x-default",
+                        "url": "https://lams-event.com/services/category/kosh-wedding-presentation/"
+                    }
+                ],
+                "json_ld": {
+                    "@context": "https://schema.org",
+                    "@type": "CollectionPage",
+                    "name": "الكوش وتقديم الأفراح في الرياض",
+                    "description": "تصميم وتنفيذ كوش الأفراح ومنصات تقديم العروس في قاعات واستراحات الرياض.",
+                    "url": "https://lams-event.com/services/category/kosh-wedding-presentation/",
+                    "inLanguage": "ar-SA",
+                    "isPartOf": {
+                        "@type": "WebSite",
+                        "name": "لمسة التميز",
+                        "url": "https://lams-event.com/"
+                    }
+                },
+                "json_ld_sha256": "bb856ec8ad7d3a4e0b8949eb7f1ad76286657e196ce26b0a7e3b7f9dcb4cad02",
+                "created_at": "2026-08-01T18:02:44.000000Z",
+                "updated_at": "2026-08-01T18:02:44.000000Z"
+            },
+            "faqs": []
+        },
         {
             "id": 1,
             "title": "الكوش وتقديم الأفراح",
@@ -85434,6 +85556,20 @@
             "published_at": "2026-07-30T11:52:00.000000Z",
             "created_at": "2026-07-30T11:52:18.000000Z",
             "updated_at": "2026-08-01T05:01:15.000000Z"
+        },
+        {
+            "id": 171,
+            "path": "/services/category/alkosh-otkdym-alafrah/",
+            "exact_url": "https://lams-event.com/services/category/alkosh-otkdym-alafrah/",
+            "routable_type": "App\\Models\\ServiceCategory",
+            "routable_id": 12,
+            "is_legacy": false,
+            "slug_locked": true,
+            "is_published": true,
+            "legacy_html_sha256": null,
+            "published_at": "2026-08-01T18:00:00.000000Z",
+            "created_at": "2026-08-01T18:02:44.000000Z",
+            "updated_at": "2026-08-01T18:02:44.000000Z"
         }
     ],
     "redirects": [],
@@ -87530,6 +87666,19 @@
             "is_included": true,
             "created_at": "2026-07-30T11:52:18.000000Z",
             "updated_at": "2026-08-01T05:01:15.000000Z"
+        },
+        {
+            "id": 171,
+            "route_registry_id": 171,
+            "loc": "https://lams-event.com/services/category/alkosh-otkdym-alafrah/",
+            "path": "/services/category/alkosh-otkdym-alafrah/",
+            "lastmod": "2026-08-01",
+            "changefreq": "monthly",
+            "priority": "0.80",
+            "position": 171,
+            "is_included": true,
+            "created_at": "2026-08-01T18:02:44.000000Z",
+            "updated_at": "2026-08-01T18:02:44.000000Z"
         }
     ],
     "contact": {
