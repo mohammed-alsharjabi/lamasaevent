@@ -91,6 +91,21 @@
                             @endforeach
                         </section>
                         @break
+                    @case('related_services')
+                        <section class="section">
+                            <h2>{{ $block['heading'] ?? 'خدمات مرتبطة' }}</h2>
+                            <div class="grid">
+                                @foreach(($block['service_ids'] ?? []) as $serviceId)
+                                    @if($related = $relatedServices->get($serviceId))
+                                        <article class="card">
+                                            <h3>{{ $related->title }}</h3>
+                                            @if($related->excerpt)<p>{{ $related->excerpt }}</p>@endif
+                                        </article>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </section>
+                        @break
                     @default
                         {!! $block['html'] ?? '' !!}
                 @endswitch

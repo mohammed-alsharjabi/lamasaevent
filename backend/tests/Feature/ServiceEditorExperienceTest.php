@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Filament\Resources\Services\Pages\CreateService;
+use App\Filament\Resources\Services\Pages\EditService;
 use App\Models\ContactSetting;
 use App\Models\Role;
 use App\Models\Service;
@@ -11,7 +12,10 @@ use App\Models\SiteSetting;
 use App\Models\User;
 use App\Services\ContentExportService;
 use App\Services\ContentPublishingService;
+use App\Services\ServiceContentSuggestionService;
 use App\Services\ServiceDuplicationService;
+use App\Services\ServiceFormDataMapper;
+use App\Services\ServiceSeoAuditService;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -69,9 +73,14 @@ class ServiceEditorExperienceTest extends TestCase
         ]);
 
         Livewire::test(CreateService::class)
-            ->assertSee('الإضافة السريعة')
+            ->assertSee('معلومات الخدمة')
             ->assertSee('وضع المطور')
-            ->assertSee('ابدأ بقالب جاهز')
+            ->assertDontSee('قالب جاهز')
+            ->assertDontSee('محتوى صفحة الخدمة')
+            ->assertDontSee('زر الإجراء وواتساب')
+            ->assertDontSee('داخل Laravel')
+            ->assertSee('حفظ كمسودة')
+            ->assertSee('نشر وإضافة خدمة جديدة')
             ->fillForm([
                 'title' => 'تنسيق حفلات الشركات',
                 'service_category_id' => $category->id,
@@ -110,7 +119,9 @@ class ServiceEditorExperienceTest extends TestCase
         $exported = app(ContentExportService::class)
             ->build()['services']
             ->firstWhere('id', $service->id);
-        $this->assertSame('features', $exported->content_blocks[1]['type']);
+        $this->assertTrue(collect($exported->content_blocks)->contains(
+            fn (array $block): bool => ($block['type'] ?? null) === 'features',
+        ));
         $this->assertArrayNotHasKey('seo_overrides', $exported->toArray());
     }
 
@@ -142,6 +153,167 @@ class ServiceEditorExperienceTest extends TestCase
             'https://lams-event.com'.$service->routePath(),
             $service->fresh()->seoMeta->canonical,
         );
+    }
+
+    public function test_first_class_overrides_and_automatic_schema_are_exposed_as_final_api_values(): void
+    {
+        $service = Service::create([
+            'title' => 'تنسيق مناسبة خاصة',
+            'excerpt' => 'وصف أساسي للخدمة.',
+            'status' => 'published',
+            'slug_override' => 'private-event-riyadh',
+            'seo_title_override' => 'عنوان مخصص للخدمة',
+            'meta_description_override' => 'وصف مخصص وواضح لنتيجة البحث.',
+            'og_title_override' => 'عنوان مخصص للمشاركة',
+            'target_search_phrase' => 'تنسيق مناسبة خاصة',
+            'uses_generated_defaults' => true,
+        ]);
+        app(ContentPublishingService::class)->sync($service);
+        $service->refresh();
+
+        $this->assertSame('private-event-riyadh', $service->slug);
+        $this->assertSame('عنوان مخصص للخدمة', $service->seoMeta->title);
+        $this->assertSame('وصف مخصص وواضح لنتيجة البحث.', $service->seoMeta->description);
+        $this->assertSame('عنوان مخصص للمشاركة', $service->seoMeta->open_graph['title']);
+        $this->assertSame('index,follow', $service->seoMeta->robots);
+        $this->assertSame('Service', $service->seoMeta->json_ld[0]['@type']);
+        $this->assertSame('BreadcrumbList', $service->seoMeta->json_ld[1]['@type']);
+
+        $exported = app(ContentExportService::class)
+            ->build()['services']
+            ->firstWhere('id', $service->id);
+        $this->assertSame('عنوان مخصص للخدمة', $exported->seoMeta->title);
+        $this->assertArrayNotHasKey('target_search_phrase', $exported->toArray());
+
+        Livewire::test(EditService::class, ['record' => $service->getRouteKey()])
+            ->assertFormSet([
+                'seo_title_override' => 'عنوان مخصص للخدمة',
+                'meta_description_override' => 'وصف مخصص وواضح لنتيجة البحث.',
+                'slug_override' => 'private-event-riyadh',
+                'target_search_phrase' => 'تنسيق مناسبة خاصة',
+            ]);
+    }
+
+    public function test_simple_fields_round_trip_to_visual_blocks_without_duplicates(): void
+    {
+        $stored = app(ServiceFormDataMapper::class)->forStorage([
+            'quick_details' => '<p>تفاصيل الخدمة</p>',
+            'quick_gallery_media_ids' => [8, 8, 9],
+            'cta_overrides' => ['mode' => 'hide'],
+            'content_blocks' => [
+                ['type' => 'related_services', 'heading' => 'قد يناسبك', 'service_ids' => [2, 2, 3]],
+            ],
+        ]);
+
+        $this->assertSame(['text', 'gallery', 'related_services'], array_column($stored['content_blocks'], 'type'));
+        $this->assertSame([8, 9], $stored['content_blocks'][1]['media_ids']);
+        $this->assertSame([2, 3], $stored['content_blocks'][2]['service_ids']);
+        $this->assertSame('hide', $stored['cta_overrides']['mode']);
+
+        $service = new Service([
+            'title' => 'خدمة تجريبية',
+            'content_blocks' => $stored['content_blocks'],
+            'cta_overrides' => $stored['cta_overrides'],
+            'uses_generated_defaults' => true,
+        ]);
+        $form = app(ServiceFormDataMapper::class)->forForm([
+            'cta_overrides' => $stored['cta_overrides'],
+        ], $service);
+
+        $this->assertSame('<p>تفاصيل الخدمة</p>', $form['quick_details']);
+        $this->assertSame([8, 9], $form['quick_gallery_media_ids']);
+        $this->assertSame('hide', $form['cta_overrides']['mode']);
+        $this->assertSame('related_services', $form['content_blocks'][0]['type']);
+    }
+
+    public function test_suggestions_are_editable_and_never_publish_content(): void
+    {
+        $suggestions = app(ServiceContentSuggestionService::class)->suggest([
+            'title' => 'Neymar Events FCB',
+            'excerpt' => '',
+        ]);
+
+        $this->assertTrue($suggestions['apply_excerpt']);
+        $this->assertTrue($suggestions['apply_faqs']);
+        $this->assertNotEmpty($suggestions['suggested_features']);
+        $this->assertArrayNotHasKey('status', $suggestions);
+        $this->assertArrayNotHasKey('published_at', $suggestions);
+    }
+
+    public function test_title_can_fill_blank_basic_content_without_exposing_a_suggestion_workflow(): void
+    {
+        $component = Livewire::test(CreateService::class)
+            ->fillForm(['title' => 'تنسيق حفلات التخرج']);
+
+        $this->assertStringContainsString(
+            'تنسيق حفلات التخرج',
+            (string) $component->get('data.excerpt'),
+        );
+        $this->assertStringContainsString(
+            'تنسيق حفلات التخرج',
+            json_encode($component->get('data.quick_details'), JSON_UNESCAPED_UNICODE) ?: '',
+        );
+        $component
+            ->assertDontSee('اقتراح محتوى')
+            ->assertDontSee('الذكاء الاصطناعي');
+    }
+
+    public function test_seo_audit_uses_practical_checks_and_protects_drafts_from_indexing(): void
+    {
+        $audit = app(ServiceSeoAuditService::class)->audit([
+            'title' => 'تنسيق مناسبة خاصة',
+            'excerpt' => 'خدمة لتنظيم المناسبة باحتراف.',
+            'quick_details' => '<p>تفاصيل واضحة عن الخدمة.</p>',
+            'status' => 'draft',
+            'target_search_phrase' => 'تنسيق مناسبة خاصة',
+        ]);
+
+        $this->assertFalse($audit['ready']);
+        $this->assertSame('يحتاج مراجعة', $audit['status']);
+        $this->assertSame('noindex,nofollow', $audit['values']['robots']);
+        $this->assertTrue(collect($audit['checks'])->contains(
+            fn (array $check): bool => $check['label'] === 'فهرسة المسودة' && $check['ok'],
+        ));
+        $this->assertTrue(collect($audit['checks'])->contains(
+            fn (array $check): bool => $check['label'] === 'الصورة البارزة' && ! $check['ok'],
+        ));
+
+        $emptyAudit = app(ServiceSeoAuditService::class)->audit(['status' => 'draft']);
+        $this->assertStringContainsString('اسم الخدمة', $emptyAudit['values']['title']);
+        $this->assertTrue(collect($emptyAudit['checks'])->contains(
+            fn (array $check): bool => $check['label'] === 'وصف نتيجة البحث' && ! $check['ok'],
+        ));
+    }
+
+    public function test_related_services_are_exported_only_from_published_records(): void
+    {
+        $published = Service::create([
+            'title' => 'خدمة مرتبطة منشورة',
+            'excerpt' => 'الخدمة المنشورة.',
+            'status' => 'published',
+        ]);
+        $draft = Service::create([
+            'title' => 'خدمة مرتبطة مسودة',
+            'status' => 'draft',
+        ]);
+        $service = Service::create([
+            'title' => 'الخدمة الأساسية',
+            'status' => 'published',
+            'content_blocks' => [[
+                'type' => 'related_services',
+                'service_ids' => [$published->id, $draft->id],
+            ]],
+        ]);
+        app(ContentPublishingService::class)->sync($published);
+        app(ContentPublishingService::class)->sync($draft);
+        app(ContentPublishingService::class)->sync($service);
+
+        $exported = app(ContentExportService::class)
+            ->build()['services']
+            ->firstWhere('id', $service->id);
+
+        $this->assertCount(1, $exported->content_blocks[0]['services']);
+        $this->assertSame('خدمة مرتبطة منشورة', $exported->content_blocks[0]['services'][0]['title']);
     }
 
     public function test_export_normalizes_early_visual_editor_and_seo_shapes(): void

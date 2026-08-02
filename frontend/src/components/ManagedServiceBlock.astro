@@ -22,6 +22,7 @@ const {
 } = Astro.props;
 const items = Array.isArray(block.items) ? block.items : [];
 const media = Array.isArray(block.media) ? block.media as GalleryMedia[] : [];
+const relatedServices = Array.isArray(block.services) ? block.services : [];
 const heading = typeof block.heading === "string" ? block.heading : null;
 const blockUrl = typeof block.url === "string" && block.url !== "" ? block.url : ctaUrl;
 const blockLabel = typeof block.label === "string" && block.label !== "" ? block.label : ctaLabel;
@@ -111,6 +112,20 @@ const blockLabel = typeof block.label === "string" && block.label !== "" ? block
   </section>
 )}
 
+{block.type === "related_services" && relatedServices.length > 0 && (
+  <section class="managed-service-section container">
+    <h2>{heading || "خدمات مرتبطة"}</h2>
+    <div class="managed-service-grid">
+      {relatedServices.map((service) => (
+        <article class="managed-service-card">
+          <h3><a href={service.public_path}>{service.title}</a></h3>
+          {service.excerpt && <p>{service.excerpt}</p>}
+        </article>
+      ))}
+    </div>
+  </section>
+)}
+
 <style>
   .managed-service-hero {
     padding-block: clamp(3rem, 8vw, 7rem) clamp(2rem, 5vw, 4rem);
@@ -162,6 +177,12 @@ const blockLabel = typeof block.label === "string" && block.label !== "" ? block
     border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
     border-radius: 1rem;
     background: color-mix(in srgb, currentColor 3%, transparent);
+  }
+
+  .managed-service-card a {
+    color: inherit;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
   }
 
   .managed-service-card__number {

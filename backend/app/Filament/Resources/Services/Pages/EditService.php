@@ -7,13 +7,18 @@ use App\Filament\Resources\Concerns\HandlesManagedContent;
 use App\Filament\Resources\Services\ServiceResource;
 use App\Models\SeoMeta;
 use App\Models\Service;
+use App\Models\User;
 use App\Services\ServiceDuplicationService;
+use App\Services\ServiceFormDataMapper;
+use App\Services\SlugRedirectService;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class EditService extends EditRecord
 {
@@ -31,6 +36,18 @@ class EditService extends EditRecord
         /** @var Service $record */
         $record = $this->serviceRecord();
         $data['developer_mode'] = false;
+
+        // These attributes are intentionally hidden from API serialization,
+        // so hydrate them explicitly for the authorized Filament editor.
+        foreach ([
+            'seo_overrides', 'cta_overrides', 'uses_generated_defaults',
+            'seo_title_override', 'meta_description_override', 'slug_override',
+            'canonical_override', 'robots_override', 'og_title_override',
+            'og_description_override', 'og_image_override', 'schema_override',
+            'target_search_phrase', 'hero_alt_override',
+        ] as $attribute) {
+            $data[$attribute] = $record->getAttribute($attribute);
+        }
 
         if (! $record->uses_generated_defaults) {
             $seo = $record->seoMeta()->first();
@@ -52,16 +69,95 @@ class EditService extends EditRecord
             ];
         }
 
-        return $data;
+        return app(ServiceFormDataMapper::class)->forForm($data, $record);
     }
 
     /** @param array<string, mixed> $data */
     protected function mutateFormDataBeforeSave(array $data): array
     {
+        $data = app(ServiceFormDataMapper::class)->forStorage($data);
         $data = $this->managedMutateFormDataBeforeSave($data);
         $data['uses_generated_defaults'] = true;
 
         return $data;
+    }
+
+    /** @return array<Action> */
+    protected function getFormActions(): array
+    {
+        return [
+            Action::make('saveDraft')
+                ->label('حفظ كمسودة')
+                ->icon('heroicon-o-document')
+                ->color('gray')
+                ->action('saveDraft'),
+            Action::make('previewChanges')
+                ->label('معاينة')
+                ->icon('heroicon-o-eye')
+                ->color('gray')
+                ->action('previewChanges'),
+            Action::make('publish')
+                ->label('نشر')
+                ->icon('heroicon-o-paper-airplane')
+                ->action('publish')
+                ->visible(fn (): bool => auth()->user()?->hasPermission('services.publish') ?? false),
+            Action::make('publishAndCreateAnother')
+                ->label('نشر وإضافة خدمة جديدة')
+                ->icon('heroicon-o-plus-circle')
+                ->action('publishAndCreateAnother')
+                ->visible(fn (): bool => auth()->user()?->hasPermission('services.publish') ?? false),
+            $this->getCancelFormAction()->label('إلغاء'),
+        ];
+    }
+
+    public function saveDraft(): void
+    {
+        $this->data['status'] = ContentStatus::Draft->value;
+        $this->save();
+    }
+
+    public function previewChanges(): void
+    {
+        $this->save(shouldRedirect: false);
+        $this->redirect(route('admin.services.preview', $this->serviceRecord()));
+    }
+
+    public function publish(): void
+    {
+        $this->data['status'] = ContentStatus::Published->value;
+        $this->save();
+    }
+
+    public function publishAndCreateAnother(): void
+    {
+        $this->data['status'] = ContentStatus::Published->value;
+        $this->save(shouldRedirect: false);
+        $this->redirect(ServiceResource::getUrl('create'));
+    }
+
+    /** @param array<string, mixed> $data */
+    protected function handleRecordUpdate(Model $record, array $data): Model
+    {
+        $requestedSlug = Str::slug((string) ($data['slug_override'] ?? ''));
+        $wasPublished = $record->getRawOriginal('status') === ContentStatus::Published->value;
+        $record = parent::handleRecordUpdate($record, $data);
+
+        if (
+            $record instanceof Service
+            && $wasPublished
+            && $requestedSlug !== ''
+            && $requestedSlug !== $record->slug
+        ) {
+            $actor = auth()->user();
+
+            if (! $actor instanceof User) {
+                abort(403);
+            }
+
+            app(SlugRedirectService::class)->change($record, $requestedSlug, $actor);
+        }
+
+        return $record;
     }
 
     protected function getHeaderActions(): array

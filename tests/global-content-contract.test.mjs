@@ -89,7 +89,7 @@ test("contact and footer controls render exactly what the CMS stores", () => {
   assert.equal(home.includes('class="site-footer__credit"'), hasCredit);
 });
 
-test("admin forms never expose slug fields and use the shared media picker", () => {
+test("admin forms hide raw slugs, use the safe service override, and share the media picker", () => {
   const filamentRoot = join(projectRoot, "backend", "app", "Filament");
   const adminSource = readdirSync(filamentRoot, {
     recursive: true,
@@ -103,13 +103,40 @@ test("admin forms never expose slug fields and use the shared media picker", () 
     "TextInput::make('slug')",
     "TextEntry::make('slug')",
     "TextColumn::make('slug')",
-    "الرابط المختصر",
     "slugRedirectAction",
   ]) {
     assert.equal(
       adminSource.includes(forbidden),
       false,
       `Admin still exposes slug UI: ${forbidden}`,
+    );
+  }
+
+  const serviceForm = readFileSync(
+    join(filamentRoot, "Resources/Services/Schemas/ServiceForm.php"),
+    "utf8",
+  );
+  const editService = readFileSync(
+    join(filamentRoot, "Resources/Services/Pages/EditService.php"),
+    "utf8",
+  );
+  assert.match(serviceForm, /seoTextField\('slug_override'/);
+  assert.match(editService, /SlugRedirectService/);
+
+  for (const removedServiceEditorCopy of [
+    "قالب جاهز",
+    "قالب صفحة الخدمة",
+    "محتوى صفحة الخدمة",
+    "زر الإجراء وواتساب",
+    "إظهار زر واتساب",
+    "اقتراح محتوى",
+    "داخل Laravel",
+    "يولد Laravel",
+  ]) {
+    assert.equal(
+      serviceForm.includes(removedServiceEditorCopy),
+      false,
+      `Removed service editor copy returned: ${removedServiceEditorCopy}`,
     );
   }
 

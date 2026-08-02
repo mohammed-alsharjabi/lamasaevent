@@ -29,6 +29,13 @@ export interface ContentBlock {
   items?: Array<Record<string, unknown>>;
   media_ids?: number[];
   media?: GalleryMedia[];
+  service_ids?: number[];
+  services?: Array<{
+    id: number;
+    title: string;
+    excerpt: string | null;
+    public_path: string;
+  }>;
   [key: string]: unknown;
 }
 

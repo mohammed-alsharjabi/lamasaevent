@@ -93,15 +93,32 @@ test("local administrator can enter the Arabic Filament dashboard", async ({
   await expect(page.getByText("لوحة معلومات لمسة")).toBeVisible();
 
   await page.goto("http://127.0.0.1:8000/admin/services/create");
-  await expect(page.getByRole("region", { name: "الإضافة السريعة" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "معلومات الخدمة" })).toBeVisible();
   await expect(page.getByLabel("اسم الخدمة*")).toBeVisible();
-  await expect(page.getByLabel("قالب صفحة الخدمة")).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "تفاصيل الخدمة" })).toBeVisible();
+  await expect(page.getByLabel("معرض الصور — اختياري")).toBeVisible();
+  await expect(page.getByRole("button", { name: "حفظ كمسودة" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "نشر", exact: true })).toBeVisible();
+  await expect(page.getByText("قالب جاهز — اختياري")).toHaveCount(0);
+  await expect(page.getByText("محتوى صفحة الخدمة")).toHaveCount(0);
+  await expect(page.getByText("زر الإجراء وواتساب")).toHaveCount(0);
+  await expect(page.getByText("اقتراح محتوى")).toHaveCount(0);
 
-  const seo = page.getByRole("region", { name: "SEO" });
+  await page.getByLabel("اسم الخدمة*").fill("تنسيق حفلات التخرج");
+  await page.getByLabel("اسم الخدمة*").blur();
+  await expect(page.getByLabel("الوصف المختصر")).toHaveValue(/تنسيق حفلات التخرج/);
+
+  const seo = page.getByRole("region", { name: "تحسين الظهور في محركات البحث" });
   await seo.getByRole("button").click();
-  await expect(seo.locator("input[type='url']")).not.toHaveAttribute("required");
-  await expect(seo.getByText("Meta Keywords — اختياري")).toBeVisible();
-  await expect(page.getByRole("region", { name: "Open Graph" })).toBeVisible();
+  await expect(seo.getByLabel("الرابط الأساسي Canonical تلقائي")).not.toHaveAttribute("required");
+  await expect(seo.getByText("عبارة البحث المستهدفة — اختياري")).toBeVisible();
+  await expect(seo.getByLabel(/Meta Keywords/)).toHaveCount(0);
+  await expect(seo.getByText("معاينة نتيجة Google")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Schema" })).toHaveCount(0);
+
+  const developer = page.getByRole("region", { name: "وضع المطور" });
+  await developer.getByRole("button").click();
+  await developer.getByRole("switch", { name: "تفعيل تعديل JSON المتقدم" }).check();
   await expect(page.getByRole("region", { name: "Schema" })).toBeVisible();
 
   await page.close();

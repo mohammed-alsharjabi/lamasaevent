@@ -9,6 +9,7 @@ class ServiceContentNormalizer
 {
     private const MANAGED_TYPES = [
         'intro', 'text', 'features', 'steps', 'gallery', 'cta', 'faq',
+        'related_services',
     ];
 
     /**
@@ -58,6 +59,7 @@ class ServiceContentNormalizer
                     'gallery' => $this->gallery($block),
                     'cta' => $this->cta($block),
                     'faq' => $this->faq($block),
+                    'related_services' => $this->relatedServices($block),
                 };
             })
             ->values()
@@ -154,6 +156,21 @@ class ServiceContentNormalizer
                     'answer' => $this->plain($item['answer'] ?? null, 2000),
                 ])
                 ->filter(fn (array $item): bool => filled($item['question']) && filled($item['answer']))
+                ->values()
+                ->all(),
+        ];
+    }
+
+    /** @param array<string, mixed> $block */
+    private function relatedServices(array $block): array
+    {
+        return [
+            'type' => 'related_services',
+            'heading' => $this->plain($block['heading'] ?? null, 255),
+            'service_ids' => collect(Arr::wrap($block['service_ids'] ?? []))
+                ->map(fn (mixed $id): int => (int) $id)
+                ->filter()
+                ->unique()
                 ->values()
                 ->all(),
         ];

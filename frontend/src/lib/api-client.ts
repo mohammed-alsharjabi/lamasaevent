@@ -106,6 +106,13 @@ const contentBlockSchema = z.looseObject({
       alt: z.string().nullable(),
       caption: z.string().nullable(),
     })).optional(),
+    service_ids: z.array(z.number().int()).optional(),
+    services: z.array(z.looseObject({
+      id: z.number().int(),
+      title: z.string().min(1),
+      excerpt: z.string().nullable(),
+      public_path: z.string().startsWith("/"),
+    })).optional(),
   });
 
 const normalizeContentBlocks = (value: unknown): unknown => {

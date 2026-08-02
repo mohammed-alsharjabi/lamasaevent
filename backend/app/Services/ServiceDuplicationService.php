@@ -36,6 +36,12 @@ class ServiceDuplicationService
                 'is_featured' => false,
                 'seo_overrides' => $seoOverrides,
                 'cta_overrides' => $source->cta_overrides,
+                'meta_description_override' => $source->meta_description_override,
+                'robots_override' => $source->robots_override,
+                'og_description_override' => $source->og_description_override,
+                'og_image_override' => $source->og_image_override,
+                'target_search_phrase' => $source->target_search_phrase,
+                'hero_alt_override' => $source->hero_alt_override,
                 'uses_generated_defaults' => true,
             ]);
 

@@ -9,6 +9,7 @@ use App\Models\Faq;
 use App\Models\Media;
 use App\Models\SeoMeta;
 use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Models\SiteSetting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -29,22 +30,19 @@ class SeoDefaultsService
         }
         $usesGeneratedDefaults = $content instanceof Service
             && $content->uses_generated_defaults;
-        $overrides = $usesGeneratedDefaults && is_array($content->seo_overrides)
-            ? $content->seo_overrides
+        $overrides = $usesGeneratedDefaults
+            ? $content->effectiveSeoOverrides()
             : [];
         $title = $this->title($content, $usesGeneratedDefaults);
         $description = $this->description($content, $title);
         $canonical = rtrim((string) config('app.production_url'), '/').$path;
 
         if ($usesGeneratedDefaults) {
-            $seo->title = $this->override($overrides, 'title', $title);
-            $seo->description = $this->override($overrides, 'description', $description);
-            $seo->canonical = $this->override($overrides, 'canonical', $canonical);
-            $seo->robots = $this->override(
-                $overrides,
-                'robots',
-                $content->isPublished() ? 'index,follow' : 'noindex,nofollow',
-            );
+            $computed = $this->previewService($content, $path);
+            $seo->title = $computed['title'];
+            $seo->description = $computed['description'];
+            $seo->canonical = $computed['canonical'];
+            $seo->robots = $computed['robots'];
         } elseif (blank($seo->title)) {
             $seo->title = $title;
         }
@@ -79,14 +77,7 @@ class SeoDefaultsService
         );
 
         if ($usesGeneratedDefaults) {
-            $seo->setAttribute(
-                'open_graph',
-                $this->arrayOverride(
-                    $overrides,
-                    'open_graph',
-                    $this->openGraph($content, $seo),
-                ),
-            );
+            $seo->setAttribute('open_graph', $computed['open_graph']);
         } elseif (blank($seo->getAttribute('open_graph'))) {
             $seo->setAttribute('open_graph', [
                 'type' => $content instanceof Article ? 'article' : 'website',
@@ -99,17 +90,7 @@ class SeoDefaultsService
         }
 
         if ($usesGeneratedDefaults) {
-            $seo->setAttribute(
-                'twitter',
-                $this->arrayOverride($overrides, 'twitter', [
-                    'card' => filled($seo->open_graph['image'] ?? null)
-                        ? 'summary_large_image'
-                        : 'summary',
-                    'title' => (string) $seo->title,
-                    'description' => (string) $seo->description,
-                    'image' => $seo->open_graph['image'] ?? null,
-                ]),
-            );
+            $seo->setAttribute('twitter', $computed['twitter']);
         } elseif (blank($seo->getAttribute('twitter'))) {
             $seo->setAttribute('twitter', [
                 'card' => 'summary',
@@ -119,13 +100,7 @@ class SeoDefaultsService
         }
 
         if ($usesGeneratedDefaults) {
-            $seo->setAttribute(
-                'hreflang',
-                $this->arrayOverride($overrides, 'hreflang', [
-                    ['lang' => 'ar-SA', 'href' => (string) $seo->canonical],
-                    ['lang' => 'x-default', 'href' => (string) $seo->canonical],
-                ]),
-            );
+            $seo->setAttribute('hreflang', $computed['hreflang']);
         } elseif (blank($seo->getAttribute('hreflang'))) {
             $seo->setAttribute('hreflang', [
                 ['lang' => 'ar-SA', 'href' => (string) $seo->canonical],
@@ -134,14 +109,7 @@ class SeoDefaultsService
         }
 
         if ($usesGeneratedDefaults) {
-            $seo->setAttribute(
-                'json_ld',
-                $this->arrayOverride(
-                    $overrides,
-                    'json_ld',
-                    [$this->serviceSchema($content, $seo)],
-                ),
-            );
+            $seo->setAttribute('json_ld', $computed['json_ld']);
         } elseif ($seo->getAttribute('json_ld') === null) {
             $seo->setAttribute('json_ld', []);
         }
@@ -160,6 +128,78 @@ class SeoDefaultsService
         $content->setRelation('seoMeta', $seo);
 
         return $seo;
+    }
+
+    /**
+     * Calculate the exact public SEO payload without writing it. Filament uses
+     * this for honest previews and checks; sync() persists the same values.
+     *
+     * @return array{
+     *   title: string,
+     *   description: string,
+     *   canonical: string,
+     *   robots: string,
+     *   open_graph: array<mixed>,
+     *   twitter: array<mixed>,
+     *   hreflang: array<mixed>,
+     *   json_ld: array<mixed>
+     * }
+     */
+    public function previewService(Service $service, ?string $path = null): array
+    {
+        $overrides = $service->effectiveSeoOverrides();
+        $title = $this->title($service, true);
+        $description = $this->description($service, $title);
+        $path ??= $service->routePath();
+        $canonical = rtrim((string) config('app.production_url'), '/').$path;
+        $title = $this->override($overrides, 'title', $title);
+        $description = $this->override($overrides, 'description', $description);
+        $canonical = $this->override($overrides, 'canonical', $canonical);
+        $robots = $this->override(
+            $overrides,
+            'robots',
+            $service->isPublished() ? 'index,follow' : 'noindex,nofollow',
+        );
+        $seo = new SeoMeta([
+            'title' => $title,
+            'description' => $description,
+            'canonical' => $canonical,
+            'robots' => $robots,
+        ]);
+        $openGraph = array_replace(
+            $this->openGraph($service, $seo),
+            is_array($overrides['open_graph'] ?? null)
+                ? $overrides['open_graph']
+                : [],
+        );
+        $twitter = array_replace([
+            'card' => filled($openGraph['image'] ?? null)
+                ? 'summary_large_image'
+                : 'summary',
+            'title' => (string) ($openGraph['title'] ?? $title),
+            'description' => (string) ($openGraph['description'] ?? $description),
+            'image' => $openGraph['image'] ?? null,
+        ], is_array($overrides['twitter'] ?? null) ? $overrides['twitter'] : []);
+        $hreflang = $this->arrayOverride(
+            $overrides,
+            'hreflang',
+            $this->hreflang($canonical),
+        );
+        $jsonLd = $this->arrayOverride($overrides, 'json_ld', [
+            $this->serviceSchema($service, $seo),
+            $this->breadcrumbSchema($service, $canonical),
+        ]);
+
+        return [
+            'title' => $title,
+            'description' => $description,
+            'canonical' => $canonical,
+            'robots' => $robots,
+            'open_graph' => $openGraph,
+            'twitter' => $twitter,
+            'hreflang' => $hreflang,
+            'json_ld' => $jsonLd,
+        ];
     }
 
     /**
@@ -275,6 +315,28 @@ class SeoDefaultsService
         ];
     }
 
+    /** @return list<array{lang: string, href: string}> */
+    private function hreflang(string $canonical): array
+    {
+        $languages = SiteSetting::query()
+            ->where('key', 'site_languages')
+            ->first()?->value;
+        $locales = is_array($languages) && is_array($languages['locales'] ?? null)
+            ? $languages['locales']
+            : ['ar-SA'];
+        $alternates = collect($locales)
+            ->filter(fn (mixed $locale): bool => filled($locale))
+            ->map(fn (mixed $locale): array => [
+                'lang' => (string) $locale,
+                'href' => $canonical,
+            ])
+            ->values()
+            ->all();
+        $alternates[] = ['lang' => 'x-default', 'href' => $canonical];
+
+        return $alternates;
+    }
+
     /** @return array<string, mixed> */
     private function serviceSchema(Service $service, SeoMeta $seo): array
     {
@@ -321,5 +383,49 @@ class SeoDefaultsService
             $schema,
             fn (mixed $value): bool => $value !== null && $value !== '',
         );
+    }
+
+    /** @return array<string, mixed> */
+    private function breadcrumbSchema(Service $service, string $canonical): array
+    {
+        $origin = rtrim((string) config('app.production_url'), '/');
+        $items = [
+            [
+                '@type' => 'ListItem',
+                'position' => 1,
+                'name' => 'الرئيسية',
+                'item' => $origin.'/',
+            ],
+            [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => 'الخدمات',
+                'item' => $origin.'/services',
+            ],
+        ];
+
+        $category = $service->getRelationValue('category');
+
+        if ($category instanceof ServiceCategory) {
+            $items[] = [
+                '@type' => 'ListItem',
+                'position' => count($items) + 1,
+                'name' => $category->title,
+                'item' => $origin.$category->routePath(),
+            ];
+        }
+
+        $items[] = [
+            '@type' => 'ListItem',
+            'position' => count($items) + 1,
+            'name' => $service->title,
+            'item' => $canonical,
+        ];
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => $items,
+        ];
     }
 }

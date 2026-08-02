@@ -6,17 +6,16 @@ use App\Filament\Forms\ManagedContentFields;
 use App\Models\Media;
 use App\Models\Service;
 use App\Models\SiteSetting;
-use App\Services\ServiceContentTemplates;
-use App\Services\ServiceDefaultsService;
+use App\Services\ServiceContentSuggestionService;
+use App\Services\ServiceSeoAuditService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\CodeEditor;
 use Filament\Forms\Components\CodeEditor\Enums\Language;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -37,27 +36,11 @@ class ServiceForm
                 View::make('filament.forms.service-autosave')
                     ->visible(fn (?Service $record): bool => $record instanceof Service)
                     ->columnSpanFull(),
-                Section::make('ابدأ بقالب جاهز — اختياري')
-                    ->description('اختر قالبًا لإضافة أقسام مرتبة، ثم عدّلها كما تريد. لن يتغير القالب بعد الحفظ إلا بيدك.')
-                    ->icon('heroicon-o-sparkles')
-                    ->schema([
-                        Select::make('service_template')
-                            ->label('قالب صفحة الخدمة')
-                            ->options(ServiceContentTemplates::options())
-                            ->placeholder('ابدأ بصفحة فارغة')
-                            ->live()
-                            ->dehydrated(false)
-                            ->afterStateUpdated(function (?string $state, Set $set): void {
-                                if (filled($state)) {
-                                    $set('content_blocks', ServiceContentTemplates::blocks($state));
-                                }
-                            }),
-                    ])
-                    ->visible(fn (?Service $record): bool => ! $record)
-                    ->columnSpanFull(),
-                Section::make('الإضافة السريعة')
-                    ->description('أدخل المعلومات الأساسية فقط. الرابط وSEO والتاريخ والترتيب وزر واتساب تُنشأ تلقائيًا داخل Laravel.')
-                    ->icon('heroicon-o-bolt')
+                Hidden::make('slug'),
+                Hidden::make('content_blocks'),
+                Hidden::make('cta_overrides'),
+                Section::make('معلومات الخدمة')
+                    ->icon('heroicon-o-briefcase')
                     ->columns(2)
                     ->schema([
                         TextInput::make('title')
@@ -65,6 +48,25 @@ class ServiceForm
                             ->placeholder('مثال: تنسيق حفلات الزفاف')
                             ->required()
                             ->live(onBlur: true)
+                            ->afterStateUpdated(function (?string $state, Get $get, Set $set, ?Service $record): void {
+                                if (blank($state) || $record instanceof Service) {
+                                    return;
+                                }
+
+                                $suggestions = app(ServiceContentSuggestionService::class)->suggest([
+                                    'title' => $state,
+                                    'service_category_id' => $get('service_category_id'),
+                                    'excerpt' => $get('excerpt'),
+                                ]);
+
+                                if (blank($get('excerpt'))) {
+                                    $set('excerpt', $suggestions['suggested_excerpt']);
+                                }
+
+                                if (self::richContentIsBlank($get('quick_details'))) {
+                                    $set('quick_details', $suggestions['suggested_intro']);
+                                }
+                            })
                             ->maxLength(255)
                             ->validationMessages([
                                 'required' => 'اكتب اسم الخدمة حتى يمكن حفظها.',
@@ -90,30 +92,50 @@ class ServiceForm
                             ->preload()
                             ->disabled(fn (?Service $record): bool => $record?->children()->exists() ?? false)
                             ->dehydrated(),
-                        ManagedContentFields::status('services'),
                         Textarea::make('excerpt')
-                            ->label('الملخص')
+                            ->label('الوصف المختصر')
                             ->placeholder('جملة قصيرة واضحة تظهر في بطاقات الخدمة وتُستخدم تلقائيًا لوصف SEO.')
                             ->rows(4)
                             ->live(onBlur: true)
                             ->maxLength(500)
                             ->columnSpanFull(),
+                        RichEditor::make('quick_details')
+                            ->label('تفاصيل الخدمة')
+                            ->placeholder('اشرح ما الذي يحصل عليه العميل، وكيف تنفذ الخدمة، وما الذي يميزها.')
+                            ->toolbarButtons([
+                                'h2', 'h3', 'bold', 'italic', 'link', 'blockquote',
+                                'bulletList', 'orderedList', 'undo', 'redo',
+                            ])
+                            ->live(onBlur: true)
+                            ->columnSpanFull(),
                         ...ManagedContentFields::heroMedia(),
+                        Select::make('quick_gallery_media_ids')
+                            ->label('معرض الصور — اختياري')
+                            ->multiple()
+                            ->options(fn (): array => Media::query()
+                                ->orderByDesc('id')
+                                ->pluck('original_name', 'id')
+                                ->all())
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->helperText('يمكنك اختيار عدة صور موجودة؛ يظهر اسم كل صورة ومعاينة مصغرة أدناه.')
+                            ->columnSpanFull(),
+                        Placeholder::make('quick_gallery_preview')
+                            ->label('الصور المختارة')
+                            ->content(fn (Get $get): HtmlString => self::galleryPreview(
+                                (array) ($get('quick_gallery_media_ids') ?? []),
+                            ))
+                            ->visible(fn (Get $get): bool => filled($get('quick_gallery_media_ids')))
+                            ->columnSpanFull(),
+                        ManagedContentFields::status('services')->live(),
+                        ManagedContentFields::featured(),
                     ])
-                    ->columnSpanFull(),
-                Section::make('محتوى صفحة الخدمة')
-                    ->description('أضف أقسامًا مرئية، رتّبها بالسحب والإفلات، وافتح كل قسم لتعديل محتواه. تُحفظ داخليًا كبيانات JSON منظمة.')
-                    ->icon('heroicon-o-rectangle-stack')
-                    ->schema([
-                        self::contentBuilder(),
-                    ])
-                    ->collapsed()
                     ->columnSpanFull(),
                 Section::make('إعدادات العرض')
                     ->description('قيم اختيارية. الترتيب وتاريخ النشر يُحددان تلقائيًا عند تركهما فارغين.')
                     ->columns(2)
                     ->schema([
-                        ManagedContentFields::featured(),
                         TextInput::make('sort_order')
                             ->label(self::automaticLabel('الترتيب', true))
                             ->numeric()
@@ -131,79 +153,78 @@ class ServiceForm
                     ])
                     ->collapsed()
                     ->columnSpanFull(),
-                Section::make('زر الإجراء وواتساب')
-                    ->description('يستخدم النظام رقم واتساب واسم الزر من إعدادات الموقع. خصّص القيم فقط لهذه الخدمة عند الحاجة.')
+                Section::make('تحسين الظهور في محركات البحث')
+                    ->description('يعرض النظام النتيجة الفعلية التي سيحصل عليها الموقع. لا تحتاج لتعديل شيء إلا إذا ظهر تنبيه واضح.')
+                    ->icon('heroicon-o-magnifying-glass')
                     ->columns(2)
                     ->schema([
-                        Placeholder::make('cta_preview')
-                            ->label('المعاينة التلقائية')
-                            ->content(fn (Get $get, ?Service $record): HtmlString => self::ctaPreview($get, $record))
+                        Placeholder::make('google_preview')
+                            ->label('معاينة نتيجة Google')
+                            ->content(fn (Get $get, ?Service $record): HtmlString => self::googlePreview($get, $record))
                             ->columnSpanFull(),
-                        TextInput::make('cta_overrides.label')
-                            ->label(fn (Get $get): HtmlString => self::automaticLabel(
-                                'تخصيص نص الزر',
-                                blank($get('cta_overrides.label')),
-                            ))
-                            ->placeholder('اتركه فارغًا لاستخدام اسم واتساب العام')
-                            ->maxLength(120)
-                            ->suffixAction(self::resetAction('resetCtaLabel', 'cta_overrides.label')),
-                        TextInput::make('cta_overrides.url')
-                            ->label(fn (Get $get): HtmlString => self::automaticLabel(
-                                'تخصيص رابط الزر',
-                                blank($get('cta_overrides.url')),
-                            ))
-                            ->url()
-                            ->placeholder('اتركه فارغًا لتوليد رابط واتساب')
-                            ->maxLength(2048)
-                            ->suffixAction(self::resetAction('resetCtaUrl', 'cta_overrides.url')),
-                        Select::make('cta_overrides.mode')
-                            ->label('إظهار زر واتساب')
-                            ->options([
-                                'auto' => 'تلقائي — يظهر عند توفر رقم واتساب',
-                                'show' => 'إظهار دائمًا',
-                                'hide' => 'إخفاء في هذه الخدمة',
-                            ])
-                            ->default('auto')
-                            ->selectablePlaceholder(false)
+                        Placeholder::make('seo_audit')
+                            ->label('فحص جاهزية الصفحة')
+                            ->content(fn (Get $get, ?Service $record): HtmlString => self::seoAuditPreview($get, $record))
                             ->columnSpanFull(),
-                    ])
-                    ->collapsed()
-                    ->columnSpanFull(),
-                Section::make('SEO')
-                    ->description('القيم التلقائية هي الموصى بها. اضغط «تخصيص» لنسخ القيمة الحالية ثم عدّلها، أو «العودة للتلقائي» لإلغاء التخصيص.')
-                    ->columns(2)
-                    ->schema([
-                        self::seoTextField('title', 'عنوان SEO', fn (Get $get): string => self::generatedSeoTitle($get), 70),
-                        self::seoTextField('canonical', 'Canonical URL', fn (Get $get): string => self::generatedCanonical($get), 255)
+                        TextInput::make('target_search_phrase')
+                            ->label('عبارة البحث المستهدفة — اختياري')
+                            ->placeholder('مثال: تنظيم حفلات زفاف في الرياض')
+                            ->helperText('تُستخدم فقط لإعطائك اقتراحات تحريرية، وليست Meta Keywords ولا تضمن ترتيبًا في Google.')
+                            ->live(onBlur: true)
+                            ->maxLength(160)
+                            ->columnSpanFull(),
+                        self::seoTextField('seo_title_override', 'عنوان الظهور في Google', fn (Get $get): string => self::generatedSeoTitle($get), 70),
+                        self::seoTextField('slug_override', 'تخصيص الرابط المختصر', fn (Get $get): string => self::generatedSlug($get), 180),
+                        self::seoTextField('canonical_override', 'الرابط الأساسي Canonical', fn (Get $get): string => self::generatedCanonical($get), 2048)
                             ->url(),
-                        self::seoTextarea('description', 'Meta Description', fn (Get $get): string => self::generatedDescription($get), 180)
-                            ->columnSpanFull(),
-                        TagsInput::make('seo_overrides.keywords')
-                            ->label('Meta Keywords — اختياري')
-                            ->placeholder('أضف كلمة ثم Enter أو الصق كلمات مفصولة بفواصل')
-                            ->helperText('استخدم كلمات مرتبطة فعلًا بالخدمة وتجنب الحشو.')
-                            ->splitKeys([',', '،', "\n"])
-                            ->rules(['array', 'max:20'])
-                            ->nestedRecursiveRules(['string', 'max:60'])
-                            ->reorderable()
-                            ->columnSpanFull(),
-                        Select::make('seo_overrides.robots')
+                        Select::make('robots_override')
                             ->label(fn (Get $get): HtmlString => self::automaticLabel(
-                                'تعليمات محركات البحث',
-                                blank($get('seo_overrides.robots')),
+                                'تعليمات الفهرسة',
+                                blank($get('robots_override')),
                             ))
                             ->options([
-                                'index,follow' => 'إظهار الصفحة وتتبع روابطها',
+                                'index,follow' => 'إظهار الصفحة في البحث وتتبع روابطها',
                                 'noindex,follow' => 'عدم إظهار الصفحة مؤقتًا',
                                 'noindex,nofollow' => 'عدم الإظهار وعدم تتبع الروابط',
                             ])
                             ->placeholder('تلقائي حسب حالة النشر')
+                            ->hintActions(self::overrideActions(
+                                'robots',
+                                'robots_override',
+                                fn (Get $get): string => $get('status') === 'published'
+                                    ? 'index,follow'
+                                    : 'noindex,nofollow',
+                            )),
+                        self::seoTextarea('meta_description_override', 'وصف نتيجة البحث', fn (Get $get): string => self::generatedDescription($get), 180)
+                            ->columnSpanFull(),
+                        self::seoTextField('hero_alt_override', 'النص البديل للصورة', fn (Get $get): string => trim((string) $get('title')), 255)
+                            ->helperText('صف الصورة باختصار إذا كانت القيمة المقترحة لا تعبّر عنها.')
+                            ->columnSpanFull(),
+                        Placeholder::make('social_preview')
+                            ->label('معاينة المشاركة')
+                            ->content(fn (Get $get): HtmlString => self::openGraphPreview($get))
+                            ->columnSpanFull(),
+                        self::seoTextField('og_title_override', 'عنوان المشاركة', fn (Get $get): string => self::effectiveSeoValue($get, 'seo_title_override', self::generatedSeoTitle($get)), 100),
+                        self::seoTextarea('og_description_override', 'وصف المشاركة', fn (Get $get): string => self::effectiveSeoValue($get, 'meta_description_override', self::generatedDescription($get)), 300),
+                        TextInput::make('og_image_override')
+                            ->label(fn (Get $get): HtmlString => self::automaticLabel(
+                                'رابط صورة المشاركة',
+                                blank($get('og_image_override')),
+                            ))
+                            ->url()
+                            ->maxLength(2048)
+                            ->placeholder('تلقائي من الصورة البارزة')
+                            ->hintActions(self::overrideActions(
+                                'og_image',
+                                'og_image_override',
+                                fn (Get $get): string => Media::query()->find($get('hero_media_id'))?->url() ?? '',
+                            ))
                             ->columnSpanFull(),
                     ])
                     ->collapsed()
                     ->columnSpanFull(),
                 Section::make('وضع المطور')
-                    ->description('غير مطلوب للاستخدام العادي. فعّله فقط لتعديل JSON بدل القيم التي يولدها Laravel.')
+                    ->description('غير مطلوب للاستخدام العادي. فعّله فقط إذا كنت تحتاج إلى تخصيص تقني متقدم.')
                     ->schema([
                         Toggle::make('developer_mode')
                             ->label('تفعيل تعديل JSON المتقدم')
@@ -213,18 +234,6 @@ class ServiceForm
                     ->collapsed()
                     ->columnSpanFull(),
                 self::developerSection(
-                    'Open Graph',
-                    'معاينة مشاركة الخدمة في واتساب ومنصات التواصل.',
-                    'open_graph',
-                    fn (Get $get): HtmlString => self::openGraphPreview($get),
-                ),
-                self::developerSection(
-                    'Twitter Cards / X',
-                    'تُولد بطاقة مشاركة متوافقة تلقائيًا من نفس عنوان الخدمة ووصفها وصورتها.',
-                    'twitter',
-                    fn (Get $get): HtmlString => self::openGraphPreview($get),
-                ),
-                self::developerSection(
                     'Hreflang',
                     'يولد النظام ar-SA وx-default على رابط الصفحة الصحيح.',
                     'hreflang',
@@ -232,9 +241,15 @@ class ServiceForm
                 ),
                 self::developerSection(
                     'Schema',
-                    'يولد Laravel مخطط Service متضمنًا العلامة والصورة وبيانات التواصل والأسئلة.',
-                    'json_ld',
+                    'يولد النظام مخططي Service وBreadcrumbList متضمنين العلامة والصورة وبيانات التواصل والأسئلة.',
+                    'schema_override',
                     fn (Get $get): HtmlString => self::schemaPreview($get),
+                ),
+                self::developerSection(
+                    'Twitter Cards / X',
+                    'تُولد البطاقة تلقائيًا من بيانات المشاركة، ويمكن تخصيص JSON هنا فقط عند الضرورة.',
+                    'twitter',
+                    fn (Get $get): HtmlString => self::openGraphPreview($get),
                 ),
                 Section::make('الأسئلة الشائعة')
                     ->description('أسئلة منظمة تظهر للمستخدم ويستفيد منها Schema تلقائيًا. أضف فقط الأسئلة الحقيقية.')
@@ -247,142 +262,87 @@ class ServiceForm
             ->columns(1);
     }
 
-    private static function contentBuilder(): Repeater
+    /** @return array<string, mixed> */
+    private static function formState(Get $get): array
     {
-        return Repeater::make('content_blocks')
-            ->label('أقسام الصفحة')
-            ->addActionLabel('إضافة قسم')
-            ->defaultItems(0)
-            ->reorderable()
-            ->collapsible()
-            ->cloneable()
-            ->itemLabel(fn (array $state): string => self::blockLabel((string) ($state['type'] ?? '')))
-            ->schema([
-                Select::make('type')
-                    ->label('نوع القسم')
-                    ->options([
-                        'intro' => 'مقدمة',
-                        'text' => 'نص',
-                        'features' => 'قائمة مميزات',
-                        'steps' => 'خطوات',
-                        'gallery' => 'معرض صور',
-                        'cta' => 'دعوة للتواصل CTA',
-                        'faq' => 'أسئلة شائعة',
-                        'article' => 'قسم مستعاد محمي',
-                        'section' => 'قسم مستعاد محمي',
-                        'navigation' => 'تنقل مستعاد محمي',
-                        'component' => 'مكوّن مستعاد محمي',
-                    ])
-                    ->required()
-                    ->live()
-                    ->disableOptionWhen(fn (string $value, Get $get): bool => in_array(
-                        $value,
-                        ['article', 'section', 'navigation', 'component'],
-                        true,
-                    ) && $get('type') !== $value),
-                TextInput::make('heading')
-                    ->label('عنوان القسم — اختياري')
-                    ->maxLength(255)
-                    ->visible(fn (Get $get): bool => in_array($get('type'), self::managedBlockTypes(), true)),
-                RichEditor::make('lead')
-                    ->label('نص المقدمة')
-                    ->toolbarButtons(['bold', 'italic', 'link', 'bulletList', 'orderedList'])
-                    ->visible(fn (Get $get): bool => $get('type') === 'intro')
-                    ->columnSpanFull(),
-                RichEditor::make('body')
-                    ->label('النص')
-                    ->toolbarButtons(['h2', 'h3', 'bold', 'italic', 'link', 'blockquote', 'bulletList', 'orderedList'])
-                    ->visible(fn (Get $get): bool => $get('type') === 'text')
-                    ->columnSpanFull(),
-                Repeater::make('items')
-                    ->label(fn (Get $get): string => match ($get('type')) {
-                        'features' => 'المميزات',
-                        'steps' => 'الخطوات',
-                        default => 'الأسئلة',
-                    })
-                    ->addActionLabel('إضافة عنصر')
-                    ->reorderable()
-                    ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? $state['question'] ?? null)
-                    ->schema([
-                        TextInput::make('title')
-                            ->label('العنوان')
-                            ->maxLength(255)
-                            ->visible(fn (Get $get): bool => in_array($get('../../type'), ['features', 'steps'], true)),
-                        Textarea::make('description')
-                            ->label('الوصف')
-                            ->rows(2)
-                            ->maxLength(1000)
-                            ->visible(fn (Get $get): bool => in_array($get('../../type'), ['features', 'steps'], true)),
-                        TextInput::make('question')
-                            ->label('السؤال')
-                            ->maxLength(500)
-                            ->visible(fn (Get $get): bool => $get('../../type') === 'faq'),
-                        Textarea::make('answer')
-                            ->label('الإجابة')
-                            ->rows(3)
-                            ->maxLength(2000)
-                            ->visible(fn (Get $get): bool => $get('../../type') === 'faq'),
-                    ])
-                    ->visible(fn (Get $get): bool => in_array($get('type'), ['features', 'steps', 'faq'], true))
-                    ->columnSpanFull(),
-                Select::make('media_ids')
-                    ->label('صور المعرض')
-                    ->multiple()
-                    ->options(fn (): array => Media::query()->orderByDesc('id')->pluck('original_name', 'id')->all())
-                    ->searchable()
-                    ->preload()
-                    ->helperText('يمكنك اختيار عدة صور موجودة من مكتبة الوسائط.')
-                    ->visible(fn (Get $get): bool => $get('type') === 'gallery')
-                    ->columnSpanFull(),
-                Textarea::make('text')
-                    ->label('النص التشجيعي')
-                    ->rows(2)
-                    ->maxLength(1000)
-                    ->visible(fn (Get $get): bool => $get('type') === 'cta'),
-                TextInput::make('label')
-                    ->label('نص الزر — اختياري')
-                    ->maxLength(120)
-                    ->visible(fn (Get $get): bool => $get('type') === 'cta'),
-                TextInput::make('url')
-                    ->label('رابط الزر — اختياري')
-                    ->maxLength(2048)
-                    ->visible(fn (Get $get): bool => $get('type') === 'cta'),
-                Placeholder::make('legacy_notice')
-                    ->label('محتوى مستعاد ومحمي')
-                    ->content('هذا القسم مستعاد من الموقع القديم ويُحفظ كما هو لحماية التصميم والروابط. يمكنك نقله أو حذفه، لكن محتواه الخام غير معروض هنا.')
-                    ->visible(fn (Get $get): bool => ! in_array($get('type'), self::managedBlockTypes(), true))
-                    ->columnSpanFull(),
-                Hidden::make('tag'),
-                Hidden::make('id'),
-                Hidden::make('classes'),
-                Hidden::make('headings'),
-                Hidden::make('paragraphs'),
-                Hidden::make('links'),
-                Hidden::make('html'),
-            ])
-            ->columns(2)
-            ->columnSpanFull();
+        $keys = [
+            'title', 'service_category_id', 'parent_id', 'excerpt', 'quick_details',
+            'hero_media_id', 'status', 'slug', 'seo_title_override',
+            'meta_description_override', 'slug_override', 'canonical_override',
+            'robots_override', 'og_title_override', 'og_description_override',
+            'og_image_override', 'schema_override', 'target_search_phrase',
+            'hero_alt_override', 'seo_overrides',
+        ];
+
+        return collect($keys)->mapWithKeys(fn (string $key): array => [$key => $get($key)])->all();
     }
 
-    /** @return list<string> */
-    private static function managedBlockTypes(): array
+    /** @param list<int|string> $ids */
+    private static function galleryPreview(array $ids): HtmlString
     {
-        return ['intro', 'text', 'features', 'steps', 'gallery', 'cta', 'faq'];
+        $mediaItems = Media::query()
+            ->whereKey($ids)
+            ->get()
+            ->keyBy(fn (Media $media): string => (string) $media->getKey());
+        $cards = collect($ids)->map(function (mixed $id) use ($mediaItems): string {
+            $media = $mediaItems->get((string) $id);
+
+            if (! $media instanceof Media) {
+                return '';
+            }
+
+            return '<div style="display:flex;align-items:center;gap:.55rem;padding:.5rem;'
+                .'border:1px solid #e5e7eb;border-radius:.65rem">'
+                .'<img src="'.e($media->url()).'" alt="'.e($media->alt ?: $media->original_name).'" '
+                .'style="width:4rem;height:3rem;object-fit:cover;border-radius:.4rem">'
+                .'<span style="font-size:.82rem;word-break:break-word">'.e($media->original_name).'</span></div>';
+        })->filter()->implode('');
+
+        return new HtmlString(
+            '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.6rem">'
+            .$cards.'</div>',
+        );
     }
 
-    private static function blockLabel(string $type): string
+    private static function googlePreview(Get $get, ?Service $record): HtmlString
     {
-        return match ($type) {
-            'intro' => 'مقدمة',
-            'text' => 'نص',
-            'features' => 'قائمة مميزات',
-            'steps' => 'خطوات',
-            'gallery' => 'معرض صور',
-            'cta' => 'دعوة للتواصل',
-            'faq' => 'أسئلة شائعة',
-            default => 'قسم مستعاد ومحمي',
-        };
+        $audit = app(ServiceSeoAuditService::class)->audit(self::formState($get), $record);
+        $values = $audit['values'];
+
+        return new HtmlString(
+            '<div dir="rtl" style="max-width:42rem;padding:1rem;border:1px solid #e5e7eb;'
+            .'border-radius:.85rem;background:#fff">'
+            .'<div dir="ltr" style="color:#202124;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'
+            .e((string) $values['canonical']).'</div>'
+            .'<div style="color:#1a0dab;font-size:1.25rem;line-height:1.5;margin:.2rem 0">'
+            .e((string) $values['title']).'</div>'
+            .'<p style="color:#4d5156;margin:0;line-height:1.65">'.e((string) $values['description']).'</p>'
+            .'</div>',
+        );
+    }
+
+    private static function seoAuditPreview(Get $get, ?Service $record): HtmlString
+    {
+        $audit = app(ServiceSeoAuditService::class)->audit(self::formState($get), $record);
+        $ready = (bool) $audit['ready'];
+        $items = collect($audit['checks'])->map(function (array $check): string {
+            $suggestion = $check['severity'] === 'suggestion';
+            $ok = (bool) $check['ok'];
+            $color = $suggestion ? '#92400e' : ($ok ? '#047857' : '#b91c1c');
+            $icon = $suggestion ? '💡' : ($ok ? '✓' : '!');
+
+            return '<li style="display:flex;gap:.55rem;align-items:flex-start;color:'.$color.'">'
+                .'<b aria-hidden="true">'.$icon.'</b><span><strong>'.e((string) $check['label'])
+                .':</strong> '.e((string) $check['message']).'</span></li>';
+        })->implode('');
+
+        return new HtmlString(
+            '<div style="padding:1rem;border-radius:.85rem;border:1px solid '
+            .($ready ? '#a7f3d0' : '#fecaca').';background:'.($ready ? '#ecfdf5' : '#fef2f2').'">'
+            .'<strong style="color:'.($ready ? '#047857' : '#b91c1c').'">'.e($audit['status']).'</strong>'
+            .'<ul style="display:grid;gap:.55rem;margin:.85rem 0 0;padding:0;list-style:none">'.$items.'</ul>'
+            .'</div>',
+        );
     }
 
     private static function seoTextField(
@@ -391,7 +351,7 @@ class ServiceForm
         callable $generated,
         int $maxLength,
     ): TextInput {
-        $path = "seo_overrides.{$key}";
+        $path = $key;
 
         return TextInput::make($path)
             ->label(fn (Get $get): HtmlString => self::automaticLabel($label, blank($get($path))))
@@ -407,7 +367,7 @@ class ServiceForm
         callable $generated,
         int $maxLength,
     ): Textarea {
-        $path = "seo_overrides.{$key}";
+        $path = $key;
 
         return Textarea::make($path)
             ->label(fn (Get $get): HtmlString => self::automaticLabel($label, blank($get($path))))
@@ -436,15 +396,6 @@ class ServiceForm
         ];
     }
 
-    private static function resetAction(string $name, string $path): Action
-    {
-        return Action::make($name)
-            ->label('تلقائي')
-            ->icon('heroicon-m-arrow-path')
-            ->action(fn (Set $set) => $set($path, null))
-            ->visible(fn (Get $get): bool => filled($get($path)));
-    }
-
     private static function developerSection(
         string $title,
         string $description,
@@ -458,10 +409,14 @@ class ServiceForm
                     ->label('معاينة مفهومة')
                     ->content(fn (Get $get): HtmlString => $preview($get))
                     ->visible(fn (Get $get): bool => ! $get('developer_mode')),
-                self::jsonEditor("seo_overrides.{$key}", "JSON {$title}")
-                    ->helperText('اتركه [] للعودة إلى القيمة التلقائية التي يولدها Laravel.')
+                self::jsonEditor(
+                    $key === 'schema_override' ? $key : "seo_overrides.{$key}",
+                    "JSON {$title}",
+                )
+                    ->helperText('اتركه [] للعودة إلى القيمة التلقائية التي يولدها النظام.')
                     ->visible(fn (Get $get): bool => (bool) $get('developer_mode')),
             ])
+            ->visible(fn (Get $get): bool => (bool) $get('developer_mode'))
             ->collapsed()
             ->columnSpanFull();
     }
@@ -514,12 +469,20 @@ class ServiceForm
 
     private static function generatedCanonical(Get $get): string
     {
-        $recordSlug = $get('slug');
-        $slug = filled($recordSlug)
-            ? (string) $recordSlug
-            : (Str::slug((string) $get('title')) ?: 'service');
+        $slug = filled($get('slug_override'))
+            ? Str::slug((string) $get('slug_override'))
+            : self::generatedSlug($get);
 
         return rtrim((string) config('app.production_url'), '/').'/services/'.$slug;
+    }
+
+    private static function generatedSlug(Get $get): string
+    {
+        $recordSlug = $get('slug');
+
+        return filled($recordSlug)
+            ? (string) $recordSlug
+            : (Str::slug((string) $get('title')) ?: 'service');
     }
 
     private static function brandName(): string
@@ -531,26 +494,6 @@ class ServiceForm
             : (string) config('app.name');
     }
 
-    private static function ctaPreview(Get $get, ?Service $record): HtmlString
-    {
-        $service = $record ?? new Service;
-        $service->title = (string) ($get('title') ?: 'اسم الخدمة');
-        $service->setAttribute('cta_overrides', (array) ($get('cta_overrides') ?? []));
-        $cta = app(ServiceDefaultsService::class)->cta($service);
-
-        if (! $cta['enabled'] || blank($cta['url'])) {
-            return new HtmlString('<span style="color:#6b7280">زر واتساب سيكون مخفيًا.</span>');
-        }
-
-        return new HtmlString(
-            '<div style="display:flex;align-items:center;gap:.75rem;padding:1rem;'
-            .'border:1px solid #d1fae5;border-radius:.85rem;background:#ecfdf5">'
-            .'<strong>'.e((string) $cta['label']).'</strong>'
-            .'<small style="color:#047857;direction:ltr">'.e((string) $cta['url']).'</small>'
-            .'</div>',
-        );
-    }
-
     private static function openGraphPreview(Get $get): HtmlString
     {
         $media = Media::query()->find($get('hero_media_id'));
@@ -560,15 +503,15 @@ class ServiceForm
 
         return new HtmlString(
             '<div style="display:flex;gap:1rem;align-items:center;padding:1rem;border:1px solid #e5e7eb;border-radius:.85rem">'
-            .$image.'<div><strong>'.e(self::effectiveSeoValue($get, 'title', self::generatedSeoTitle($get))).'</strong>'
-            .'<p style="margin:.35rem 0;color:#6b7280">'.e(self::effectiveSeoValue($get, 'description', self::generatedDescription($get))).'</p>'
-            .'<small dir="ltr">'.e(self::effectiveSeoValue($get, 'canonical', self::generatedCanonical($get))).'</small></div></div>',
+            .$image.'<div><strong>'.e(self::effectiveSeoValue($get, 'og_title_override', self::effectiveSeoValue($get, 'seo_title_override', self::generatedSeoTitle($get)))).'</strong>'
+            .'<p style="margin:.35rem 0;color:#6b7280">'.e(self::effectiveSeoValue($get, 'og_description_override', self::effectiveSeoValue($get, 'meta_description_override', self::generatedDescription($get)))).'</p>'
+            .'<small dir="ltr">'.e(self::effectiveSeoValue($get, 'canonical_override', self::generatedCanonical($get))).'</small></div></div>',
         );
     }
 
     private static function hreflangPreview(Get $get): HtmlString
     {
-        $url = e(self::effectiveSeoValue($get, 'canonical', self::generatedCanonical($get)));
+        $url = e(self::effectiveSeoValue($get, 'canonical_override', self::generatedCanonical($get)));
 
         return new HtmlString(
             '<div style="display:grid;gap:.45rem"><span><b>العربية (السعودية):</b> '
@@ -588,8 +531,17 @@ class ServiceForm
 
     private static function effectiveSeoValue(Get $get, string $key, string $default): string
     {
-        $value = $get("seo_overrides.{$key}");
+        $value = $get($key);
 
         return filled($value) ? (string) $value : $default;
+    }
+
+    private static function richContentIsBlank(mixed $value): bool
+    {
+        $html = is_array($value)
+            ? RichContentRenderer::make($value)->toHtml()
+            : (string) $value;
+
+        return trim(strip_tags(html_entity_decode($html))) === '';
     }
 }

@@ -87,6 +87,7 @@ class ContentExportService
             ->whereKey(array_values($serviceGalleryIds))
             ->get()
             ->keyBy('id');
+        $publishedServicesById = $services->keyBy('id');
         $areas = $published(Area::query())
             ->where('is_active', true)
             ->with('media')
@@ -155,6 +156,9 @@ class ContentExportService
                 );
 
                 $hero = $record->getRelation('heroMedia');
+                $heroAlt = $record instanceof Service
+                    ? $record->effectiveHeroAlt()
+                    : ($hero instanceof Media ? $hero->alt : null);
                 $record->unsetRelation('heroMedia');
 
                 if (filled($record->getAttribute('legacy_path'))) {
@@ -168,7 +172,7 @@ class ContentExportService
                         ? [
                             'original_name' => $hero->original_name,
                             'public_url' => $hero->url(),
-                            'alt' => $hero->alt,
+                            'alt' => $heroAlt,
                         ]
                         : null,
                 );
@@ -185,7 +189,28 @@ class ContentExportService
 
                     if (is_array($blocks)) {
                         foreach ($blocks as &$block) {
-                            if (! is_array($block) || ($block['type'] ?? null) !== 'gallery') {
+                            if (! is_array($block)) {
+                                continue;
+                            }
+
+                            if (($block['type'] ?? null) === 'related_services') {
+                                $block['services'] = collect((array) ($block['service_ids'] ?? []))
+                                    ->map(fn (mixed $id) => $publishedServicesById->get((int) $id))
+                                    ->filter(fn (mixed $related): bool => $related instanceof Service)
+                                    ->reject(fn (Service $related): bool => $related->is($record))
+                                    ->map(fn (Service $related): array => [
+                                        'id' => $related->id,
+                                        'title' => $related->title,
+                                        'excerpt' => $related->excerpt,
+                                        'public_path' => $related->routePath(),
+                                    ])
+                                    ->values()
+                                    ->all();
+
+                                continue;
+                            }
+
+                            if (($block['type'] ?? null) !== 'gallery') {
                                 continue;
                             }
 
