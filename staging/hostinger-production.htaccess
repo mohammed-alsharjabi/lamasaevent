@@ -31,8 +31,14 @@ DirectoryIndex index.html index.php
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
-    # Static Astro routes are physical directories. Missing former routes must
-    # reach Laravel unchanged so a cached DirectorySlash redirect cannot loop.
+    # Public documents are rendered from the current database immediately.
+    # Static assets and the verified Astro build remain the fast fallback.
+    RewriteRule ^sitemap\.xml$ index.php [L]
+    RewriteCond %{REQUEST_URI} !^/(?:admin|api|storage|_astro|assets|icons|css|fonts|js)(?:/|$) [NC]
+    RewriteCond %{REQUEST_URI} !\.[A-Za-z0-9]{2,8}$
+    RewriteRule ^ index.php [L]
+
+    # Missing assets and application routes still reach Laravel unchanged.
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]

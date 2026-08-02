@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Services\ContentExportService;
 use App\Services\ContentPublishingService;
 use App\Services\ImageProcessor;
+use App\Services\PublicPageRenderer;
 use App\Services\SlugRedirectService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -24,9 +25,11 @@ class ExampleTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_guests_are_sent_to_the_admin_login(): void
+    public function test_public_home_is_available_and_guests_are_sent_to_the_admin_login(): void
     {
-        $this->get('/')->assertRedirect('/admin');
+        $this->get('/')
+            ->assertOk()
+            ->assertHeader('X-Lamsa-Content-Source', 'database');
         $this->get('/admin')->assertRedirect('/admin/login');
     }
 
@@ -173,8 +176,10 @@ class ExampleTest extends TestCase
         );
 
         Cache::put(ContentExportService::CACHE_KEY, '{"stale":true}', now()->addMinute());
+        Cache::put(PublicPageRenderer::CACHE_KEY, '{"stale":true}', now()->addMinute());
         $setting->update(['value' => ['name' => 'اسم محدث']]);
 
         $this->assertFalse(Cache::has(ContentExportService::CACHE_KEY));
+        $this->assertFalse(Cache::has(PublicPageRenderer::CACHE_KEY));
     }
 }

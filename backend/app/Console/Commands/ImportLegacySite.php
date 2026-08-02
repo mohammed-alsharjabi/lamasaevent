@@ -22,6 +22,7 @@ use App\Services\ImageProcessor;
 use App\Services\LegacyHtmlParser;
 use App\Services\LegacyManifestService;
 use App\Services\LegacyVerificationService;
+use App\Services\PublicPageRenderer;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -111,6 +112,7 @@ class ImportLegacySite extends Command
         $this->seedGlobalSettings();
         $this->syncMenus($parsedRoutes['/']['menus'] ?? []);
         Cache::forget(ContentExportService::CACHE_KEY);
+        Cache::forget(PublicPageRenderer::CACHE_KEY);
         $report = $verification->verify($routes);
         if (! $report['passed']) {
             throw new RuntimeException('Post-import verification failed. Run legacy:verify for details.');

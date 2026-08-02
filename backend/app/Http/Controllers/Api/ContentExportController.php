@@ -30,6 +30,7 @@ class ContentExportController extends Controller
         return response($json)
             ->header('Content-Type', 'application/json; charset=UTF-8')
             ->header('ETag', $etag)
-            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache');
     }
 }

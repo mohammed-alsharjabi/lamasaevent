@@ -67,6 +67,7 @@ class ContentPublishingService
         }, 3);
 
         Cache::forget(ContentExportService::CACHE_KEY);
+        Cache::forget(PublicPageRenderer::CACHE_KEY);
         Cache::forget('sitemap-xml:v1');
         app(PublishPipeline::class)->queue($content, $actorId);
     }

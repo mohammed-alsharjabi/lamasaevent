@@ -3,6 +3,7 @@
 namespace App\Models\Concerns;
 
 use App\Services\ContentExportService;
+use App\Services\PublicPageRenderer;
 use App\Services\PublishPipeline;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -22,6 +23,7 @@ trait InvalidatesContentExport
     private static function invalidateContentExport(Model $model): void
     {
         Cache::forget(ContentExportService::CACHE_KEY);
+        Cache::forget(PublicPageRenderer::CACHE_KEY);
         Cache::forget('sitemap-xml:v1');
 
         if (auth()->check()) {

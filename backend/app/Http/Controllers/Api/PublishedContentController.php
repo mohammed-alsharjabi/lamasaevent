@@ -32,7 +32,8 @@ class PublishedContentController extends Controller
             ->paginate($request->integer('per_page', 20));
 
         return response()->json($records)
-            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache');
     }
 
     public function show(string $type, int $id): JsonResponse
@@ -50,7 +51,8 @@ class PublishedContentController extends Controller
             ->findOrFail($id);
 
         return response()->json(['data' => $record])
-            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache');
     }
 
     /**

@@ -3,6 +3,8 @@ name: Deploy Production
 on:
   push:
     branches: ["feature/admin-cms"]
+    paths-ignore:
+      - "frontend/src/data/content-export.json"
   workflow_dispatch:
 
 permissions:
@@ -145,6 +147,18 @@ jobs:
           php artisan optimize
           php artisan queue:restart
           php artisan migrate:status --no-ansi | grep '2026_08_01_000000' | grep -q 'Ran'
+          php artisan migrate:status --no-ansi | grep '2026_08_01_010000' | grep -q 'Ran'
+
+          public_root="$(php artisan tinker --execute='echo config("publishing.deployment.public_root");')"
+          htaccess_source="$app_root/staging/hostinger-production.htaccess"
+          test -d "$public_root"
+          test "$(basename "$public_root")" = 'public_html'
+          test -f "$htaccess_source"
+          if [[ -f "$public_root/.htaccess" ]]; then
+            cp "$public_root/.htaccess" "$backup_root/htaccess-before-$timestamp"
+          fi
+          install -m 644 "$htaccess_source" "$public_root/.htaccess.next"
+          mv "$public_root/.htaccess.next" "$public_root/.htaccess"
 
           echo "LARAVEL_DEPLOYED=$(git rev-parse --short HEAD)"
           echo "CODE_BACKUP=$code_backup"
