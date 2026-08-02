@@ -142,12 +142,27 @@ jobs:
             --no-progress \
             --optimize-autoloader
           php artisan migrate --force --no-interaction
-          php artisan storage:link --no-interaction || true
+
+          # Hostinger disables PHP's exec() function, which Laravel's
+          # storage:link inspection may call. Maintain the one required link
+          # with shell primitives and fail if it is not usable.
+          storage_target="$backend_root/storage/app/public"
+          storage_link="$backend_root/public/storage"
+          mkdir -p "$storage_target"
+          if [[ -L "$storage_link" && ! -e "$storage_link" ]]; then
+            unlink "$storage_link"
+          fi
+          if [[ ! -e "$storage_link" ]]; then
+            ln -s "$storage_target" "$storage_link"
+          fi
+          test -e "$storage_link"
+
           php artisan optimize:clear
           php artisan optimize
           php artisan queue:restart
           php artisan migrate:status --no-ansi | grep '2026_08_01_000000' | grep -q 'Ran'
           php artisan migrate:status --no-ansi | grep '2026_08_01_010000' | grep -q 'Ran'
+          php artisan migrate:status --no-ansi | grep '2026_08_02_000000' | grep -q 'Ran'
 
           public_root="$(php artisan tinker --execute='echo config("publishing.deployment.public_root");')"
           htaccess_source="$app_root/staging/hostinger-production.htaccess"
