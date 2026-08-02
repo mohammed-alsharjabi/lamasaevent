@@ -59,35 +59,6 @@ class ContentExportService
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get();
-        $serviceGalleryIds = [];
-
-        foreach ($services as $service) {
-            if (! $service instanceof Service) {
-                continue;
-            }
-
-            $blocks = $service->getAttribute('content_blocks');
-
-            if (! is_array($blocks)) {
-                continue;
-            }
-
-            foreach ($blocks as $block) {
-                if (! is_array($block) || ($block['type'] ?? null) !== 'gallery') {
-                    continue;
-                }
-
-                foreach ((array) ($block['media_ids'] ?? []) as $mediaId) {
-                    $serviceGalleryIds[(int) $mediaId] = (int) $mediaId;
-                }
-            }
-        }
-
-        $serviceGalleryMedia = Media::query()
-            ->whereKey(array_values($serviceGalleryIds))
-            ->get()
-            ->keyBy('id');
-        $publishedServicesById = $services->keyBy('id');
         $areas = $published(Area::query())
             ->where('is_active', true)
             ->with('media')
@@ -95,11 +66,42 @@ class ContentExportService
             ->orderBy('id')
             ->get();
         $articles = $published(Article::query())
-            ->with('media')
+            ->with(['category:id,name,slug', 'media'])
             ->orderBy('sort_order')
             ->latest('published_at')
             ->latest('id')
             ->get();
+        $contentGalleryIds = [];
+
+        foreach ([$services, $articles] as $contentRecords) {
+            foreach ($contentRecords as $contentRecord) {
+                if (! $contentRecord instanceof Service && ! $contentRecord instanceof Article) {
+                    continue;
+                }
+
+                $blocks = $contentRecord->getAttribute('content_blocks');
+
+                if (! is_array($blocks)) {
+                    continue;
+                }
+
+                foreach ($blocks as $block) {
+                    if (! is_array($block) || ($block['type'] ?? null) !== 'gallery') {
+                        continue;
+                    }
+
+                    foreach ((array) ($block['media_ids'] ?? []) as $mediaId) {
+                        $contentGalleryIds[(int) $mediaId] = (int) $mediaId;
+                    }
+                }
+            }
+        }
+
+        $contentGalleryMedia = Media::query()
+            ->whereKey(array_values($contentGalleryIds))
+            ->get()
+            ->keyBy('id');
+        $publishedServicesById = $services->keyBy('id');
 
         foreach ([$pages, $serviceCategories, $services, $areas, $articles] as $records) {
             foreach ($records as $record) {
@@ -156,7 +158,7 @@ class ContentExportService
                 );
 
                 $hero = $record->getRelation('heroMedia');
-                $heroAlt = $record instanceof Service
+                $heroAlt = $record instanceof Service || $record instanceof Article
                     ? $record->effectiveHeroAlt()
                     : ($hero instanceof Media ? $hero->alt : null);
                 $record->unsetRelation('heroMedia');
@@ -185,6 +187,9 @@ class ContentExportService
                         $record->setAttribute('whatsapp_enabled', $cta['enabled']);
                     }
 
+                }
+
+                if ($record instanceof Service || $record instanceof Article) {
                     $blocks = $record->getAttribute('content_blocks');
 
                     if (is_array($blocks)) {
@@ -193,7 +198,10 @@ class ContentExportService
                                 continue;
                             }
 
-                            if (($block['type'] ?? null) === 'related_services') {
+                            if (
+                                $record instanceof Service
+                                && ($block['type'] ?? null) === 'related_services'
+                            ) {
                                 $block['services'] = collect((array) ($block['service_ids'] ?? []))
                                     ->map(fn (mixed $id) => $publishedServicesById->get((int) $id))
                                     ->filter(fn (mixed $related): bool => $related instanceof Service)
@@ -217,7 +225,7 @@ class ContentExportService
                             $block['media'] = [];
 
                             foreach ((array) ($block['media_ids'] ?? []) as $mediaId) {
-                                $media = $serviceGalleryMedia->get((int) $mediaId);
+                                $media = $contentGalleryMedia->get((int) $mediaId);
 
                                 if (! $media instanceof Media) {
                                     continue;

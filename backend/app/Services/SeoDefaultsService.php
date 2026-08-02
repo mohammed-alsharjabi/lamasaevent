@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\ManagedContent;
 use App\Models\Article;
+use App\Models\ArticleCategory;
 use App\Models\ContactSetting;
 use App\Models\Faq;
 use App\Models\Media;
@@ -11,6 +12,7 @@ use App\Models\SeoMeta;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\SiteSetting;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -28,7 +30,7 @@ class SeoDefaultsService
         if (! $seo instanceof SeoMeta) {
             $seo = new SeoMeta;
         }
-        $usesGeneratedDefaults = $content instanceof Service
+        $usesGeneratedDefaults = ($content instanceof Service || $content instanceof Article)
             && $content->uses_generated_defaults;
         $overrides = $usesGeneratedDefaults
             ? $content->effectiveSeoOverrides()
@@ -38,7 +40,9 @@ class SeoDefaultsService
         $canonical = rtrim((string) config('app.production_url'), '/').$path;
 
         if ($usesGeneratedDefaults) {
-            $computed = $this->previewService($content, $path);
+            $computed = $content instanceof Service
+                ? $this->previewService($content, $path)
+                : $this->previewArticle($content, $path);
             $seo->title = $computed['title'];
             $seo->description = $computed['description'];
             $seo->canonical = $computed['canonical'];
@@ -203,6 +207,78 @@ class SeoDefaultsService
     }
 
     /**
+     * Calculate the exact public SEO payload for a smart article without
+     * writing it. The editor preview and publishing pipeline share this path.
+     *
+     * @return array{
+     *   title: string,
+     *   description: string,
+     *   canonical: string,
+     *   robots: string,
+     *   open_graph: array<mixed>,
+     *   twitter: array<mixed>,
+     *   hreflang: array<mixed>,
+     *   json_ld: array<mixed>
+     * }
+     */
+    public function previewArticle(Article $article, ?string $path = null): array
+    {
+        $overrides = $article->effectiveSeoOverrides();
+        $title = $this->title($article, true);
+        $description = $this->description($article, $title);
+        $path ??= $article->routePath();
+        $canonical = rtrim((string) config('app.production_url'), '/').$path;
+        $title = $this->override($overrides, 'title', $title);
+        $description = $this->override($overrides, 'description', $description);
+        $canonical = $this->override($overrides, 'canonical', $canonical);
+        $robots = $this->override(
+            $overrides,
+            'robots',
+            $article->isPublished() ? 'index,follow' : 'noindex,nofollow',
+        );
+        $seo = new SeoMeta([
+            'title' => $title,
+            'description' => $description,
+            'canonical' => $canonical,
+            'robots' => $robots,
+        ]);
+        $openGraph = array_replace(
+            $this->openGraph($article, $seo),
+            is_array($overrides['open_graph'] ?? null)
+                ? $overrides['open_graph']
+                : [],
+        );
+        $twitter = array_replace([
+            'card' => filled($openGraph['image'] ?? null)
+                ? 'summary_large_image'
+                : 'summary',
+            'title' => (string) ($openGraph['title'] ?? $title),
+            'description' => (string) ($openGraph['description'] ?? $description),
+            'image' => $openGraph['image'] ?? null,
+        ], is_array($overrides['twitter'] ?? null) ? $overrides['twitter'] : []);
+        $hreflang = $this->arrayOverride(
+            $overrides,
+            'hreflang',
+            $this->hreflang($canonical),
+        );
+        $jsonLd = $this->arrayOverride($overrides, 'json_ld', [
+            $this->articleSchema($article, $seo),
+            $this->articleBreadcrumbSchema($article, $canonical),
+        ]);
+
+        return [
+            'title' => $title,
+            'description' => $description,
+            'canonical' => $canonical,
+            'robots' => $robots,
+            'open_graph' => $openGraph,
+            'twitter' => $twitter,
+            'hreflang' => $hreflang,
+            'json_ld' => $jsonLd,
+        ];
+    }
+
+    /**
      * @return list<string>
      */
     public function normalizeKeywords(mixed $keywords): array
@@ -299,13 +375,13 @@ class SeoDefaultsService
     /** @return array<string, string|null> */
     private function openGraph(Model $content, SeoMeta $seo): array
     {
-        $heroMedia = $content instanceof Service
+        $heroMedia = ($content instanceof Service || $content instanceof Article)
             ? $content->heroMedia()->first()
             : null;
         $image = $heroMedia instanceof Media ? $heroMedia->url() : null;
 
         return [
-            'type' => 'website',
+            'type' => $content instanceof Article ? 'article' : 'website',
             'locale' => 'ar_SA',
             'site_name' => $this->siteName(),
             'title' => (string) $seo->title,
@@ -419,6 +495,105 @@ class SeoDefaultsService
             '@type' => 'ListItem',
             'position' => count($items) + 1,
             'name' => $service->title,
+            'item' => $canonical,
+        ];
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => $items,
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    private function articleSchema(Article $article, SeoMeta $seo): array
+    {
+        $heroMedia = $article->heroMedia()->first();
+        $image = $heroMedia instanceof Media ? $heroMedia->url() : null;
+        $publishedAt = $article->getAttribute('published_at');
+        $updatedAt = $article->getAttribute('updated_at');
+        $faqs = $article->faqs()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get(['question', 'answer']);
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'BlogPosting',
+            'headline' => $article->title,
+            'description' => (string) $seo->description,
+            'url' => (string) $seo->canonical,
+            'mainEntityOfPage' => (string) $seo->canonical,
+            'inLanguage' => 'ar-SA',
+            'datePublished' => $publishedAt instanceof CarbonInterface
+                ? $publishedAt->toIso8601String()
+                : null,
+            'dateModified' => $updatedAt instanceof CarbonInterface
+                ? $updatedAt->toIso8601String()
+                : null,
+            'image' => $image,
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => $this->siteName(),
+            ],
+        ];
+
+        if ($faqs->isNotEmpty()) {
+            $schema['subjectOf'] = [
+                '@type' => 'FAQPage',
+                'mainEntity' => $faqs
+                    ->filter(fn ($faq): bool => $faq instanceof Faq)
+                    ->map(fn (Faq $faq): array => [
+                        '@type' => 'Question',
+                        'name' => $faq->question,
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => $faq->answer,
+                        ],
+                    ])->values()->all(),
+            ];
+        }
+
+        return array_filter(
+            $schema,
+            fn (mixed $value): bool => $value !== null && $value !== '',
+        );
+    }
+
+    /** @return array<string, mixed> */
+    private function articleBreadcrumbSchema(Article $article, string $canonical): array
+    {
+        $origin = rtrim((string) config('app.production_url'), '/');
+        $items = [
+            [
+                '@type' => 'ListItem',
+                'position' => 1,
+                'name' => 'الرئيسية',
+                'item' => $origin.'/',
+            ],
+            [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => 'المقالات',
+                'item' => $origin.'/blog',
+            ],
+        ];
+
+        $category = $article->relationLoaded('category')
+            ? $article->getRelation('category')
+            : $article->category()->first();
+
+        if ($category instanceof ArticleCategory) {
+            $items[] = [
+                '@type' => 'ListItem',
+                'position' => count($items) + 1,
+                'name' => $category->name,
+            ];
+        }
+
+        $items[] = [
+            '@type' => 'ListItem',
+            'position' => count($items) + 1,
+            'name' => $article->title,
             'item' => $canonical,
         ];
 

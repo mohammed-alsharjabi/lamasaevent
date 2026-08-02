@@ -39,7 +39,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 'المحتوى',
-                'التصنيفات والمناطق',
+                'التصنيفات',
+                'المناطق والأماكن',
                 'الوسائط والهيكل',
                 'SEO والنشر',
                 'النظام',

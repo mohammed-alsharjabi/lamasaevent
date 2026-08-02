@@ -22,7 +22,7 @@ class ServiceCategoryResource extends Resource
 {
     protected static ?string $model = ServiceCategory::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -36,7 +36,7 @@ class ServiceCategoryResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'التصنيفات والمناطق';
+        return 'التصنيفات';
     }
 
     public static function form(Schema $schema): Schema

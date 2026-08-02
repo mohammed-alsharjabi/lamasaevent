@@ -22,7 +22,7 @@ class AreaResource extends Resource
 {
     protected static ?string $model = Area::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -30,13 +30,13 @@ class AreaResource extends Resource
 
     protected static ?string $pluralModelLabel = 'المناطق';
 
-    protected static ?string $navigationLabel = 'المناطق';
+    protected static ?string $navigationLabel = 'المناطق والأماكن';
 
     protected static ?int $navigationSort = 30;
 
     public static function getNavigationGroup(): ?string
     {
-        return 'التصنيفات والمناطق';
+        return 'المناطق والأماكن';
     }
 
     public static function form(Schema $schema): Schema
