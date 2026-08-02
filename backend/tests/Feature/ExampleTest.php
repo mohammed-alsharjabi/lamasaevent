@@ -33,6 +33,18 @@ class ExampleTest extends TestCase
         $this->get('/admin')->assertRedirect('/admin/login');
     }
 
+    public function test_admin_uses_the_self_hosted_cairo_font(): void
+    {
+        $this->get('/admin/login')
+            ->assertOk()
+            ->assertSee('font-family:"Cairo"', false)
+            ->assertSee('/fonts/cairo/cairo-arabic.woff2', false)
+            ->assertSee('/fonts/cairo/cairo-latin.woff2', false);
+
+        $this->assertFileExists(public_path('fonts/cairo/cairo-arabic.woff2'));
+        $this->assertFileExists(public_path('fonts/cairo/cairo-latin.woff2'));
+    }
+
     public function test_non_admin_users_cannot_open_the_dashboard(): void
     {
         $user = User::factory()->create(['is_admin' => false]);
