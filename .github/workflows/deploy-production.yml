@@ -175,6 +175,18 @@ jobs:
           install -m 644 "$htaccess_source" "$public_root/.htaccess.next"
           mv "$public_root/.htaccess.next" "$public_root/.htaccess"
 
+          # The document root serves both the Astro site and Laravel admin.
+          # Publish the self-hosted admin fonts explicitly; frontend snapshot
+          # deployments preserve this directory and cannot remove it.
+          install -d -m 755 "$public_root/fonts/cairo"
+          rsync \
+            -az \
+            --delete \
+            "$backend_root/public/fonts/cairo/" \
+            "$public_root/fonts/cairo/"
+          test -s "$public_root/fonts/cairo/cairo-arabic.woff2"
+          test -s "$public_root/fonts/cairo/cairo-latin.woff2"
+
           echo "LARAVEL_DEPLOYED=$(git rev-parse --short HEAD)"
           echo "CODE_BACKUP=$code_backup"
           echo "DATABASE_BACKUP=$database_backup"
