@@ -43,6 +43,14 @@ class ExampleTest extends TestCase
 
         $this->assertFileExists(public_path('fonts/cairo/cairo-arabic.woff2'));
         $this->assertFileExists(public_path('fonts/cairo/cairo-latin.woff2'));
+
+        $this->get('/fonts/cairo/cairo-arabic.woff2')
+            ->assertOk()
+            ->assertHeader('Content-Type', 'font/woff2')
+            ->assertHeader(
+                'Cache-Control',
+                'immutable, max-age=31536000, public',
+            );
     }
 
     public function test_non_admin_users_cannot_open_the_dashboard(): void

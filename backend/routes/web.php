@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\PreviewArticleController;
 use App\Http\Controllers\Admin\PreviewServiceController;
 use App\Http\Controllers\Api\SitemapXmlController;
+use App\Http\Controllers\CairoFontController;
 use App\Http\Controllers\PublicPageController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,10 @@ Route::get('/admin/article-previews/{article}', PreviewArticleController::class)
 
 Route::get('/sitemap.xml', SitemapXmlController::class)
     ->name('public.sitemap');
+
+Route::get('/fonts/cairo/{font}', CairoFontController::class)
+    ->where('font', 'cairo-(?:arabic|latin)\.woff2')
+    ->name('public.cairo-font');
 
 Route::get('/', PublicPageController::class)->name('public.home');
 Route::get('/services', PublicPageController::class);
