@@ -134,24 +134,32 @@ const blockLabel = typeof block.label === "string" && block.label !== "" ? block
   .managed-service-hero img {
     display: block;
     width: 100%;
-    max-height: 34rem;
+    aspect-ratio: 16 / 9;
+    max-height: 38rem;
     object-fit: cover;
-    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.125rem;
     margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.46);
   }
 
   .managed-service-hero__body {
-    max-width: 54rem;
+    max-width: 50rem;
   }
 
   .managed-service-hero h1 {
-    margin: 0 0 0.75rem;
+    margin: 0 0 1rem;
+    color: #f7f7f7;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.25;
+    letter-spacing: -0.035em;
   }
 
   .managed-service-hero p,
   .managed-service-card p,
   .managed-service-cta p {
-    color: var(--text-muted, #596579);
+    color: rgba(255, 255, 255, 0.58);
+    line-height: 1.9;
   }
 
   .managed-service-section,
@@ -163,6 +171,8 @@ const blockLabel = typeof block.label === "string" && block.label !== "" ? block
   .managed-service-section h2,
   .managed-service-cta h2 {
     margin-top: 0;
+    color: #f5f5f5;
+    font-size: clamp(1.35rem, 3vw, 1.85rem);
   }
 
   .managed-service-grid,
@@ -173,10 +183,15 @@ const blockLabel = typeof block.label === "string" && block.label !== "" ? block
   }
 
   .managed-service-card {
-    padding: 1.25rem;
-    border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+    padding: clamp(1.25rem, 3vw, 1.65rem);
+    border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 1rem;
-    background: color-mix(in srgb, currentColor 3%, transparent);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025));
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
+  }
+
+  .managed-service-card h3 {
+    color: #f1f1f1;
   }
 
   .managed-service-card a {
@@ -191,8 +206,8 @@ const blockLabel = typeof block.label === "string" && block.label !== "" ? block
     height: 2.25rem;
     place-items: center;
     border-radius: 999px;
-    color: white;
-    background: var(--brand, #173f38);
+    color: #07110f;
+    background: #81d8d0;
     font-weight: 800;
   }
 
@@ -210,15 +225,17 @@ const blockLabel = typeof block.label === "string" && block.label !== "" ? block
 
   .managed-service-gallery figcaption {
     padding-top: 0.5rem;
-    color: var(--text-muted, #596579);
+    color: rgba(255, 255, 255, 0.5);
     font-size: 0.9rem;
   }
 
   .managed-service-cta {
     text-align: center;
     color: white;
+    border: 1px solid rgba(129, 216, 208, 0.24);
     border-radius: 1.25rem;
-    background: var(--brand, #173f38);
+    background: linear-gradient(145deg, #0d2823, #091612);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.3);
   }
 
   .managed-service-cta p {
@@ -228,23 +245,30 @@ const blockLabel = typeof block.label === "string" && block.label !== "" ? block
   .managed-service-cta a {
     display: inline-flex;
     padding: 0.75rem 1.2rem;
-    color: var(--brand, #173f38);
+    color: #07110f;
     border-radius: 999px;
-    background: white;
+    background: #81d8d0;
     text-decoration: none;
     font-weight: 800;
   }
 
   .managed-service-faqs details {
     padding-block: 1rem;
-    border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+    color: rgba(255, 255, 255, 0.62);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .managed-service-faqs summary {
     cursor: pointer;
+    color: #f3f3f3;
     font-weight: 800;
   }
 
   :global(.managed-rich > :first-child) { margin-top: 0; }
   :global(.managed-rich > :last-child) { margin-bottom: 0; }
+  :global(.managed-rich) { color: rgba(255, 255, 255, 0.66); line-height: 1.9; }
+  :global(.managed-rich h2),
+  :global(.managed-rich h3),
+  :global(.managed-rich strong) { color: #f4f4f4; }
+  :global(.managed-rich a) { color: #81d8d0; }
 </style>

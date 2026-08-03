@@ -78,6 +78,73 @@ test("published CMS services use the native grids everywhere", async ({
   ).toHaveAttribute("href", child.public_path as string);
 });
 
+test("article and service details stay dark and editorial cards stay aligned", async ({
+  page,
+}) => {
+  await page.goto("/blog/riyadh-venue-timing", {
+    waitUntil: "domcontentloaded",
+  });
+  await expect(page.locator("main")).toHaveClass(/content-detail--dark/);
+  await expect(page.locator("main")).toHaveCSS(
+    "background-color",
+    "rgb(5, 5, 5)",
+  );
+  await expect(page.locator(".bla-prose")).toHaveCSS(
+    "color",
+    "rgba(255, 255, 255, 0.7)",
+  );
+
+  const managedServicePath = cmsServicePaths.find(Boolean);
+
+  if (managedServicePath) {
+    await page.goto(managedServicePath, { waitUntil: "domcontentloaded" });
+    await expect(page.locator("main")).toHaveClass(/content-detail--dark/);
+    await expect(page.locator("main")).toHaveCSS(
+      "background-color",
+      "rgb(5, 5, 5)",
+    );
+  }
+
+  await page.goto("/blog", { waitUntil: "domcontentloaded" });
+  const cards = page.locator(".blog-card");
+  await expect(cards.first()).toBeVisible();
+  await expect(page.locator(".blog-card__media img")).toHaveCount(
+    await cards.count(),
+  );
+
+  const firstRowMetrics = await cards.evaluateAll((nodes) =>
+    nodes.slice(0, 3).map((card) => {
+      const media = card.querySelector(".blog-card__media");
+
+      return {
+        card: Math.round(card.getBoundingClientRect().height),
+        media: Math.round(media?.getBoundingClientRect().height ?? 0),
+      };
+    }),
+  );
+  expect(new Set(firstRowMetrics.map(({ card }) => card)).size).toBe(1);
+  expect(new Set(firstRowMetrics.map(({ media }) => media)).size).toBe(1);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/blog/riyadh-venue-timing", {
+    waitUntil: "domcontentloaded",
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    ),
+  ).toBe(false);
+
+  if (managedServicePath) {
+    await page.goto(managedServicePath, { waitUntil: "domcontentloaded" });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      ),
+    ).toBe(false);
+  }
+});
+
 test("local administrator can enter the Arabic Filament dashboard", async ({
   browser,
 }) => {

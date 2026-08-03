@@ -26,9 +26,10 @@ const {
 } = Astro.props;
 const integrated = integrateNativeListings(blocks, routePath);
 const hasManagedIntro = integrated.blocks.some((block) => block.type === "intro");
+const isDarkDetail = /^\/(?:blog|services)\/.+/.test(routePath);
 ---
 
-<main id="main">
+<main id="main" class:list={{ "content-detail--dark": isDarkDetail }}>
   {integrated.blocks.length > 0 ? (
     <>
       {!hasManagedIntro && integrated.blocks.some((block) => !block.html) && (
@@ -57,18 +58,21 @@ const hasManagedIntro = integrated.blocks.some((block) => block.type === "intro"
       ))}
     </>
   ) : (
-    <article class="container" style="padding-block: clamp(3rem, 8vw, 7rem);">
+    <article class="managed-detail-fallback container">
       {heroMedia && (
-        <figure style="margin: 0 0 2rem;">
+        <figure class="managed-detail-fallback__media">
           <img
             src={heroMedia.public_url}
             alt={heroMedia.alt || title || heroMedia.original_name}
-            style="display: block; width: 100%; max-height: 34rem; object-fit: cover; border-radius: 1rem;"
+            loading="eager"
+            decoding="async"
           />
         </figure>
       )}
-      {title && <h1>{title}</h1>}
-      {summary && <p>{summary}</p>}
+      <div class="managed-detail-fallback__body">
+        {title && <h1>{title}</h1>}
+        {summary && <p>{summary}</p>}
+      </div>
     </article>
   )}
   {integrated.supplementalHtml && (
