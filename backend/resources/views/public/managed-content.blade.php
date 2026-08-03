@@ -4,30 +4,32 @@
     $summary = $entity['summary'] ?? $entity['excerpt'] ?? null;
     $faqs = collect($entity['faqs'] ?? [])->filter(fn ($faq) => is_array($faq) && ($faq['is_active'] ?? true));
     $hasFaqBlock = collect($blocks)->contains(fn ($block) => is_array($block) && ($block['type'] ?? null) === 'faq');
+    $hasManagedBlocks = $blocks === [] || collect($blocks)->contains(fn ($block) => is_array($block) && ! filled($block['html'] ?? null));
+    $usesDarkDetail = in_array($kind, ['article', 'service', 'service-category'], true);
 @endphp
-<main id="main" data-live-content="{{ $kind }}" data-live-content-id="{{ (int) ($entity['id'] ?? 0) }}">
-    @if ($hero && filled($hero['public_url'] ?? null))
-        <figure class="container" style="margin-block:clamp(2rem,5vw,4rem) 1.5rem">
-            <img
-                src="{{ $hero['public_url'] }}"
-                alt="{{ $hero['alt'] ?? $entity['title'] ?? '' }}"
-                width="1200"
-                height="760"
-                loading="eager"
-                fetchpriority="high"
-                decoding="async"
-                style="display:block;width:100%;max-height:42rem;object-fit:cover;border-radius:1rem"
-            >
-        </figure>
-    @endif
-
-    @if ($blocks === [] || collect($blocks)->contains(fn ($block) => is_array($block) && ! filled($block['html'] ?? null)))
-        <header class="container" style="padding-block:clamp(2rem,5vw,4rem)">
-            <h1>{{ $entity['title'] ?? '' }}</h1>
-            @if (filled($summary))
-                <p>{{ $summary }}</p>
+<main id="main" @class(['content-detail--dark' => $usesDarkDetail]) data-live-content="{{ $kind }}" data-live-content-id="{{ (int) ($entity['id'] ?? 0) }}">
+    @if ($hasManagedBlocks)
+        <article class="managed-detail-fallback container">
+            @if ($hero && filled($hero['public_url'] ?? null))
+                <figure class="managed-detail-fallback__media">
+                    <img
+                        src="{{ $hero['public_url'] }}"
+                        alt="{{ $hero['alt'] ?? $entity['title'] ?? '' }}"
+                        width="1200"
+                        height="760"
+                        loading="eager"
+                        fetchpriority="high"
+                        decoding="async"
+                    >
+                </figure>
             @endif
-        </header>
+            <div class="managed-detail-fallback__body">
+                <h1>{{ $entity['title'] ?? '' }}</h1>
+                @if (filled($summary))
+                    <p>{{ $summary }}</p>
+                @endif
+            </div>
+        </article>
     @endif
 
     @foreach ($blocks as $block)

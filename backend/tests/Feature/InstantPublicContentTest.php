@@ -47,6 +47,8 @@ class InstantPublicContentTest extends TestCase
             ->assertSee('خدمة فورية للاختبار')
             ->assertSee('وصف الخدمة الذي يجب أن يظهر دون انتظار بناء الواجهة.')
             ->assertSee('data-live-content="service"', false)
+            ->assertSee('class="content-detail--dark"', false)
+            ->assertSee('class="managed-detail-fallback container"', false)
             ->assertSee(
                 '<link rel="canonical" href="'.config('app.production_url').$service->routePath().'">',
                 false,
@@ -110,7 +112,9 @@ class InstantPublicContentTest extends TestCase
         $this->get($article->routePath())
             ->assertOk()
             ->assertSee('مقالة فورية للاختبار')
-            ->assertSee('ملخص المقالة الفوري');
+            ->assertSee('ملخص المقالة الفوري')
+            ->assertSee('class="content-detail--dark"', false)
+            ->assertSee('class="managed-detail-fallback container"', false);
         $this->get('/blog')
             ->assertOk()
             ->assertSee('مقالة فورية للاختبار')
