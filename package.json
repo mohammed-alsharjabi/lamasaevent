@@ -1,0 +1,15 @@
+{
+  "name": "lamasaevent-recovery",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "setup": "bash scripts/setup-local.sh",
+    "dev": "bash scripts/dev.sh",
+    "stop": "bash scripts/stop-dev.sh",
+    "test": "bash scripts/test.sh",
+    "build": "bash scripts/build.sh",
+    "verify": "bash scripts/verify-local.sh"
+  }
+}

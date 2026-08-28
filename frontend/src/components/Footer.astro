@@ -1,0 +1,129 @@
+---
+import { requireContact, requireMenu, requireSetting } from "../lib/content";
+
+const brand = requireSetting("brand");
+const footer = requireSetting("footer");
+const ui = requireSetting("ui_labels");
+const contact = requireContact();
+const quickLinks = requireMenu("footer").all_items.filter((item) =>
+  item.url.startsWith("/"),
+);
+const phoneHref = `tel:${contact.phone}`;
+const whatsappHref = `https://wa.me/${contact.whatsapp}`;
+const socialLabels: Record<string, string> = {
+  instagram: "إنستغرام",
+  tiktok: "تيك توك",
+  snapchat: "سناب شات",
+  x: "إكس",
+  twitter: "إكس",
+  facebook: "فيسبوك",
+  youtube: "يوتيوب",
+  linkedin: "لينكدإن",
+};
+const socialLinks = Object.entries(contact.social_links ?? {}).filter(
+  ([, url]) => Boolean(url),
+);
+const hasCompanyLine = Boolean(footer.company_line || contact.email);
+const hasCredit = Boolean(
+  footer.credit_title ||
+  footer.credit_whatsapp_url ||
+  footer.credit_profile_url
+);
+---
+
+<!--cms-live:footer:start-->
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <p class="site-footer__brand-name">{brand.name}</p>
+      <p class="site-footer__brand-desc">
+        {footer.description}
+      </p>
+      {hasCompanyLine && (
+        <p class="site-footer__brand-desc" style="margin-top: 0.5rem; font-size: 0.9em; opacity: 0.92;">
+          {footer.company_line}
+          {contact.email && <a href={`mailto:${contact.email}`} dir="ltr">{contact.email}</a>}
+        </p>
+      )}
+    </div>
+    <div class="site-footer__columns">
+      <div class="site-footer__col">
+        <h2 class="site-footer__col-h">{footer.quick_links_heading}</h2>
+        <ul class="site-footer__list">
+          {quickLinks.map((item) => (
+            <li>
+              <a
+                href={item.url}
+                target={item.open_in_new_tab ? "_blank" : undefined}
+                rel={item.open_in_new_tab ? "noopener noreferrer" : undefined}
+              >{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="site-footer__col">
+        <h2 class="site-footer__col-h">{footer.contact_heading}</h2>
+        <ul class="site-footer__list site-footer__list--contact">
+          <li><a class="site-footer__phone" href={phoneHref} dir="ltr">{contact.phone_display}</a></li>
+          <li class="site-footer__cta-row">
+            <a
+              class="site-footer__pill site-footer__pill--wa"
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >{ui.whatsapp}</a>
+            <a class="site-footer__pill site-footer__pill--call" href={phoneHref}>{ui.call}</a>
+          </li>
+          {socialLinks.length > 0 && (
+            <li>
+              <ul class="site-footer__social" aria-label="حسابات التواصل الاجتماعي">
+                {socialLinks.map(([network, url]) => (
+                  <li>
+                    <a
+                      class="site-footer__social-link"
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >{socialLabels[network] || network}</a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          )}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container site-footer__legal">
+    <p>{footer.legal}</p>
+    {hasCredit && (
+      <div class="site-footer__credit" aria-label={footer.credit_aria_label || "بيانات منفذ الموقع"}>
+        {footer.credit_title && (
+          <p class="site-footer__credit-title">{footer.credit_title}</p>
+        )}
+        {(footer.credit_whatsapp_url || footer.credit_profile_url) && (
+          <div class="site-footer__credit-actions">
+            {footer.credit_whatsapp_url && (
+              <a
+                class="site-footer__credit-btn site-footer__credit-btn--wa"
+                href={footer.credit_whatsapp_url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >{footer.credit_whatsapp_label || "واتساب"}</a>
+            )}
+            {footer.credit_profile_url && (
+              <a
+                class="site-footer__credit-btn site-footer__credit-btn--at"
+                href={footer.credit_profile_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                dir="ltr"
+              >{footer.credit_profile_label || "الملف الشخصي"}</a>
+            )}
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+</footer>
+<!--cms-live:footer:end-->

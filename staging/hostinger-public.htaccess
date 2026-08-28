@@ -1,0 +1,43 @@
+DirectoryIndex index.html index.php
+
+<IfModule mod_headers.c>
+    Header always set X-Robots-Tag "noindex, nofollow, noarchive"
+
+    # HTML and SEO documents must be revalidated after each atomic deployment.
+    # Hashed Astro assets remain immutable and can be cached aggressively.
+    <FilesMatch "^(?:.*\.html?|sitemap\.xml|robots\.txt)$">
+        Header always set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+
+    <FilesMatch "\.(?:css|js|mjs)$">
+        Header always set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Handle X-XSRF-Token Header
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Public documents are rendered from the current database immediately.
+    # Static assets and the verified Astro build remain the fast fallback.
+    RewriteRule ^sitemap\.xml$ index.php [L]
+    RewriteCond %{REQUEST_URI} !^/(?:admin|api|storage|_astro|assets|icons|css|fonts|js)(?:/|$) [NC]
+    RewriteCond %{REQUEST_URI} !\.[A-Za-z0-9]{2,8}$
+    RewriteRule ^ index.php [L]
+
+    # Missing assets and application routes still reach Laravel unchanged.
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>

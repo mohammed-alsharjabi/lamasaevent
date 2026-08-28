@@ -1,0 +1,133 @@
+---
+import { requireMenu, requireSetting } from "../lib/content";
+
+const brand = requireSetting("brand");
+const ui = requireSetting("ui_labels");
+const headerItems = requireMenu("header").all_items;
+const brandItem = headerItems.at(0);
+const ctaItem = headerItems.at(-1);
+const navigation = headerItems.slice(1, -1);
+
+if (!brandItem || !ctaItem) {
+  throw new Error("The CMS header menu must include brand and CTA items.");
+}
+
+const logoWidth = Number.parseInt(brand.logo_width, 10);
+const logoHeight = Number.parseInt(brand.logo_height, 10);
+const menuOpenLabel = ui.menu_open;
+const menuCloseLabel = ui.menu_close;
+---
+
+<!--cms-live:header:start-->
+<div class="site-header-wrap">
+  <input type="checkbox" id="site-nav-toggle" class="site-header__checkbox visually-hidden" />
+  <header class="site-header">
+    <div class="site-header__bar">
+      <div class="container site-header__bar-inner">
+        <div class="site-header__start">
+          <a
+            class="site-header__brand brand site-header__brand--with-logo"
+            href={brandItem.url}
+            aria-label={brandItem.label}
+          >
+            <img
+              class="site-header__logo"
+              src={brand.logo_src}
+              alt=""
+              width={logoWidth}
+              height={logoHeight}
+              decoding="async"
+            />
+            <span class="site-header__brand-text">
+              <span class="site-header__brand-name">{brand.name}</span>
+              <span class="brand__tag">{brand.tagline}</span>
+            </span>
+          </a>
+          <nav class="site-header__nav site-header__nav--desktop" aria-label={ui.primary_navigation}>
+            {navigation.map((item) => (
+              <a
+                class="site-header__link"
+                href={item.url}
+                target={item.open_in_new_tab ? "_blank" : undefined}
+                rel={item.open_in_new_tab ? "noopener noreferrer" : undefined}
+              >{item.label}</a>
+            ))}
+          </nav>
+        </div>
+        <div class="site-header__end">
+          <a href={ctaItem.url} class="ui-btn ui-btn--primary site-header__cta site-header__cta--bar">
+            {ctaItem.label}
+          </a>
+          <label
+            for="site-nav-toggle"
+            class="site-header__menu-btn"
+            aria-label={menuOpenLabel}
+            id="site-nav-toggle-label"
+          >
+            <span class="site-header__menu-icon" aria-hidden="true">
+              <span class="site-header__menu-line"></span>
+              <span class="site-header__menu-line"></span>
+              <span class="site-header__menu-line"></span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </header>
+  <label for="site-nav-toggle" class="site-header__scrim" aria-hidden="true"></label>
+  <div class="site-header__drawer" role="dialog" aria-modal="true" aria-labelledby="site-nav-drawer-title">
+    <div class="site-header__drawer-head">
+      <div class="site-header__drawer-brand">
+        <img
+          class="site-header__drawer-logo"
+          src={brand.logo_src}
+          alt=""
+          width={logoWidth}
+          height={logoHeight}
+          decoding="async"
+        />
+        <p id="site-nav-drawer-title" class="site-header__drawer-title">{brand.name}</p>
+      </div>
+      <label for="site-nav-toggle" class="site-header__drawer-close" aria-label={menuCloseLabel}>
+        <span class="site-header__drawer-close-icon" aria-hidden="true"></span>
+      </label>
+    </div>
+    <nav class="site-header__nav site-header__nav--mobile" aria-label={ui.primary_navigation}>
+      {navigation.map((item) => (
+        <a
+          class="site-header__drawer-link"
+          href={item.url}
+          target={item.open_in_new_tab ? "_blank" : undefined}
+          rel={item.open_in_new_tab ? "noopener noreferrer" : undefined}
+        >{item.label}</a>
+      ))}
+    </nav>
+    <div class="site-header__drawer-cta">
+      <a href={ctaItem.url} class="ui-btn ui-btn--primary site-header__cta site-header__cta--drawer">
+        {ctaItem.label}
+      </a>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ menuOpenLabel, menuCloseLabel }}>
+  (function () {
+    var toggle = document.getElementById("site-nav-toggle");
+    var label = document.getElementById("site-nav-toggle-label");
+    if (!toggle || !label) return;
+    function sync() {
+      var open = toggle.checked;
+      label.setAttribute("aria-label", open ? menuCloseLabel : menuOpenLabel);
+      label.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+    toggle.addEventListener("change", sync);
+    sync();
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && toggle.checked) {
+        toggle.checked = false;
+        toggle.dispatchEvent(new Event("change"));
+      }
+    });
+  })();
+</script>
+<!--cms-live:header:end-->

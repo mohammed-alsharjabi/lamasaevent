@@ -1,0 +1,81 @@
+---
+import { integrateNativeListings } from "../lib/native-listings";
+import ManagedServiceBlock from "./ManagedServiceBlock.astro";
+import type { ContentBlock, ContentEntity } from "../types/content";
+
+interface Props {
+  blocks: ContentBlock[];
+  title?: string;
+  summary?: string | null;
+  heroMedia?: ContentEntity["hero_media_summary"];
+  routePath: string;
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+  whatsappEnabled?: boolean;
+}
+
+const {
+  blocks,
+  title,
+  summary,
+  heroMedia,
+  routePath,
+  ctaLabel,
+  ctaUrl,
+  whatsappEnabled,
+} = Astro.props;
+const integrated = integrateNativeListings(blocks, routePath);
+const hasManagedIntro = integrated.blocks.some((block) => block.type === "intro");
+const isDarkDetail = /^\/(?:blog|services)\/.+/.test(routePath);
+---
+
+<main id="main" class:list={{ "content-detail--dark": isDarkDetail }}>
+  {integrated.blocks.length > 0 ? (
+    <>
+      {!hasManagedIntro && integrated.blocks.some((block) => !block.html) && (
+        <ManagedServiceBlock
+          block={{ type: "intro" }}
+          title={title}
+          summary={summary}
+          heroMedia={heroMedia}
+          ctaLabel={ctaLabel}
+          ctaUrl={ctaUrl}
+          whatsappEnabled={whatsappEnabled}
+        />
+      )}
+      {integrated.blocks.map((block) => block.html ? (
+        <Fragment set:html={block.html} />
+      ) : (
+        <ManagedServiceBlock
+          block={block}
+          title={title}
+          summary={summary}
+          heroMedia={heroMedia}
+          ctaLabel={ctaLabel}
+          ctaUrl={ctaUrl}
+          whatsappEnabled={whatsappEnabled}
+        />
+      ))}
+    </>
+  ) : (
+    <article class="managed-detail-fallback container">
+      {heroMedia && (
+        <figure class="managed-detail-fallback__media">
+          <img
+            src={heroMedia.public_url}
+            alt={heroMedia.alt || title || heroMedia.original_name}
+            loading="eager"
+            decoding="async"
+          />
+        </figure>
+      )}
+      <div class="managed-detail-fallback__body">
+        {title && <h1>{title}</h1>}
+        {summary && <p>{summary}</p>}
+      </div>
+    </article>
+  )}
+  {integrated.supplementalHtml && (
+    <Fragment set:html={integrated.supplementalHtml} />
+  )}
+</main>

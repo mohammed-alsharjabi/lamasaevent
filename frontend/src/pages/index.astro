@@ -1,0 +1,11 @@
+---
+import LegacyContent from "../components/LegacyContent.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { behaviorScriptFor, getContentByPath } from "../lib/content";
+
+const page = getContentByPath("/");
+---
+
+<BaseLayout seo={page.seo_meta} behaviorScript={behaviorScriptFor("/")}>
+  <LegacyContent blocks={page.content_blocks} routePath="/" />
+</BaseLayout>

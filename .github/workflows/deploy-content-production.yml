@@ -1,0 +1,106 @@
+name: Publish Production Content
+
+on:
+  push:
+    branches: ["feature/admin-cms"]
+    paths:
+      - "frontend/src/data/content-export.json"
+
+permissions:
+  contents: write
+
+jobs:
+  publish-content:
+    if: >-
+      vars.HOSTINGER_PRODUCTION_ENABLED == 'true' &&
+      startsWith(github.event.head_commit.message, 'content: publish snapshot ')
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    concurrency:
+      group: hostinger-production
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Cache installed frontend packages
+        id: frontend-packages
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: frontend-modules-${{ runner.os }}-node24-${{ hashFiles('frontend/package-lock.json') }}
+
+      - name: Install frontend packages
+        if: steps.frontend-packages.outputs.cache-hit != 'true'
+        working-directory: frontend
+        run: npm ci --no-audit --no-fund
+
+      - name: Build the current CMS content
+        working-directory: frontend
+        env:
+          CMS_ALLOW_STATIC_FALLBACK: "true"
+        run: |
+          npm run check
+          npm run build
+
+      - name: Publish verified static fallback
+        id: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          deploy_dir="$(mktemp -d)"
+          trap 'rm -rf "$deploy_dir"' EXIT
+          cp -a frontend/dist/. "$deploy_dir/"
+
+          cd "$deploy_dir"
+          git init -b production-dist
+          git config user.name "Lamsa Content Deployment"
+          git config user.email "content-deploy@lams-event.com"
+          git add --all
+          git commit -m "content: ${GITHUB_SHA}"
+          deployment_commit="$(git rev-parse HEAD)"
+          git remote add origin \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin production-dist
+
+          echo "commit=$deployment_commit" >> "$GITHUB_OUTPUT"
+
+      - name: Refresh Hostinger static fallback
+        env:
+          WEBHOOK_URL: ${{ secrets.HOSTINGER_PRODUCTION_DEPLOY_WEBHOOK_URL }}
+          WEBHOOK_SECRET: ${{ secrets.HOSTINGER_PRODUCTION_DEPLOY_WEBHOOK_SECRET }}
+          DEPLOYMENT_COMMIT: ${{ steps.publish.outputs.commit }}
+        run: |
+          set -euo pipefail
+
+          test -n "$WEBHOOK_URL"
+          test -n "$WEBHOOK_SECRET"
+          test -n "$DEPLOYMENT_COMMIT"
+
+          payload="$(printf '{"commit":"%s"}' "$DEPLOYMENT_COMMIT")"
+          timestamp="$(date +%s)"
+          signature="$(
+            printf '%s' "$timestamp.$payload" |
+              openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" -hex |
+              awk '{print $NF}'
+          )"
+
+          curl --fail-with-body \
+            --retry 3 \
+            --retry-delay 2 \
+            --connect-timeout 10 \
+            --max-time 120 \
+            -H 'Accept: application/json' \
+            -H 'Content-Type: application/json' \
+            -H "X-Lamasaevent-Timestamp: $timestamp" \
+            -H "X-Lamasaevent-Signature: $signature" \
+            --data "$payload" \
+            "$WEBHOOK_URL"

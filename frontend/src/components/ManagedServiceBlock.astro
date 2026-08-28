@@ -1,0 +1,274 @@
+---
+import type { ContentBlock, ContentEntity, GalleryMedia } from "../types/content";
+
+interface Props {
+  block: ContentBlock;
+  title?: string;
+  summary?: string | null;
+  heroMedia?: ContentEntity["hero_media_summary"];
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+  whatsappEnabled?: boolean;
+}
+
+const {
+  block,
+  title,
+  summary,
+  heroMedia,
+  ctaLabel,
+  ctaUrl,
+  whatsappEnabled = true,
+} = Astro.props;
+const items = Array.isArray(block.items) ? block.items : [];
+const media = Array.isArray(block.media) ? block.media as GalleryMedia[] : [];
+const relatedServices = Array.isArray(block.services) ? block.services : [];
+const heading = typeof block.heading === "string" ? block.heading : null;
+const blockUrl = typeof block.url === "string" && block.url !== "" ? block.url : ctaUrl;
+const blockLabel = typeof block.label === "string" && block.label !== "" ? block.label : ctaLabel;
+---
+
+{block.type === "intro" && (
+  <header class="managed-service-hero container">
+    {heroMedia && (
+      <img
+        src={heroMedia.public_url}
+        alt={heroMedia.alt || title || heroMedia.original_name}
+        loading="eager"
+        decoding="async"
+      />
+    )}
+    <div class="managed-service-hero__body">
+      <h1>{heading || title}</h1>
+      {block.lead ? <div class="managed-rich" set:html={block.lead} /> : summary && <p>{summary}</p>}
+    </div>
+  </header>
+)}
+
+{block.type === "text" && (
+  <section class="managed-service-section container">
+    {heading && <h2>{heading}</h2>}
+    {block.body && <div class="managed-rich" set:html={block.body} />}
+  </section>
+)}
+
+{(block.type === "features" || block.type === "steps") && (
+  <section class="managed-service-section container">
+    {heading && <h2>{heading}</h2>}
+    <div class="managed-service-grid">
+      {items.map((item, index) => (
+        <article class="managed-service-card">
+          {block.type === "steps" && <span class="managed-service-card__number">{index + 1}</span>}
+          {typeof item.title === "string" && item.title !== "" && <h3>{item.title}</h3>}
+          {typeof item.description === "string" && item.description !== "" && <p>{item.description}</p>}
+        </article>
+      ))}
+    </div>
+  </section>
+)}
+
+{block.type === "gallery" && media.length > 0 && (
+  <section class="managed-service-section container">
+    {heading && <h2>{heading}</h2>}
+    <div class="managed-service-gallery">
+      {media.map((image) => (
+        <figure>
+          <img
+            src={image.public_url}
+            alt={image.alt || image.original_name}
+            loading="lazy"
+            decoding="async"
+          />
+          {image.caption && <figcaption>{image.caption}</figcaption>}
+        </figure>
+      ))}
+    </div>
+  </section>
+)}
+
+{block.type === "cta" && (
+  <section class="managed-service-cta container">
+    <h2>{heading || "هل ترغب في هذه الخدمة؟"}</h2>
+    {block.text && <p>{block.text}</p>}
+    {whatsappEnabled && blockUrl && (
+      <a href={blockUrl}>{blockLabel || "تواصل معنا"}</a>
+    )}
+  </section>
+)}
+
+{block.type === "faq" && items.length > 0 && (
+  <section class="managed-service-section container">
+    <h2>{heading || "الأسئلة الشائعة"}</h2>
+    <div class="managed-service-faqs">
+      {items.map((item) => (
+        typeof item.question === "string" && typeof item.answer === "string" && (
+          <details>
+            <summary>{item.question}</summary>
+            <p>{item.answer}</p>
+          </details>
+        )
+      ))}
+    </div>
+  </section>
+)}
+
+{block.type === "related_services" && relatedServices.length > 0 && (
+  <section class="managed-service-section container">
+    <h2>{heading || "خدمات مرتبطة"}</h2>
+    <div class="managed-service-grid">
+      {relatedServices.map((service) => (
+        <article class="managed-service-card">
+          <h3><a href={service.public_path}>{service.title}</a></h3>
+          {service.excerpt && <p>{service.excerpt}</p>}
+        </article>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .managed-service-hero {
+    padding-block: clamp(3rem, 8vw, 7rem) clamp(2rem, 5vw, 4rem);
+  }
+
+  .managed-service-hero img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 38rem;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.125rem;
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.46);
+  }
+
+  .managed-service-hero__body {
+    max-width: 50rem;
+  }
+
+  .managed-service-hero h1 {
+    margin: 0 0 1rem;
+    color: #f7f7f7;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.25;
+    letter-spacing: -0.035em;
+  }
+
+  .managed-service-hero p,
+  .managed-service-card p,
+  .managed-service-cta p {
+    color: rgba(255, 255, 255, 0.58);
+    line-height: 1.9;
+  }
+
+  .managed-service-section,
+  .managed-service-cta {
+    margin-block: clamp(1rem, 3vw, 2rem);
+    padding-block: clamp(2rem, 5vw, 4rem);
+  }
+
+  .managed-service-section h2,
+  .managed-service-cta h2 {
+    margin-top: 0;
+    color: #f5f5f5;
+    font-size: clamp(1.35rem, 3vw, 1.85rem);
+  }
+
+  .managed-service-grid,
+  .managed-service-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1rem;
+  }
+
+  .managed-service-card {
+    padding: clamp(1.25rem, 3vw, 1.65rem);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 1rem;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025));
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
+  }
+
+  .managed-service-card h3 {
+    color: #f1f1f1;
+  }
+
+  .managed-service-card a {
+    color: inherit;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+  }
+
+  .managed-service-card__number {
+    display: grid;
+    width: 2.25rem;
+    height: 2.25rem;
+    place-items: center;
+    border-radius: 999px;
+    color: #07110f;
+    background: #81d8d0;
+    font-weight: 800;
+  }
+
+  .managed-service-gallery figure {
+    margin: 0;
+  }
+
+  .managed-service-gallery img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+
+  .managed-service-gallery figcaption {
+    padding-top: 0.5rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+  }
+
+  .managed-service-cta {
+    text-align: center;
+    color: white;
+    border: 1px solid rgba(129, 216, 208, 0.24);
+    border-radius: 1.25rem;
+    background: linear-gradient(145deg, #0d2823, #091612);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.3);
+  }
+
+  .managed-service-cta p {
+    color: color-mix(in srgb, white 80%, transparent);
+  }
+
+  .managed-service-cta a {
+    display: inline-flex;
+    padding: 0.75rem 1.2rem;
+    color: #07110f;
+    border-radius: 999px;
+    background: #81d8d0;
+    text-decoration: none;
+    font-weight: 800;
+  }
+
+  .managed-service-faqs details {
+    padding-block: 1rem;
+    color: rgba(255, 255, 255, 0.62);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .managed-service-faqs summary {
+    cursor: pointer;
+    color: #f3f3f3;
+    font-weight: 800;
+  }
+
+  :global(.managed-rich > :first-child) { margin-top: 0; }
+  :global(.managed-rich > :last-child) { margin-bottom: 0; }
+  :global(.managed-rich) { color: rgba(255, 255, 255, 0.66); line-height: 1.9; }
+  :global(.managed-rich h2),
+  :global(.managed-rich h3),
+  :global(.managed-rich strong) { color: #f4f4f4; }
+  :global(.managed-rich a) { color: #81d8d0; }
+</style>

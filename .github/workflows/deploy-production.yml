@@ -1,0 +1,249 @@
+name: Deploy Production
+
+on:
+  push:
+    branches: ["feature/admin-cms"]
+    paths-ignore:
+      - "frontend/src/data/content-export.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hostinger-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: vars.HOSTINGER_PRODUCTION_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build Astro from the committed CMS snapshot
+        working-directory: frontend
+        env:
+          CMS_ALLOW_STATIC_FALLBACK: "true"
+        run: |
+          npm ci
+          npm run check
+          npm run build
+
+      - name: Back up and deploy the Laravel CMS
+        env:
+          SSH_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
+          SSH_PORT: ${{ secrets.HOSTINGER_SSH_PORT }}
+          SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
+          SSH_KEY: ${{ secrets.HOSTINGER_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.HOSTINGER_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+
+          test -n "$SSH_HOST"
+          test -n "$SSH_PORT"
+          test -n "$SSH_USER"
+          test -n "$SSH_KEY"
+          test -n "$SSH_KNOWN_HOSTS"
+
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$SSH_KEY" > "$HOME/.ssh/hostinger_deploy"
+          chmod 600 "$HOME/.ssh/hostinger_deploy"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+          ssh \
+            -i "$HOME/.ssh/hostinger_deploy" \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -p "$SSH_PORT" \
+            "$SSH_USER@$SSH_HOST" 'bash -se' <<'REMOTE'
+          set -euo pipefail
+          umask 077
+
+          app_root="$HOME/apps/lamasaevent"
+          backend_root="$app_root/backend"
+          backup_root="$HOME/deployment_backups/production"
+          timestamp="$(date -u +%Y%m%d-%H%M%S)"
+
+          test -d "$app_root/.git"
+          test -f "$backend_root/artisan"
+          mkdir -p "$backup_root"
+
+          cd "$app_root"
+          test -z "$(git status --porcelain --untracked-files=no)"
+          git fetch --prune origin feature/admin-cms
+
+          code_backup="$backup_root/backend-before-$timestamp.tar.gz"
+          tar \
+            --exclude='backend/vendor' \
+            --exclude='backend/storage/logs/*' \
+            --exclude='backend/storage/framework/cache/*' \
+            --exclude='backend/storage/framework/sessions/*' \
+            --exclude='backend/storage/framework/views/*' \
+            -czf "$code_backup" backend
+          test -s "$code_backup"
+
+          cd "$backend_root"
+          dump_binary="$(command -v mysqldump || command -v mariadb-dump)"
+          test -n "$dump_binary"
+          db_host="$(php artisan tinker --execute='echo config("database.connections.mysql.host");')"
+          db_port="$(php artisan tinker --execute='echo config("database.connections.mysql.port");')"
+          db_name="$(php artisan tinker --execute='echo config("database.connections.mysql.database");')"
+          db_user="$(php artisan tinker --execute='echo config("database.connections.mysql.username");')"
+          db_password="$(php artisan tinker --execute='echo config("database.connections.mysql.password");')"
+          database_backup="$backup_root/database-before-$timestamp.sql.gz"
+
+          dump_options=(
+            --user="$db_user"
+            --single-transaction
+            --quick
+            --skip-lock-tables
+          )
+
+          if [[ "$db_host" == 'localhost' ]]; then
+            # Hostinger grants this database user through the local Unix socket.
+            # Passing --host=localhost may resolve to IPv6 (::1) on CloudLinux.
+            MYSQL_PWD="$db_password" "$dump_binary" \
+              --protocol=SOCKET \
+              "${dump_options[@]}" \
+              "$db_name" | gzip -9 > "$database_backup"
+          else
+            MYSQL_PWD="$db_password" "$dump_binary" \
+              --host="$db_host" \
+              --port="$db_port" \
+              "${dump_options[@]}" \
+              "$db_name" | gzip -9 > "$database_backup"
+          fi
+          unset db_password MYSQL_PWD
+          test -s "$database_backup"
+
+          cd "$app_root"
+          git merge --ff-only origin/feature/admin-cms
+
+          cd "$backend_root"
+          if command -v composer2 >/dev/null 2>&1; then
+            composer_command='composer2'
+          else
+            composer_command='composer'
+          fi
+          "$composer_command" install \
+            --no-dev \
+            --prefer-dist \
+            --no-interaction \
+            --no-progress \
+            --optimize-autoloader
+          php artisan migrate --force --no-interaction
+
+          # Hostinger disables PHP's exec() function, which Laravel's
+          # storage:link inspection may call. Maintain the one required link
+          # with shell primitives and fail if it is not usable.
+          storage_target="$backend_root/storage/app/public"
+          storage_link="$backend_root/public/storage"
+          mkdir -p "$storage_target"
+          if [[ -L "$storage_link" && ! -e "$storage_link" ]]; then
+            unlink "$storage_link"
+          fi
+          if [[ ! -e "$storage_link" ]]; then
+            ln -s "$storage_target" "$storage_link"
+          fi
+          test -e "$storage_link"
+
+          php artisan optimize:clear
+          php artisan optimize
+          php artisan queue:restart
+          php artisan migrate:status --no-ansi | grep '2026_08_01_000000' | grep -q 'Ran'
+          php artisan migrate:status --no-ansi | grep '2026_08_01_010000' | grep -q 'Ran'
+          php artisan migrate:status --no-ansi | grep '2026_08_02_000000' | grep -q 'Ran'
+
+          public_root="$(php artisan tinker --execute='echo config("publishing.deployment.public_root");')"
+          htaccess_source="$app_root/staging/hostinger-production.htaccess"
+          test -d "$public_root"
+          test "$(basename "$public_root")" = 'public_html'
+          test -f "$htaccess_source"
+          if [[ -f "$public_root/.htaccess" ]]; then
+            cp "$public_root/.htaccess" "$backup_root/htaccess-before-$timestamp"
+          fi
+          install -m 644 "$htaccess_source" "$public_root/.htaccess.next"
+          mv "$public_root/.htaccess.next" "$public_root/.htaccess"
+
+          # The document root serves both the Astro site and Laravel admin.
+          # Publish the self-hosted admin fonts explicitly; frontend snapshot
+          # deployments preserve this directory and cannot remove it.
+          install -d -m 755 "$public_root/fonts/cairo"
+          rsync \
+            -az \
+            --delete \
+            "$backend_root/public/fonts/cairo/" \
+            "$public_root/fonts/cairo/"
+          test -s "$public_root/fonts/cairo/cairo-arabic.woff2"
+          test -s "$public_root/fonts/cairo/cairo-latin.woff2"
+
+          echo "LARAVEL_DEPLOYED=$(git rev-parse --short HEAD)"
+          echo "CODE_BACKUP=$code_backup"
+          echo "DATABASE_BACKUP=$database_backup"
+          REMOTE
+
+      - name: Publish the verified production build
+        id: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          deploy_dir="$(mktemp -d)"
+          trap 'rm -rf "$deploy_dir"' EXIT
+          cp -a frontend/dist/. "$deploy_dir/"
+
+          cd "$deploy_dir"
+          git init -b production-dist
+          git config user.name "Lamsa Production Deployment"
+          git config user.email "deploy@lams-event.com"
+          git add --all
+          git commit -m "deploy: ${GITHUB_SHA}"
+          deployment_commit="$(git rev-parse HEAD)"
+          git remote add origin \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin production-dist
+
+          echo "commit=$deployment_commit" >> "$GITHUB_OUTPUT"
+
+      - name: Notify the signed Hostinger production webhook
+        env:
+          WEBHOOK_URL: ${{ secrets.HOSTINGER_PRODUCTION_DEPLOY_WEBHOOK_URL }}
+          WEBHOOK_SECRET: ${{ secrets.HOSTINGER_PRODUCTION_DEPLOY_WEBHOOK_SECRET }}
+          DEPLOYMENT_COMMIT: ${{ steps.publish.outputs.commit }}
+        run: |
+          set -euo pipefail
+
+          test -n "$WEBHOOK_URL"
+          test -n "$WEBHOOK_SECRET"
+          test -n "$DEPLOYMENT_COMMIT"
+
+          payload="$(printf '{"commit":"%s"}' "$DEPLOYMENT_COMMIT")"
+          timestamp="$(date +%s)"
+          signature="$(
+            printf '%s' "$timestamp.$payload" |
+              openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" -hex |
+              awk '{print $NF}'
+          )"
+
+          curl --fail-with-body \
+            --retry 3 \
+            --retry-delay 5 \
+            --connect-timeout 15 \
+            --max-time 180 \
+            -H 'Accept: application/json' \
+            -H 'Content-Type: application/json' \
+            -H "X-Lamasaevent-Timestamp: $timestamp" \
+            -H "X-Lamasaevent-Signature: $signature" \
+            --data "$payload" \
+            "$WEBHOOK_URL"
